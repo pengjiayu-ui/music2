@@ -1,10 +1,7 @@
 /* 音乐史打卡 · 离线缓存 */
-const VERSION = 'ba2cd5e3';
+const VERSION = 'e38dfd7f';
 const CACHE = 'msh-' + VERSION;
-const ASSETS = [
-  './', './index.html', './manifest.webmanifest',
-  './icon-180.png', './icon-192.png', './icon-512.png'
-];
+const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png", "./assets/characters/cheer.png", "./assets/characters/default.png", "./assets/characters/excited.png", "./assets/characters/happy.png", "./assets/characters/love.png", "./assets/characters/proud.png", "./assets/characters/shy.png", "./assets/characters/sleepy.png", "./assets/characters/surprised.png"];
 
 self.addEventListener('install', function (e) {
   e.waitUntil((async function () {
