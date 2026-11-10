@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f3eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>音乐史 · 背诵打卡</title>
+<style>
+:root{
+  --paper:#f7f3eb; --paper2:#ece5d7; --card:#fffdf8;
+  --ink:#211d18; --ink2:#4c443b; --muted:#8d8375; --line:#e3dbcb;
+  --accent:#a63d2f; --accent2:#b0863f; --accent-soft:#f5e6e1;
+  --jade:#2f5d54; --ok:#3f7d55; --amber:#a9741f;
+  --hero1:#fffdf8; --hero2:#f4ecdd;
+  --shadow:0 1px 2px rgba(33,29,24,.04),0 14px 30px -22px rgba(33,29,24,.55);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#161412; --paper2:#241f1a; --card:#1e1b17;
+    --ink:#f3ede3; --ink2:#cec5b6; --muted:#93897a; --line:#332d26;
+    --accent:#d97763; --accent2:#d0a75e; --accent-soft:#33221d;
+    --jade:#84b7aa; --ok:#6fb187; --amber:#d5a355;
+    --hero1:#201c17; --hero2:#191612;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px -26px rgba(0,0,0,.9);
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%}
+body{
+  background:#e7e0d2; color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  font-size:15px;
+}
+@media (prefers-color-scheme:dark){ body{background:#0d0c0a} }
+.serif{font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,serif}
+.shell{min-height:100dvh;display:flex;justify-content:center}
+.app{
+  width:100%;max-width:460px;height:100dvh;display:flex;flex-direction:column;
+  background:var(--paper);position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,0,0,.05),0 40px 90px -40px rgba(0,0,0,.45);
+}
+/* ---------- top ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 18px 8px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:34px;height:34px;border-radius:11px;flex:none;display:grid;place-items:center;color:#fff;font-size:16px;
+  background:linear-gradient(145deg,#bd4c33,#8c2d20);box-shadow:0 8px 18px -10px #8c2d20}
+.brand h1{font-size:15.5px;margin:0;letter-spacing:.03em;font-weight:600;white-space:nowrap}
+.brand p{margin:1px 0 0;font-size:10.5px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+.pill{border:1px solid var(--line);background:var(--card);color:var(--ink2);font-size:11.5px;padding:7px 11px;
+  border-radius:999px;font-variant-numeric:tabular-nums;white-space:nowrap;cursor:pointer}
+/* ---------- main ---------- */
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 26px;overscroll-behavior:contain}
+.view{animation:viewIn .28s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stack{display:grid;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.sec-title{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 10px;font-size:12px;color:var(--muted);letter-spacing:.08em}
+.sec-title b{color:var(--ink2);font-weight:600;font-size:13px;letter-spacing:.02em}
+/* hero */
+.hero{position:relative;overflow:hidden;padding:20px 18px 18px;border-radius:24px;
+  background:linear-gradient(155deg,var(--hero1),var(--hero2));border:1px solid var(--line);box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;right:-40px;top:-50px;width:170px;height:170px;border-radius:50%;
+  background:radial-gradient(circle,rgba(176,134,63,.20),transparent 65%)}
+.hero-row{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1}
+.eyebrow{margin:0;font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.big{display:flex;align-items:baseline;gap:6px;margin:6px 0 2px}
+.big b{font-family:"Songti SC","Noto Serif SC",Georgia,serif;font-size:52px;line-height:.95;font-weight:600;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.big span{font-size:13px;color:var(--muted);letter-spacing:.1em}
+.datesub{margin:4px 0 0;font-size:11.5px;color:var(--muted)}
+.ring{width:88px;height:88px;flex:none}
+.ring-fg{transition:stroke-dashoffset .7s cubic-bezier(.2,.8,.2,1)}
+.ring-t{font-size:19px;font-weight:600;fill:var(--ink);font-variant-numeric:tabular-nums}
+.ring-s{font-size:8px;fill:var(--muted);letter-spacing:.1em}
+/* tasks */
+.task{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:16px}
+.tico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:16px;flex:none}
+.tico.rev{background:var(--accent-soft);color:var(--accent)}
+.tico.new{background:rgba(47,93,84,.12);color:var(--jade)}
+.task .tx{flex:1;min-width:0}
+.task .tx b{display:block;font-size:14px;font-weight:600;letter-spacing:.01em}
+.task .tx small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.task em{font-style:normal;font-family:"Songti SC",Georgia,serif;font-size:22px;font-variant-numeric:tabular-nums}
+.task em.zero{color:var(--muted);opacity:.55}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:16px;border:1px solid transparent;
+  background:var(--accent);color:#fff;font-size:15.5px;font-weight:600;letter-spacing:.03em;cursor:pointer;
+  font-family:inherit;transition:transform .12s ease,filter .2s;box-shadow:0 10px 22px -14px rgba(166,61,47,.9)}
+.btn:active{transform:scale(.985)}
+.btn.ghost{background:transparent;color:var(--ink2);border-color:var(--line);box-shadow:none;font-weight:500}
+.btn:disabled{opacity:.5;pointer-events:none}
+/* forecast */
+.forecast{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;padding:14px 14px 10px}
+.fcol{display:flex;flex-direction:column;align-items:center;gap:7px}
+.fnum{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.fbar{width:100%;max-width:22px;border-radius:6px 6px 3px 3px;min-height:4px;
+  background:linear-gradient(180deg,var(--accent),rgba(166,61,47,.45))}
+.fbar.low{background:var(--paper2)}
+.flab{font-size:10px;color:var(--muted)}
+.fcol.today .flab{color:var(--accent);font-weight:600}
+/* memory tip */
+.tipcard{padding:15px 16px;border-radius:18px;background:linear-gradient(160deg,var(--accent-soft),transparent 90%);border:1px solid var(--line)}
+.tipcard h4{margin:0 0 6px;font-size:12px;letter-spacing:.1em;color:var(--accent);font-weight:600}
+.tipcard p{margin:0;font-size:12.5px;line-height:1.7;color:var(--ink2)}
+/* tabbar */
+.tabbar{flex:none;display:flex;gap:2px;padding:5px 10px calc(5px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--paper)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 6px;border:0;background:none;
+  color:var(--muted);font-size:10px;font-family:inherit;cursor:pointer;border-radius:12px;letter-spacing:.04em}
+.tab svg{width:20px;height:20px}
+.tab.on{color:var(--accent)}
+/* search */
+.searchwrap{position:relative;margin:10px 0 14px}
+.searchwrap input{width:100%;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card);
+  padding:0 14px 0 38px;font-size:16px;color:var(--ink);font-family:inherit;outline:none}
+.searchwrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.sicon{position:absolute;left:14px;top:12px;color:var(--muted);font-size:15px}
+.segs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px}
+.seg{flex:none;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);
+  font-size:12.5px;color:var(--ink2);cursor:pointer;font-family:inherit;white-space:nowrap}
+.seg.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+/* chapter */
+.chap{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;box-shadow:var(--shadow)}
+.chaphead{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;background:none;border:0;font-family:inherit;
+  color:inherit;text-align:left;cursor:pointer}
+.chnum{width:26px;height:26px;flex:none;border-radius:9px;background:var(--paper2);color:var(--ink2);display:grid;place-items:center;
+  font-size:11px;font-family:"Songti SC",serif}
+.cht{flex:1;min-width:0}
+.cht b{display:block;font-size:14px;font-weight:600}
+.cht small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+.chev{color:var(--muted);transition:transform .2s;font-size:16px}
+.chap.open .chev{transform:rotate(90deg)}
+.chapbody{border-top:1px dashed var(--line);padding:6px 8px 8px}
+.crow{display:flex;align-items:center;gap:9px;width:100%;padding:9px 6px;background:none;border:0;font-family:inherit;
+  color:var(--ink2);font-size:13px;text-align:left;cursor:pointer;border-radius:9px}
+.crow:active{background:var(--paper2)}
+.crow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crow em{font-style:normal;font-size:10px;color:var(--muted);flex:none}
+.dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--line)}
+.dot[data-s="new"]{background:transparent;border:1px solid var(--muted);opacity:.7}
+.dot[data-s="learn"]{background:var(--accent2)}
+.dot[data-s="mastered"]{background:var(--ok)}
+/* stats */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.tile b{display:block;font-family:"Songti SC",Georgia,serif;font-size:27px;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile small{display:block;font-size:10.5px;color:var(--muted);margin-top:5px;letter-spacing:.06em}
+.panel{padding:15px 16px;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.panel h3{margin:0 0 12px;font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.bar{height:7px;border-radius:99px;background:var(--paper2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#c0603f,#b0863f);transition:width .5s}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:10.5px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px}
+.heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,11px);grid-auto-columns:1fr;gap:4px;width:100%}
+.heat i{width:100%;height:11px;border-radius:3px;background:var(--paper2)}
+.heat i[data-l="1"]{background:#ead6c2}.heat i[data-l="2"]{background:#dba98d}
+.heat i[data-l="3"]{background:#c0745a}.heat i[data-l="4"]{background:#a63d2f}
+@media (prefers-color-scheme:dark){
+  .heat i[data-l="1"]{background:#3a2e24}.heat i[data-l="2"]{background:#5a3a2c}
+  .heat i[data-l="3"]{background:#8a4a37}.heat i[data-l="4"]{background:#c4654e}
+}
+.chline{display:flex;align-items:center;gap:10px;padding:7px 0}
+.chline span{width:112px;flex:none;font-size:11.5px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chline .bar{flex:1}
+.chline em{font-style:normal;font-size:10.5px;color:var(--muted);width:38px;text-align:right;font-variant-numeric:tabular-nums}
+.weakrow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--ink2);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;font-family:inherit;text-align:left}
+.weakrow:last-child{border-bottom:0}
+.weakrow em{font-style:normal;font-size:10px;color:var(--accent);margin-left:auto;flex:none}
+/* settings */
+.setrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px dashed var(--line)}
+.setrow:last-child{border-bottom:0}
+.setrow .tx{flex:1}
+.setrow b{display:block;font-size:13.5px;font-weight:600}
+.setrow small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.stepper{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.stepper button{width:32px;height:32px;border:0;background:var(--card);color:var(--ink2);font-size:17px;cursor:pointer;font-family:inherit}
+.stepper b{min-width:34px;text-align:center;font-size:14px;font-variant-numeric:tabular-nums}
+.dateinput{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:11px;padding:8px 10px;font-family:inherit;font-size:12.5px}
+.about{font-size:11.5px;line-height:1.85;color:var(--muted)}
+.about b{color:var(--ink2)}
+/* overlay */
+#overlay{position:fixed;inset:0;z-index:50;display:flex;justify-content:center;background:rgba(22,18,14,.45);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.panel-full{width:100%;max-width:460px;background:var(--paper);height:100dvh;display:flex;flex-direction:column;animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.study-top{flex:none;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 16px 8px}
+.icon-btn{width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--ink2);
+  font-size:14px;cursor:pointer;display:grid;place-items:center;font-family:inherit}
+.sprog{flex:1;height:5px;border-radius:99px;background:var(--paper2);overflow:hidden}
+.sprog i{display:block;height:100%;border-radius:99px;background:var(--accent);transition:width .35s}
+.scount{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+.study-body{flex:1;overflow-y:auto;padding:6px 16px 16px;display:flex;flex-direction:column}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px 19px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column}
+.qcard.front{flex:1}
+.qcard.back{margin:auto 0}
+.qcard.front .qtitle{margin:auto 0;padding:16px 0}
+.qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ptag{font-size:10px;letter-spacing:.08em;padding:4px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.ptag.w{background:rgba(47,93,84,.13);color:var(--jade)}
+.ptag.f{background:rgba(176,134,63,.15);color:var(--accent2)}
+.qtype{font-size:10px;color:var(--muted);letter-spacing:.06em;border:1px solid var(--line);padding:3.5px 8px;border-radius:99px}
+.qtitle{font-size:25px;line-height:1.45;margin:14px 0 0;font-weight:600;letter-spacing:.01em}
+.qhint{margin:auto 0 0;padding-top:26px;font-size:12px;color:var(--muted);letter-spacing:.04em}
+.qlabel{margin:0 0 10px;font-size:10px;letter-spacing:.14em;color:var(--muted)}
+.qbody{margin-top:16px;padding-top:15px;border-top:1px dashed var(--line);animation:rise .3s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pts{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.pts li{position:relative;padding-left:17px;font-size:14px;line-height:1.8;color:var(--ink2)}
+.pts li:before{content:"";position:absolute;left:2px;top:10px;width:6px;height:6px;border-radius:2px;background:var(--accent2);opacity:.6}
+mark{background:linear-gradient(transparent 55%,rgba(176,134,63,.48) 55%);color:inherit;padding:0 1px;border-radius:2px}
+@media (prefers-color-scheme:dark){mark{background:linear-gradient(transparent 62%,rgba(208,167,94,.32) 62%)}}
+.keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.key{font-size:11px;padding:4px 9px;border-radius:8px;background:var(--paper2);color:var(--ink2);letter-spacing:.02em}
+.tipbox{margin-top:14px;padding:11px 12px;border-radius:12px;background:linear-gradient(160deg,var(--accent-soft),transparent);
+  border:1px solid var(--line);font-size:12px;line-height:1.65;color:var(--ink2)}
+.tipbox b{color:var(--accent);font-weight:600;font-size:10.5px;letter-spacing:.1em;display:block;margin-bottom:4px}
+.study-foot{flex:none;padding:10px 16px calc(14px + env(safe-area-inset-bottom))}
+.rate{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.rbtn{height:62px;border-radius:15px;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;
+  color:var(--ink2);transition:transform .1s}
+.rbtn:active{transform:scale(.97)}
+.rbtn small{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:.02em}
+.rbtn[data-lvl="got"]{background:linear-gradient(160deg,#45875c,#2f6045);border-color:transparent;color:#fff;
+  box-shadow:0 10px 20px -14px rgba(47,96,69,.9)}
+.rbtn[data-lvl="got"] small{color:rgba(255,255,255,.78)}
+.rbtn[data-lvl="forgot"]{color:var(--accent);border-color:rgba(166,61,47,.3)}
+.rbtn[data-lvl="vague"]{color:var(--amber);border-color:rgba(169,116,31,.3)}
+/* done */
+.done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 26px;text-align:center}
+.done-mark{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;font-size:30px;color:#fff;
+  background:linear-gradient(150deg,#4d9166,#2f6045);box-shadow:0 18px 40px -20px rgba(47,96,69,.9);animation:pop .45s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.done h2{font-size:22px;margin:22px 0 8px;letter-spacing:.02em}
+.done p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.8}
+.done-stat{display:flex;gap:26px;margin:22px 0 26px}
+.done-stat div{text-align:center}
+.done-stat b{display:block;font-family:"Songti SC",serif;font-size:24px;font-variant-numeric:tabular-nums}
+.done-stat small{font-size:10px;color:var(--muted);letter-spacing:.08em}
+/* sheet */
+#modal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(22,18,14,.45);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sheet{width:100%;max-width:460px;background:var(--paper);border-radius:24px 24px 0 0;max-height:84dvh;overflow-y:auto;
+  padding:18px 20px calc(22px + env(safe-area-inset-bottom));animation:sheetup .28s cubic-bezier(.2,.8,.2,1) both}
+@keyframes sheetup{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@media (min-width:560px){
+  #modal{align-items:center}
+  .sheet{border-radius:24px;max-height:78dvh}
+}
+.sheet h2{font-size:21px;line-height:1.45;margin:14px 0 4px;font-weight:600}
+.sheet .mbody{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.sheet-actions{display:flex;gap:9px;margin-top:18px}
+.sheet-actions .btn{height:44px;font-size:13.5px;border-radius:13px}
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(78px + env(safe-area-inset-bottom));transform:translate(-50%,10px);z-index:99;
+  background:rgba(33,29,24,.92);color:#fff;font-size:12.5px;padding:9px 16px;border-radius:99px;opacity:0;
+  pointer-events:none;transition:.25s;max-width:80vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.warnbar{display:flex;gap:8px;background:rgba(169,116,31,.12);border:1px solid rgba(169,116,31,.35);
+  color:var(--amber);font-size:11.5px;line-height:1.65;padding:10px 12px;border-radius:12px;margin-bottom:12px}
+/* exam */
+.exam-top{display:flex;align-items:center;gap:8px;padding:8px 0 10px;position:sticky;top:0;z-index:6;
+  background:linear-gradient(var(--paper) 72%,transparent);}
+.clock{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--ink2);margin-left:auto;padding:6px 11px;
+  border-radius:999px;background:var(--card);border:1px solid var(--line)}
+.clock.warn{color:var(--accent);border-color:rgba(166,61,47,.45)}
+.qblock{padding:15px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}
+.qhead{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted);letter-spacing:.05em}
+.qno{width:22px;height:22px;border-radius:7px;background:var(--paper2);display:grid;place-items:center;
+  font-size:11px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.qfull{margin-left:auto}
+.qtext{margin:10px 0 12px;font-size:15px;line-height:1.8;color:var(--ink);font-family:"Songti SC","Noto Serif SC",serif}
+.ansbox{width:100%;min-height:92px;border:1px dashed var(--line);border-radius:12px;background:var(--paper);
+  padding:10px;font-family:inherit;font-size:13.5px;line-height:1.7;color:var(--ink);resize:vertical;outline:none}
+.ansbox:focus{border-color:var(--accent);background:var(--card)}
+.paperhint{font-size:11.5px;color:var(--muted);padding:11px 12px;border:1px dashed var(--line);border-radius:12px;line-height:1.6}
+.scoregrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.score{text-align:center;padding:13px 6px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.score b{display:block;font-family:"Songti SC",Georgia,serif;font-size:26px;line-height:1.15;font-variant-numeric:tabular-nums}
+.score small{font-size:10px;color:var(--muted);letter-spacing:.06em}
+.score.mid{border-color:var(--accent);box-shadow:0 12px 26px -20px rgba(166,61,47,.9)}
+.score.mid b{color:var(--accent)}
+.rub{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+.rub td{padding:6px 2px;border-bottom:1px dashed var(--line);vertical-align:top;color:var(--ink2);line-height:1.6}
+.rub td:last-child{width:46px;text-align:right;color:var(--muted);white-space:nowrap}
+.rub td.lost{border-bottom:0;padding-top:0;text-align:left;font-size:11px;color:var(--muted)}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);
+  font-size:13px;line-height:1.55;color:var(--ink2);cursor:pointer}
+.chk:last-child{border-bottom:0}
+.chk input{margin:3px 0 0;accent-color:var(--accent);width:15px;height:15px;flex:none}
+.mini{font-size:11px;color:var(--muted);line-height:1.7}
+.histrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+.histrow:last-child{border-bottom:0}
+.histrow b{font-variant-numeric:tabular-nums}
+.histrow .muted{margin-left:auto;font-size:11px}
+.muted{color:var(--muted)}
+.center{text-align:center}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">♪</div>
+        <div>
+          <h1>音乐史 · 背诵打卡</h1>
+          <p>广州大学音乐考研 · 中西音乐史</p>
+        </div>
+      </div>
+      <button class="pill" data-act="tab" data-tab="me" id="examPill">距初试 —</button>
+    </header>
+
+    <main id="main">
+      <section class="view" data-view="today" id="view-today"></section>
+
+      <section class="view" data-view="exam" id="view-exam" hidden></section>
+
+      <section class="view" data-view="lib" id="view-lib" hidden>
+        <div class="searchwrap">
+          <span class="sicon">⌕</span>
+          <input id="search" placeholder="搜索考点、人物、作品" autocomplete="off">
+        </div>
+        <div id="libSegs"></div>
+        <div id="libList" class="stack"></div>
+      </section>
+
+      <section class="view" data-view="stats" id="view-stats" hidden></section>
+
+      <section class="view" data-view="me" id="view-me" hidden></section>
+    </main>
+
+    <nav class="tabbar">
+      <button class="tab on" data-act="tab" data-tab="today">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3.5"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+        <span>今日</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="exam">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><path d="M10 13h5M10 17h3"/></svg>
+        <span>模考</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="lib">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.6A2.6 2.6 0 0 1 6.6 3H19v18H6.6A2.6 2.6 0 0 1 4 18.4z"/><path d="M8.5 7.5h6"/></svg>
+        <span>书库</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="stats">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20v-8M12 20V4M19 20v-6"/></svg>
+        <span>统计</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="me">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.4"/><circle cx="9.5" cy="17" r="2.4"/></svg>
+        <span>设置</span>
+      </button>
+    </nav>
+  </div>
+</div>
+
+<div id="overlay" hidden></div>
+<div id="modal" hidden></div>
+<div id="toast"></div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+
+<script>
+(function(){
+"use strict";
+var DATA = {"parts":[{"part":"中国音乐史","short":"中","chapters":[{"id":"cn01","num":"一","title":"原始社会音乐","era":"远古—前21世纪","intro":"乐舞一体、乐器初成，中国音乐的源头。","cards":[{"q":"原始乐舞的代表作有哪些？","type":"简答","pts":["《葛天氏之乐》：八阙歌舞，「载民、玄鸟、遂草木、奋五谷、敬天常、达帝功、依地德、总禽兽之极」，反映农耕祭祀与图腾崇拜。","《蜡辞》：伊耆氏之乐，年终祭祀万物，辞曰「土反其宅，水归其壑，昆虫毋作，草木归其泽」。","《云门》：黄帝时乐舞，又名《承云》，祭天神。","《箫韶》：舜时乐舞，又名《九韶》《九辩》《九歌》，孔子评为「尽善尽美」。","《朱襄氏之乐》：以五弦瑟求雨，带原始巫术色彩。"],"keys":["葛天氏之乐","蜡辞","云门","箫韶","尽善尽美"],"tip":"按时代串记：葛天氏→伊耆氏→黄帝→舜，口诀「葛蜡云韶」。"},{"q":"贾湖骨笛","type":"名词解释","pts":["河南舞阳贾湖遗址出土，距今约八千年，新石器时代早期。","多为七孔，可吹奏七声音阶，部分能奏完整七声。","是中国迄今发现最早的乐器实物之一，把中国音乐可考历史大幅前推。","证明原始先民已具备明确的音高与音阶意识。"],"keys":["贾湖","骨笛","七孔","八千年"],"tip":"「骨笛一响，八千年」——地点、年代、孔数、意义四要素。"},{"q":"原始乐器主要有哪些？","type":"简答","pts":["吹奏类：骨笛、骨哨、陶埙（一孔至多孔，音高渐全）。","打击类：石磬（特磬）、陶钟、陶鼓、陶响器、摇响器。","特点：材质天然，多与狩猎、祭祀、巫术相关；尚无成熟弦乐器实证。"],"keys":["骨笛","陶埙","石磬","陶鼓"],"tip":"按「吹—打」两类记，再补一句「弦乐器尚无实证」，答题更严谨。"},{"q":"夔","type":"名词解释","pts":["舜时乐官，《尚书·舜典》载「夔，命汝典乐，教胄子」。","「击石拊石，百兽率舞」，反映原始乐舞诗、乐、舞一体的形态。","被视作中国最早的音乐管理者与音乐教育者。"],"keys":["夔","典乐","击石拊石"],"tip":"记住身份（乐官）+ 出处（《尚书》）+ 名言（击石拊石）。"},{"q":"关于音乐起源的主要学说","type":"简答","pts":["劳动说：音乐起源于生产劳动（最具影响力）。","模仿说、巫术说、情感说、游戏说、异性求爱说。","中国古代有「物动心感」说，《乐记》「凡音之起，由人心生也」。","考古实证以骨笛、埙、磬等乐器为依据。"],"keys":["劳动说","巫术说","物动心感"],"tip":"五说记「劳模巫情游」——劳动、模仿、巫术、情感、游戏。"}]},{"id":"cn02","num":"二","title":"夏商音乐","era":"前21世纪—前11世纪","intro":"青铜时代，巫乐盛行，乐器由陶石走向青铜。","cards":[{"q":"夏商时期的代表性乐舞","type":"简答","pts":["《大夏》：夏禹时乐舞，歌颂治水功绩。","《大濩》：商汤时乐舞，歌颂伐桀之功。","《雩舞》：求雨祭祀之舞。","《魌舞》：驱疫逐鬼的傩舞。","《桑林》：商代祭祀乐舞，后世被视作「淫乐」代表。"],"keys":["大夏","大濩","雩舞","魌舞","桑林"],"tip":"「夏禹汤濩」；《桑林》是反面典型，常作对比考点。"},{"q":"夏商时期的乐器","type":"简答","pts":["铜铃、陶埙、石磬、编磬、编铙。","虎纹特磬、排箫、兽面纹大铙等。","商代青铜乐器发达，编铙常三件一组，音高成组。","河南安阳殷墟等地出土集中。"],"keys":["编铙","特磬","排箫","大铙"],"tip":"「青铜三件套」：铙、磬、铃，再加陶埙。"},{"q":"「候人兮猗」","type":"名词解释","pts":["见《吕氏春秋·音初》，传为涂山氏之女等候夏禹时所唱。","现存最早的南方歌曲歌词之一。","「兮猗」为语气词，体现早期歌谣「以歌代言」的形态。"],"keys":["候人兮猗","吕氏春秋","涂山氏"],"tip":"四字歌词 + 出处 + 「最早南方歌词」的地位。"},{"q":"商代音乐的特点","type":"简答","pts":["巫乐盛行，音乐与占卜、祭祀紧密结合。","「淫乐」之说，商纣「以酒为池，悬肉为林」，反映享乐性音乐。","青铜乐器高度发达，编铙、大铙为标志。","音乐教育初现，「瞽宗」为商代乐教机构。"],"keys":["巫乐","淫乐","瞽宗"],"tip":"两点定性（巫、淫）+ 一点实物（青铜）+ 一点制度（瞽宗）。"}]},{"id":"cn03","num":"三","title":"西周春秋战国","era":"前11世纪—前221","intro":"礼乐制度确立、八音分类、曾侯乙编钟，先秦音乐的高峰。","cards":[{"q":"礼乐制度","type":"名词解释","pts":["周初周公「制礼作乐」，以乐配礼、维护宗法等级。","等级规范：天子八佾、诸侯六佾、大夫四佾、士二佾。","乐悬：王宫悬、诸侯轩悬、卿大夫判悬、士特悬。","设「大司乐」掌乐教，为周代最高音乐机构。","核心观念「礼辨异，乐和同」。"],"keys":["制礼作乐","八佾","乐悬","大司乐","礼辨异乐和同"],"tip":"「佾—悬—司乐—和同」四级记忆，数字（8/6/4/2）必写。"},{"q":"六代之乐","type":"名词解释","pts":["《云门》（黄帝）、《大咸》（尧）、《大韶》（舜）。","《大夏》（禹）、《大濩》（汤）、《大武》（周武王）。","用于祭祀大典，又称「六大舞」，是雅乐的核心。","《大武》为西周代表作，表现武王伐纣。"],"keys":["云门","大咸","大韶","大夏","大濩","大武"],"tip":"「云咸韶夏濩武」六字诀，对应黄尧舜禹汤武。"},{"q":"八音分类法","type":"名词解释","pts":["按制作材料分乐器为八类，见《周礼·春官》。","金（钟镈）、石（磬）、土（埙缶）、革（鼓）。","丝（琴瑟）、木（柷敔）、匏（笙竽）、竹（箫管）。","中国最早的乐器科学分类法，影响深远。"],"keys":["金石土革","丝木匏竹","周礼"],"tip":"八字口诀「金石土革，丝木匏竹」，每种各举一器。"},{"q":"曾侯乙墓编钟","type":"名词解释","pts":["1978年湖北随州擂鼓墩出土，战国早期。","共65件，分三层八组，总重约2500公斤。","「一钟双音」，十二律俱全，可在多调上旋宫转调。","钟体铭文2828字，记载各国律名对照。","证明先秦乐律学与铸造工艺的高度发达。"],"keys":["曾侯乙","65件","一钟双音","十二律","旋宫转调"],"tip":"数字题：1978、65件、三层八组、2828字、一钟双音。"},{"q":"三分损益法与十二律","type":"名词解释","pts":["三分损益：以弦长或管长为基准，损一（×2/3）或益一（×4/3）求得各音。","《管子·地员》以「先益后损」求出五音（宫商角徵羽）。","《吕氏春秋·音律》以「先损后益」推全十二律。","十二律：黄钟、大吕、太簇、夹钟、姑洗、仲吕、蕤宾、林钟、夷则、南吕、无射、应钟。","局限：仲吕不能还生黄钟，故有后世六十律、十八律、新法密率等探索。"],"keys":["三分损益","管子","吕氏春秋","十二律"],"tip":"十二律按「黄大太夹姑仲蕤，林夷南无应」背，顺序必考。"},{"q":"伶伦作律","type":"名词解释","pts":["传说黄帝命伶伦取昆仑之竹制管，以定十二律。","见《吕氏春秋·古乐》，有「听凤鸣以别十二律」的神话色彩。","反映古人对律吕起源的想象，是律学史的起点叙事。"],"keys":["伶伦","制管","吕氏春秋"],"tip":"「伶伦吹竹定十二律」——人物、材料、数目三要点。"},{"q":"《诗经》《楚辞》《九歌》《成相篇》","exam":"简述《诗经》《楚辞》与《成相篇》的音乐史料价值。","type":"简答","pts":["《诗经》分风、雅、颂，孔子编订，皆可弦歌。","《楚辞》：屈原作品，楚地民歌色彩。","《九歌》：屈原据民间祭神乐歌改作，共十一篇。","《成相篇》：荀子作，以「相」（春牍）击节，被视为说唱艺术的雏形。"],"keys":["风雅颂","楚辞","九歌","成相篇"],"tip":"《成相篇》是「说唱雏形」的固定考点，务必点出。"},{"q":"先秦音乐家群像","type":"简答","pts":["伶州鸠：周景王时乐官，论十二律与「七律」。","师旷：晋国盲乐师，善琴，能「听声辨吉凶」。","师涓、师襄、师文、师乙：卫、鲁、郑、鲁乐师；师襄为孔子琴师。","秦青「声振林木，响遏行云」，韩娥「余音绕梁，三日不绝」。","伯牙善琴，钟子期知音，「高山流水」典故。"],"keys":["伶州鸠","师旷","秦青","韩娥","伯牙"],"tip":"分两类：宫廷乐官（伶州鸠、师旷、师襄）+ 传说歌手琴家（秦青、韩娥、伯牙）。"},{"q":"「百家争鸣」中的音乐思想","type":"论述","pts":["儒家：孔子「尽善尽美」「兴于诗，立于礼，成于乐」；荀子《乐论》「乐者，乐也」，主张以乐教化。","墨家：墨子《非乐》，指音乐耗费财力和误政，代表小生产者立场。","道家：老子「大音希声」，庄子「天籁」「无声之中独闻和」，崇尚自然。","儒道互补，构成中国古代音乐美学的两大源头。"],"keys":["尽善尽美","非乐","大音希声","天籁"],"tip":"三家三句：儒「和」、墨「非」、道「无」。"},{"q":"《乐记》","type":"名词解释","pts":["现存最早、最系统的音乐美学专著，传为公孙尼子所作。","核心命题：「凡音之起，由人心生也」「物动心感」。","主张「礼辨异，乐和同」「乐者，通伦理者也」，强调音乐的社会功能。","对后世中国音乐美学影响深远。"],"keys":["乐记","物动心感","礼辨异乐和同"],"tip":"地位（最早最系统）+ 三句原文，是万能答题模板。"}]},{"id":"cn04","num":"四","title":"秦汉音乐","era":"前221—220","intro":"乐府采风、鼓吹乐兴起、相和歌成形、丝绸之路初开。","cards":[{"q":"乐府","type":"名词解释","pts":["秦代已设「乐府」，汉武帝时大规模扩建。","职能：采集民间歌谣、创作改编、宫廷演出。","李延年任协律都尉，主持乐府音乐。","汉哀帝时罢乐府，但所存民歌影响深远。","是中国历史上重要的官方音乐机构。"],"keys":["乐府","汉武帝","李延年","协律都尉"],"tip":"「秦设汉盛哀帝罢」——三段式记沿革。"},{"q":"鼓吹乐","type":"名词解释","pts":["源于北方游牧民族，以鼓、角、笳、笛为主要乐器。","鼓吹：用于朝会、道路仪仗。","横吹：军中马上演奏，有《横吹曲》。","短箫铙歌：军乐、凯歌，用于激励士气。","汉代宫廷重要乐种，后广泛用于仪仗、婚丧。"],"keys":["鼓吹","横吹","短箫铙歌","鼓角"],"tip":"三分类「鼓吹—横吹—短箫铙歌」，各记使用场合。"},{"q":"相和歌与相和大曲","type":"名词解释","pts":["相和歌：北方民间歌曲，「丝竹更相和，执节者歌」，一人唱、众人和。","相和大曲：在相和歌基础上发展的大型歌舞，结构为「艳—解—趋（或乱）」。","代表作：《陌上桑》《东门行》。","是汉魏时期最重要的歌舞音乐形式之一。"],"keys":["相和歌","丝竹更相和","艳解趋","相和大曲"],"tip":"结构「艳—解—趋—乱」，四个字必须按序写。"},{"q":"百戏与角抵戏","type":"名词解释","pts":["百戏：汉代综合性表演艺术，含歌舞、杂技、幻术、角抵。","角抵戏：源于战国角力，汉代盛行，带戏剧因素。","张衡《西京赋》有生动记载。","音乐与戏剧结合的先声。"],"keys":["百戏","角抵戏","西京赋"],"tip":"「百戏是筐，角抵是戏」——总类与子类的关系。"},{"q":"京房六十律与京房准","type":"名词解释","pts":["西汉京房为解决三分损益「仲吕不能还生黄钟」的矛盾。","将律数推至六十律，试图实现旋宫。","创制「京房准」，十三弦定律器，用于调律。","是律学探索的重要成果，但未真正解决问题。"],"keys":["京房","六十律","京房准"],"tip":"人—数—器：京房、六十律、十三弦准。"},{"q":"三种七声音阶","type":"简答","pts":["雅乐音阶（正声音阶）：1 2 3 #4 5 6 7，第四级升高。","清乐音阶（下徵音阶）：1 2 3 4 5 6 7，即自然七声。","燕乐音阶（清商音阶）：1 2 3 4 5 6 b7，第七级降低。","三者区别在「四级」与「七级」的半音位置，是判断调式的关键。"],"keys":["雅乐音阶","清乐音阶","燕乐音阶","变徵","闰"],"tip":"口诀「雅升四、清全白、燕降七」。"},{"q":"声曲折","type":"名词解释","pts":["汉代记谱形式，以线条或符号描摹旋律的高低走向。","见《汉书·艺文志》「歌声曲折」。","具体形态已失传，是中国早期记谱法的重要线索。"],"keys":["声曲折","汉书艺文志","记谱"],"tip":"「声」是歌，「曲折」是旋律线——望文生义即可得分。"},{"q":"丝绸之路与汉代音乐交流","type":"简答","pts":["张骞通西域，开启中外音乐交流的第一个高峰。","传入：横吹、曲项琵琶、箜篌、胡笳、羌笛。","传出：丝竹乐器、乐律观念。","为隋唐多部乐的形成奠定基础。"],"keys":["张骞","横吹","琵琶","箜篌","胡笳"],"tip":"「进多出少」——记传入乐器清单即可应付简答。"}]},{"id":"cn05","num":"五","title":"魏晋南北朝音乐","era":"220—589","intro":"清商乐兴盛、琴学自觉、律学探索，音乐走向独立与思辨。","cards":[{"q":"清商乐","type":"名词解释","pts":["承相和歌而来，融合南方吴歌、西曲。","「清商三调」：平调、清调、瑟调（侧调）。","北魏孝文帝时称「清商乐」，隋唐归入「清乐」。","是这一时期最具代表性的音乐。"],"keys":["清商乐","吴歌","西曲","清商三调"],"tip":"「承相和、融吴西、分三调」三句话。"},{"q":"吴歌与西曲","type":"简答","pts":["吴歌：建康一带，婉转抒情，多五言四句，如《子夜歌》。","西曲：荆楚一带，节奏明快，多写商旅离别，如《莫愁乐》。","二者共同构成清商乐的主体。"],"keys":["吴歌","西曲","子夜歌"],"tip":"「吴柔西快」——地域与风格一一对应。"},{"q":"嵇康《声无哀乐论》","type":"名词解释","pts":["魏晋玄学背景下的音乐美学论著。","核心：「声音自当以善恶为主，则无关于哀乐」。","认为音乐本体无情感，哀乐生于人心，反对儒家「乐与政通」。","是中国音乐美学史上的里程碑。"],"keys":["嵇康","声无哀乐论","无关于哀乐"],"tip":"一句核心原文 + 一句评价（里程碑），足够。"},{"q":"阮籍《酒狂》与《乐论》","type":"简答","pts":["阮籍，竹林七贤之一，善琴。","《酒狂》：古琴曲，三拍子，写醉酒佯狂之态。","《乐论》：主张「乐者，天地之体，万物之性」。"],"keys":["阮籍","酒狂","乐论"],"tip":"「嵇声无、阮乐论」——两人两书不要混。"},{"q":"荀勖笛律","type":"名词解释","pts":["西晋荀勖制十二笛，每笛可奏三调。","发现「管口校正」：管乐器空气柱长度不等于管长。","是律学与乐器声学的重要成就。"],"keys":["荀勖","笛律","管口校正"],"tip":"一个关键词「管口校正」就是得分点。"},{"q":"文字谱《碣石调·幽兰》","type":"名词解释","pts":["南朝梁丘明传谱，现存最早的古琴谱。","文字谱：用文字详述指法、弦序、徽位。","唐曹柔在此基础上发展为减字谱。","原件现存日本京都神光院。"],"keys":["文字谱","碣石调幽兰","丘明","减字谱"],"tip":"「最早琴谱 + 文字谱 + 藏于日本」三点。"},{"q":"魏晋南北朝时期的律学与音乐交流","type":"简答","pts":["何承天新律：南朝宋，律数接近十二平均律。","钱乐之三百六十律：南朝宋，律数极度细化。","曹妙达：北齐琵琶世家，西域音乐东传。","苏祗婆：北周龟兹人，传入「五旦七调」。","佛教音乐：梵呗、法曲兴起。"],"keys":["何承天","钱乐之","曹妙达","苏祗婆","五旦七调"],"tip":"「何新、钱三六、曹琵琶、苏五旦」四组对应。"}]},{"id":"cn06","num":"六","title":"隋唐五代音乐","era":"581—960","intro":"多部乐、燕乐大曲、教坊梨园，中国古代音乐的鼎盛期。","cards":[{"q":"七部乐、九部乐、十部乐","type":"名词解释","pts":["隋初设「七部乐」：国伎、清商、高丽、天竺、安国、龟兹、文康。","隋炀帝改为「九部乐」：清乐、西凉、龟兹、天竺、康国、疏勒、安国、高丽、礼毕（文康改名）。","唐太宗定「十部乐」：燕乐、清商、西凉、天竺、高丽、龟兹、安国、疏勒、康国、高昌。","体现唐代宫廷音乐的多元与开放。"],"keys":["七部乐","九部乐","十部乐","龟兹","高昌"],"tip":"数字递进 7→9→10；九部里的「礼毕」就是原来的「文康」，不是删掉。"},{"q":"坐部伎与立部伎","type":"名词解释","pts":["唐代宫廷燕乐分二部。","坐部伎：堂上坐奏，人数少，技艺高，共六部。","立部伎：堂下立奏，人数多，共八部。","标志唐代燕乐的高度发展。"],"keys":["坐部伎","立部伎","六部","八部"],"tip":"「坐六立八，坐高立众」。"},{"q":"唐代音乐机构","type":"简答","pts":["太常寺下设大乐署（雅乐、燕乐训练）与鼓吹署（仪仗鼓吹）。","教坊：唐初设，掌俗乐歌舞，后专管宫廷俗乐。","梨园：唐玄宗设，专习法曲，乐工称「皇帝梨园弟子」。","形成完备的宫廷音乐教育与管理体系。"],"keys":["大乐署","鼓吹署","教坊","梨园"],"tip":"「两署两坊园」——大乐、鼓吹、教坊、梨园。"},{"q":"燕乐大曲与《霓裳羽衣曲》","type":"名词解释","pts":["燕乐大曲：唐代大型歌舞音乐，结构为「散序—中序—破」。","《霓裳羽衣曲》：唐代燕乐大曲的代表作，相传唐玄宗吸收《婆罗门曲》素材作成。","白居易《霓裳羽衣歌》详述其结构与舞态，是研究唐代大曲的重要文献。","代表唐代歌舞大曲的最高成就。"],"keys":["燕乐大曲","散序中序破","霓裳羽衣曲"],"tip":"三段结构「散序—中序—破」必背；答题时归为「燕乐大曲」，不要与法曲、健舞软舞混为一类。"},{"q":"健舞、软舞与法曲","type":"简答","pts":["健舞：刚健有力，如《胡旋》《胡腾》《柘枝》。","软舞：柔美舒缓，如《绿腰》《春莺啭》。","法曲：源于佛教法会音乐，风格清雅，乐器以钟磬琴瑟为主，由梨园法部专司。","三者是唐代宫廷乐舞与音乐的不同类别，注意与燕乐大曲区分。"],"keys":["健舞","软舞","胡旋","绿腰","法曲"],"tip":"「健胡旋、软绿腰、法清雅」；法曲是音乐类别，大曲是结构体裁，别混。"},{"q":"声诗、曲子、变文与《阳关三叠》","type":"简答","pts":["声诗：入乐歌唱的唐诗，「选诗入乐」。","曲子：民间长短句歌曲，是词的音乐源头。","变文：寺院说唱，散文与韵文交替，讲唱结合。","《阳关三叠》：王维《送元二使安西》入乐，叠唱三遍。"],"keys":["声诗","曲子","变文","阳关三叠"],"tip":"「诗—词—说唱—琴歌」四条线，各一例。"},{"q":"唐代乐器与器乐","type":"简答","pts":["古琴：《梅花三弄》为代表曲目。","琵琶：曲项琵琶，横抱，用拨子演奏，是燕乐主奏乐器。","箜篌、筚篥、羌笛、胡笳等西域乐器盛行。","敦煌壁画与乐舞图像保存大量乐器资料。"],"keys":["梅花三弄","曲项琵琶","筚篥","箜篌"],"tip":"「琴一琶一，胡乐一片」。"},{"q":"唐代乐谱种类","type":"简答","pts":["减字谱：曹柔创，古琴专用，由文字谱简化而来。","管色谱：工尺谱的前身。","弦索谱、律吕字谱、龟兹谱。","记谱法的多样化反映唐代音乐传播的需要。"],"keys":["减字谱","管色谱","律吕字谱","龟兹谱"],"tip":"「减、管、弦、律、龟」五谱连背。"},{"q":"唐代乐调理论","type":"简答","pts":["旋宫转调：调高与调式的转换。","六十调、八十四调：隋代郑译、万宝常据龟兹乐调发展而来。","五旦七调：龟兹苏祗婆所传。","二十八调：唐代燕乐调体系。"],"keys":["旋宫转调","八十四调","五旦七调","二十八调"],"tip":"数字链：5+7→12→60→84→28，按时代排。"},{"q":"唐代音乐著作与音乐家","type":"简答","pts":["《乐书要录》（元万顷等）、《教坊记》（崔令钦）。","《羯鼓录》（南卓）、《乐府杂录》（段安节）。","《太乐令壁记》（刘贶）、《通典·乐典》（杜佑）。","音乐家：万宝常、祖孝孙、李隆基、张文收。","歌者乐工：永新（许和子）、念奴、张红红、段善本、雷海青。"],"keys":["乐府杂录","羯鼓录","教坊记","永新","念奴"],"tip":"「三录一记一典」+ 两组人物（律学家 / 歌者）。"},{"q":"开皇乐议与唐代对外音乐交流","type":"简答","pts":["开皇乐议：隋初关于雅乐宫调的大讨论，郑译、万宝常等参与，促成八十四调。","唐代对外交流：吸收天竺、龟兹、高丽、日本音乐。","日本遣唐使带回大量乐器与乐谱，正仓院保存唐乐器。","形成「胡乐入华、华乐外传」的双向格局。"],"keys":["开皇乐议","遣唐使","正仓院"],"tip":"「一议一传」：开皇乐议 + 遣唐使。"}]},{"id":"cn07","num":"七","title":"宋元音乐","era":"960—1368","intro":"词乐、说唱、戏曲成熟，音乐重心由宫廷转向市井。","cards":[{"q":"姜夔与《白石道人歌曲》","type":"名词解释","pts":["南宋姜夔，号白石道人，词人兼作曲家。","《白石道人歌曲》存十七首旁谱，是现存最早的宋词乐谱。","自度曲：《扬州慢》《杏花天影》《暗香》《疏影》。","为研究宋代词乐提供珍贵实证。"],"keys":["姜夔","白石道人歌曲","自度曲","扬州慢"],"tip":"「十七首旁谱」是数字考点；自度曲举《扬州慢》。"},{"q":"《潇湘水云》","type":"名词解释","pts":["南宋郭沔（楚望）作，浙派古琴代表作。","借九嶷山云水缭绕之景，抒家国沦亡之痛。","技法上多用「吟猱」，意境深远。"],"keys":["潇湘水云","郭沔","浙派"],"tip":"人、派、情三点：郭沔、浙派、家国之痛。"},{"q":"宋元说唱音乐","type":"简答","pts":["鼓子词：以鼓伴奏，同一曲牌反复，赵令畤《商调蝶恋花》。","唱赚：张五牛创，集合多种曲牌，有「赚」的独特唱腔。","诸宫调：孔三传创，多宫调联缀说唱长篇故事，《西厢记诸宫调》。","货郎儿、陶真、涯词：市井说唱形式。"],"keys":["鼓子词","唱赚","诸宫调","孔三传","货郎儿"],"tip":"「鼓—赚—诸」三级递进，诸宫调最成熟，必举《西厢记》。"},{"q":"杂剧与南戏","type":"论述","pts":["杂剧：金元北方戏曲，四折一楔子，一人主唱，一宫到底。","关汉卿《窦娥冤》、王实甫《西厢记》、马致远《汉宫秋》。","南戏：温州杂剧，南方戏曲，结构灵活，多人分唱。","「四大传奇」：《荆钗记》《白兔记》《拜月亭》《杀狗记》。","元杂剧标志中国戏曲的成熟。"],"keys":["杂剧","四折一楔子","窦娥冤","南戏","四大传奇"],"tip":"「北杂剧严、南戏活」——结构对比是论述得分点。"},{"q":"散曲","type":"名词解释","pts":["元代兴盛，分小令与套数。","与杂剧合称「元曲」。","音乐上吸收民间曲调，语言通俗。"],"keys":["散曲","小令","套数","元曲"],"tip":"「小令短、套数长，合称元曲」。"},{"q":"蔡元定十八律","type":"名词解释","pts":["南宋蔡元定创，为解决旋宫转调问题。","在十二律基础上增加六个变律，共十八律。","使十二律各均都能构成完整的七声音阶。","是律学史上的重要成果。"],"keys":["蔡元定","十八律","变律"],"tip":"「十二加六变十八」，目的：各均成七声。"},{"q":"《海青拿天鹅》与奚琴","type":"简答","pts":["《海青拿天鹅》：元代琵琶曲，现存最早的琵琶独奏曲之一。","描绘海青（猎鹰）捕捉天鹅的场景，技法丰富。","奚琴：宋代拉弦乐器，二胡的前身。","反映器乐独立发展的趋势。"],"keys":["海青拿天鹅","奚琴","琵琶独奏"],"tip":"一曲一器：琵琶曲 + 奚琴（二胡前身）。"},{"q":"宋元音乐著作","type":"简答","pts":["陈旸《乐书》：中国第一部音乐百科全书式著作。","王灼《碧鸡漫志》：词乐研究。","朱长文《琴史》：第一部琴史专著。","《唐会要·乐类》、《事林广记》。","燕南芝庵《唱论》：演唱理论。"],"keys":["陈旸乐书","碧鸡漫志","琴史","唱论"],"tip":"「乐书百科、琴史首部、唱论唱法」三顶帽子。"},{"q":"宋代市民音乐","type":"论述","pts":["城市经济繁荣，出现「瓦舍」「勾栏」等固定演艺场所。","曲子词、说唱（鼓子词、唱赚、诸宫调）、杂剧、傀儡戏等在市井繁荣。","音乐重心由宫廷转向市民，音乐商品化、职业化。","为元杂剧与明清戏曲、说唱的发展奠定基础。"],"keys":["瓦舍","勾栏","曲子词","市民音乐"],"tip":"「瓦舍勾栏」是标志性名词；答题时点出「重心下移、商品化」两条。"}]},{"id":"cn08","num":"八","title":"明清音乐","era":"1368—1911","intro":"戏曲声腔更迭、说唱繁盛、朱载堉十二平均律领先世界。","cards":[{"q":"明清民歌与歌舞","type":"简答","pts":["民歌小曲兴盛，《山歌》《挂枝儿》等集子出现。","歌舞：秧歌、花鼓、采茶广泛流行。","少数民族音乐：新疆木卡姆、西藏囊玛与堆谐。"],"keys":["山歌","挂枝儿","木卡姆","囊玛","堆谐"],"tip":"「汉地小曲、南北歌舞、边疆三类」。"},{"q":"明清说唱音乐","type":"简答","pts":["弹词：南方说唱，琵琶、三弦伴奏，苏州弹词为代表。","鼓词：北方说唱，以鼓板击节，发展为京韵大鼓。","京韵大鼓：刘宝全改革定型。","牌子曲、道情、琴书等遍布各地。"],"keys":["弹词","鼓词","京韵大鼓","刘宝全"],"tip":"「南弹北鼓」，再记一个代表人物刘宝全。"},{"q":"四大声腔","type":"名词解释","pts":["明代戏曲四大声腔：海盐腔、余姚腔、弋阳腔、昆山腔。","昆山腔经魏良辅改革，形成「水磨调」，即昆曲。","汤显祖《牡丹亭》为昆曲代表作。","昆曲被誉为「百戏之祖」。"],"keys":["海盐腔","余姚腔","弋阳腔","昆山腔","魏良辅"],"tip":"「海余弋昆」四字；改革者魏良辅、水磨调必写。"},{"q":"乱弹、梆子腔与皮黄腔","type":"简答","pts":["清代「花雅之争」，花部（乱弹）兴起，雅部（昆曲）衰落。","梆子腔：源于秦腔，板腔体，胡琴伴奏，高亢激越。","皮黄腔：西皮与二黄，为京剧音乐基础。","板腔体逐渐取代曲牌体成为戏曲音乐主流。"],"keys":["花雅之争","梆子腔","皮黄腔","板腔体"],"tip":"「花雅之争」是明清戏曲的分水岭，务必点出。"},{"q":"明清器乐","type":"简答","pts":["乐种：西安鼓乐、福建南音、十番锣鼓。","古琴流派：浙派、虞山派（严澂《松弦馆琴谱》）、广陵派（徐常遇）。","名曲：《平沙落雁》《十面埋伏》。"],"keys":["西安鼓乐","福建南音","虞山派","广陵派","平沙落雁"],"tip":"「三大乐种、三大琴派、两首名曲」。"},{"q":"朱载堉「新法密率」","type":"名词解释","pts":["明代朱载堉创，即十二平均律，见《律学新说》《律吕精义》。","以算盘计算 2 的十二次方根，求出等比律。","1584 年提出，早于欧洲约半个世纪。","是世界律学史上的重大贡献。"],"keys":["朱载堉","新法密率","十二平均律","1584"],"tip":"人、名、年、义四项；「早于欧洲半世纪」是采分句。"},{"q":"明清重要曲谱","type":"简答","pts":["《神奇秘谱》：朱权编，现存最早的琴谱集。","《九宫大成南北词宫谱》：1746 年，规模最大的曲谱集。","《纳书楹曲谱》《弦索备考》《魏氏乐谱》。","《华秋苹琵琶谱》：第一部琵琶谱。","《南北十三套大曲琵琶新谱》。"],"keys":["神奇秘谱","九宫大成","华秋苹琵琶谱"],"tip":"「最早琴谱、最大曲谱、最早琵琶谱」三顶帽子。"},{"q":"工尺谱","type":"名词解释","pts":["以「上、尺、工、凡、六、五、乙」记音的唱名谱。","明清最通行的记谱法，由管色谱发展而来。","广泛应用于戏曲、器乐、说唱。"],"keys":["工尺谱","上尺工凡六五乙"],"tip":"七字谱字按序背，别写成「合四一上尺工凡」。"},{"q":"利玛窦与明清中外音乐交流","type":"简答","pts":["利玛窦 1601 年进京，献古钢琴（大键琴）。","唢呐、扬琴等乐器陆续传入。","西方乐理随传教士进入中国。","中西音乐交流进入新阶段。"],"keys":["利玛窦","古钢琴","唢呐","扬琴"],"tip":"「一琴两器」：古钢琴 + 唢呐、扬琴。"},{"q":"《溪山琴况》","type":"名词解释","pts":["明末虞山派琴家徐上瀛著，古琴美学专著。","仿司空图《二十四诗品》，提出琴乐「二十四况」。","以「和」为总纲，讲求清、微、淡、远，是虞山派美学的总结。","与《乐记》《声无哀乐论》并称中国古代三大音乐美学著作。"],"keys":["溪山琴况","徐上瀛","二十四况","虞山派"],"tip":"「徐上瀛、二十四况、虞山派」三件套；三大美学著作之一。"}]},{"id":"cn09","num":"九","title":"清末民初音乐","era":"1840—1919","intro":"西乐东渐、学堂乐歌兴起，中国音乐近代转型的起点。","cards":[{"q":"学堂乐歌","type":"名词解释","pts":["清末新式学堂开设乐歌课，集体歌唱成为制度化的音乐教育。","多采用日本、欧美曲调重新填词，少量自创曲调。","代表人物：沈心工、李叔同、曾志忞。","标志中国近代音乐教育与群众歌咏的开端。"],"keys":["学堂乐歌","沈心工","李叔同","曾志忞","填词"],"tip":"「旧曲填新词」是本质特征；三人名必写。"},{"q":"沈心工","type":"名词解释","pts":["学堂乐歌代表人物，被誉为「学堂乐歌之父」。","编《学校唱歌集》（1904），影响广泛。","代表作《体操—兵操》（《男儿第一志气高》）、《黄河》。","主张音乐教育面向大众、振奋国民精神。"],"keys":["沈心工","学校唱歌集","男儿第一志气高"],"tip":"「一书一歌一号」：唱歌集、兵操、乐歌之父。"},{"q":"李叔同","type":"名词解释","pts":["学堂乐歌代表人物，后出家为弘一法师。","《送别》采用奥德威《梦见家和母亲》曲调填词，传唱至今。","《春游》为三部合唱，中国最早的合唱作品之一。","1906 年创办《音乐小杂志》，中国第一份音乐刊物。"],"keys":["李叔同","送别","春游","音乐小杂志"],"tip":"三件套：送别、春游、音乐小杂志（1906）。"},{"q":"曾志忞","type":"简答","pts":["学堂乐歌代表人物、音乐理论译介者。","编《乐典教科书》《教育唱歌集》。","组织「音乐讲习会」，推动乐理普及。"],"keys":["曾志忞","乐典教科书","音乐讲习会"],"tip":"「曾译书、办讲习」——理论一侧的代表。"},{"q":"清末民初的其他音乐成果","type":"简答","pts":["《和平进行曲》（赵元任，1915）：中国第一首钢琴曲。","《行路难》（李四光，1920）：中国第一首小提琴曲。","狄就烈《乐法启蒙》：早期乐理教材。","伶工学社（南通，张謇、欧阳予倩）：戏曲改良实践。","王国维《宋元戏曲史》：戏曲史学的奠基之作。"],"keys":["和平进行曲","行路难","乐法启蒙","伶工学社","宋元戏曲史"],"tip":"两个「第一」：钢琴《和平进行曲》、小提琴《行路难》。"},{"q":"清末民初的音乐思想","type":"论述","pts":["改良与启蒙：以音乐「新民」，梁启超提倡小说戏曲的社会功能。","美育：蔡元培「以美育代宗教」，把音乐纳入教育体系。","国粹与西化之争：既学习西方，又整理国乐。","为五四以后专业音乐的发展做了思想准备。"],"keys":["美育","以美育代宗教","新民","国粹"],"tip":"三条线：启蒙、美育、中西之争。"}]},{"id":"cn10","num":"十","title":"二十世纪二十年代音乐","era":"1919—1929","intro":"专业音乐教育建立、艺术歌曲与国乐改进并起。","cards":[{"q":"萧友梅","type":"名词解释","pts":["中国专业音乐教育的奠基人。","1927 年创办上海国立音乐院（后改国立音乐专科学校）。","代表作《问》（易韦斋词）、《新霓裳羽衣舞》。","主张「以西乐为参照，建立中国专业音乐教育体系」。"],"keys":["萧友梅","上海国立音乐院","问"],"tip":"「1927 上音」是必背年份事件。"},{"q":"赵元任","type":"名词解释","pts":["语言学家、作曲家，中国艺术歌曲的奠基者。","《新诗歌集》：中国第一部个人艺术歌曲集，收《教我如何不想他》《卖布谣》等。","《教我如何不想他》（刘半农词）、《海韵》（合唱）、《卖布谣》。","注重汉语声调与旋律的结合，追求「依字行腔」。","把民族语言韵味带入艺术歌曲创作。"],"keys":["赵元任","教我如何不想他","新诗歌集","海韵","依字行腔"],"tip":"「语言学家的作曲家」——声调与旋律结合是关键评价。"},{"q":"黎锦晖","type":"名词解释","pts":["儿童歌舞剧的开创者。","作品《麻雀与小孩》《小小画家》《可怜的秋香》。","中国流行音乐的先驱（《毛毛雨》）。","作品通俗、贴近儿童生活，影响广泛。"],"keys":["黎锦晖","儿童歌舞剧","麻雀与小孩","毛毛雨"],"tip":"「儿童歌舞剧之父 + 流行乐先驱」双重身份。"},{"q":"刘天华","type":"论述","pts":["二胡、琵琶演奏家、作曲家、教育家。","十首二胡曲：《病中吟》《月夜》《苦闷之讴》《悲歌》《良宵》《闲居吟》《空山鸟语》《光明行》《独弦操》《烛影摇红》。","1927 年发起「国乐改进社」，主张「从东西调和与合作中打出一条新路」。","把二胡从民间乐器提升到专业独奏地位。"],"keys":["刘天华","十首二胡曲","国乐改进社","良宵","光明行"],"tip":"十曲至少记「病、月、苦、悲、良、闲、空、光、独、烛」。"},{"q":"王光祈","type":"名词解释","pts":["音乐学家，比较音乐学的先驱。","《东西乐制之研究》《东方民族之音乐》《中国音乐史》。","旅居德国，用比较方法研究世界音乐。","为中国音乐学引入现代学术方法。"],"keys":["王光祈","东西乐制之研究","比较音乐学"],"tip":"「三书一学」：三本著作 + 比较音乐学。"},{"q":"二十年代的音乐社团与机构","type":"简答","pts":["北京大学音乐研究会（1919，蔡元培支持）。","大同乐会（1920，郑觐文）——整理国乐、改良乐器。","北京大学附设音乐传习所（1922，萧友梅）。","上海工部局乐队（梅百器）——中国最早的职业交响乐团之一。"],"keys":["北大音乐研究会","大同乐会","音乐传习所","工部局乐队","梅百器"],"tip":"按「北大—大同—传习所—工部局」时间顺序记。"},{"q":"早期的中国音乐史著作","type":"简答","pts":["叶伯和《中国音乐史》（1922）：中国第一部中国音乐史。","郑觐文《中国音乐史》。","顾梅羹《中国音乐史》。","童斐《中乐寻源》。"],"keys":["叶伯和","郑觐文","顾梅羹","童斐","中乐寻源"],"tip":"「叶第一」——1922 叶伯和，务必记牢。"},{"q":"二十年代的革命音乐","type":"简答","pts":["《国际歌》：瞿秋白 1923 年译配。","《赤潮曲》：瞿秋白作词作曲。","工农革命歌曲在根据地传唱。","音乐开始与革命运动结合。"],"keys":["国际歌","瞿秋白","赤潮曲"],"tip":"「瞿秋白两首歌」：译《国际歌》、写《赤潮曲》。"}]},{"id":"cn11","num":"十一","title":"二十世纪三十年代音乐","era":"1930—1939","intro":"救亡歌咏高涨、学院派成熟、中国歌剧开始探索。","cards":[{"q":"抗日救亡歌咏运动","type":"名词解释","pts":["九一八事变后兴起的群众歌咏运动。","左翼音乐家联盟等组织推动，歌曲成为救亡武器。","代表：聂耳、冼星海、任光、张曙、张寒晖。","群众歌咏遍及全国，是中国近代音乐史上规模最大的音乐运动。"],"keys":["救亡歌咏","左翼","聂耳","冼星海"],"tip":"「九一八起、群众唱、救亡用」三句。"},{"q":"萧友梅与上海国立音乐院","type":"简答","pts":["1927 年创办，1929 年改组为「国立音乐专科学校」。","设理论作曲、声乐、钢琴、管弦等组。","培养贺绿汀、冼星海、丁善德、江定仙等。","是中国专业音乐教育的摇篮。"],"keys":["国立音专","1927","贺绿汀","丁善德"],"tip":"「1927 建、1929 改、四组设」。"},{"q":"黄自","type":"论述","pts":["作曲家、音乐教育家，学院派代表。","《长恨歌》：中国第一部清唱剧。","《玫瑰三愿》《抗敌歌》《旗正飘飘》《点绛唇》。","任教国立音专，培养大批作曲人才。"],"keys":["黄自","长恨歌","玫瑰三愿","清唱剧"],"tip":"「第一部清唱剧《长恨歌》」是最高频考点。"},{"q":"青主","type":"名词解释","pts":["作曲家、音乐美学家。","《大江东去》（苏轼词）：中国第一首艺术歌曲。","《我住长江头》。","著作《乐话》《音乐通论》，带表现主义美学倾向。"],"keys":["青主","大江东去","我住长江头","乐话"],"tip":"「两歌两书」；第一首艺术歌曲是《大江东去》。"},{"q":"齐尔品与中国风味钢琴曲","type":"名词解释","pts":["俄裔作曲家齐尔品 1934 年在上海「征求有中国风味的钢琴曲」。","贺绿汀《牧童短笛》获头奖，《摇篮曲》获名誉奖。","推动中国钢琴音乐的民族化创作。","是中国钢琴作品走向世界的起点。"],"keys":["齐尔品","牧童短笛","贺绿汀","中国风味"],"tip":"「齐尔品征稿、牧童短笛夺魁」。"},{"q":"三十年代的其他作曲家与作品","type":"简答","pts":["刘雪庵《长城谣》。","陈田鹤《采桑曲》。","江文也《台湾舞曲》。","任光《渔光曲》，张寒晖《松花江上》。"],"keys":["长城谣","台湾舞曲","渔光曲","松花江上"],"tip":"「一谣一曲一舞一歌」四件作品对号入座。"},{"q":"聂耳与冼星海","type":"论述","pts":["聂耳：《义勇军进行曲》《毕业歌》《铁蹄下的歌女》《卖报歌》。","聂耳的音乐短小精悍、节奏有力，塑造劳动者与战斗者形象。","冼星海：《黄河大合唱》（光未然词）、《在太行山上》《救国军歌》。","《黄河大合唱》是中国近代合唱艺术的里程碑。"],"keys":["聂耳","义勇军进行曲","冼星海","黄河大合唱"],"tip":"「聂短促有力、冼宏大史诗」——风格对比。"},{"q":"三十年代歌剧艺术的探索","type":"简答","pts":["《扬子江暴风雨》（聂耳）。","《观音》《王昭君》《岳飞》《荆轲》《孟姜女》。","《农村曲》《军民进行曲》《大地之歌》《秋子》。","多尝试中西结合，尚未形成成熟范式。"],"keys":["扬子江暴风雨","秋子","农村曲","歌剧探索"],"tip":"记「聂耳一部 + 秋子一部」即可撑起简答。"},{"q":"外国音乐家与中国音乐社团","type":"简答","pts":["梅百器：指挥上海工部局乐队。","查哈罗夫：钢琴教育家。","阿隆·阿甫夏洛穆夫：创作《北平胡同》等中国题材作品。","齐尔品：推动中国风味钢琴曲。","中华口琴会、今虞琴社（1936）等社团活跃。"],"keys":["梅百器","查哈罗夫","阿甫夏洛穆夫","今虞琴社"],"tip":"「一指挥、一钢琴、一作曲、一征稿」。"}]},{"id":"cn12","num":"十二","title":"二十世纪四十年代音乐","era":"1940—1949","intro":"延安文艺方向确立、民族新歌剧诞生、戏曲曲艺繁荣。","cards":[{"q":"马思聪","type":"名词解释","pts":["小提琴家、作曲家，中国小提琴音乐奠基人。","《思乡曲》《绥远组曲》（《内蒙组曲》）。","作品融合民歌素材与西方技法。","晚年旅居海外。"],"keys":["马思聪","思乡曲","绥远组曲"],"tip":"「小提琴 + 思乡曲」两个关键词。"},{"q":"谭小麟与丁善德","type":"简答","pts":["谭小麟：欣德米特弟子，作室内乐，技法现代。","丁善德：《春之旅》钢琴组曲、《长征交响曲》。","二人代表中国作曲技术的现代化探索。"],"keys":["谭小麟","欣德米特","丁善德","长征交响曲"],"tip":"「谭现代、丁交响」——师生两代的技术路线。"},{"q":"杨荫浏","type":"名词解释","pts":["音乐学家，中国民族音乐学的奠基人。","《中国音乐史纲》（1952）、《中国古代音乐史稿》（1981）。","抢救录制阿炳《二泉映月》等。","开创实地考察与文献互证的研究范式。"],"keys":["杨荫浏","中国古代音乐史稿","二泉映月"],"tip":"「史稿 + 阿炳」是杨荫浏的两个标签。"},{"q":"鲁艺、新音乐社与民间音乐研究","type":"简答","pts":["鲁迅艺术学院（1938，延安）：音乐系培养革命音乐干部。","新音乐社（1939，李凌、赵沨）：推动新音乐运动。","中国民间音乐研究会：系统采集民歌。","吕骥《中国民间音乐研究提纲》（1941）：民间音乐研究的纲领性文献。"],"keys":["鲁艺","新音乐社","吕骥","民间音乐研究提纲"],"tip":"「一院一社一会一提纲」。"},{"q":"延安文艺座谈会与秧歌运动","type":"论述","pts":["1942 年毛泽东《在延安文艺座谈会上的讲话》确立「文艺为工农兵服务」。","秧歌运动兴起，新秧歌《兄妹开荒》《夫妻识字》。","秧歌剧为民族新歌剧积累经验。","1945 年《白毛女》（马可等）诞生，标志民族新歌剧的成熟。"],"keys":["延安文艺座谈会","秧歌运动","兄妹开荒","白毛女"],"tip":"「讲话—秧歌—秧歌剧—白毛女」一条发展链。"},{"q":"四十年代的戏曲与曲艺","type":"简答","pts":["京剧「四大须生」：马连良、谭富英、杨宝森、奚啸伯。","京剧「四大名旦」：梅兰芳、程砚秋、尚小云、荀慧生。","越剧、黄梅戏等地方戏曲发展。","江南丝竹等器乐乐种繁荣。"],"keys":["四大须生","四大名旦","梅兰芳","越剧","黄梅戏"],"tip":"须生四人「马谭杨奚」，名旦四人「梅程尚荀」。"},{"q":"华彦钧与广东音乐","type":"简答","pts":["华彦钧（阿炳）：《二泉映月》《听松》《寒春风曲》。","广东音乐：《步步高》《雨打芭蕉》《赛龙夺锦》。","潮州音乐与潮州大锣鼓、汉剧汉乐、客家山歌、雷剧。","体现岭南音乐的丰富生态。"],"keys":["华彦钧","二泉映月","步步高","广东音乐","潮州大锣鼓"],"tip":"「一盲人、一乐种」：阿炳 + 广东音乐。"}]},{"id":"cn13","num":"十三","title":"新中国成立后至改革开放前","era":"1949—1978","intro":"专业音乐体系重建，红色经典与民族化创作的高峰。","cards":[{"q":"建国初期的音乐事业格局","type":"简答","pts":["群众歌咏、广播音乐、唱片出版迅速发展。","院系调整：中央音乐学院（1950）、上海音乐学院（1956）等建立。","成立民族音乐研究所，开展普查与整理。","音乐创作与政治运动紧密关联。"],"keys":["中央音乐学院","上海音乐学院","民族音乐研究所"],"tip":"「两院一所」+ 群众歌咏。"},{"q":"建国后至改革开放前的声乐作品","type":"简答","pts":["《歌唱祖国》（王莘）、《我的祖国》（刘炽）。","《我们走在大路上》《让我们荡起双桨》。","《长征组歌》（1965）。","合唱事业与群众歌咏相互推动。"],"keys":["歌唱祖国","我的祖国","长征组歌"],"tip":"「两歌一组歌」，作者王莘、刘炽。"},{"q":"建国后至改革开放前的歌剧与舞剧","type":"论述","pts":["歌剧《洪湖赤卫队》（1959）、《江姐》（1964）、《刘胡兰》。","舞剧《红色娘子军》（1964）、《白毛女》（1965）、《小刀会》。","民族歌剧在板腔体与西方歌剧结构间探索。","红色题材成为主流。"],"keys":["洪湖赤卫队","江姐","红色娘子军","白毛女"],"tip":"「两剧两舞」：洪湖、江姐、娘子军、白毛女。"},{"q":"建国后至改革开放前的器乐创作","type":"论述","pts":["小提琴协奏曲《梁祝》（何占豪、陈钢，1959）：越剧音调与奏鸣曲式结合。","钢琴协奏曲《黄河》（殷承宗等，1969）。","二胡《赛马》（黄海怀）、琵琶《彝族舞曲》（王惠然）。","「民族化」是核心命题：民歌、戏曲素材 + 西方体裁。"],"keys":["梁祝","何占豪","黄河协奏曲","赛马","彝族舞曲"],"tip":"《梁祝》= 越剧 + 奏鸣曲式，这句可作论述总纲。"},{"q":"戏曲现代化与「样板戏」","type":"简答","pts":["京剧现代戏《红灯记》《沙家浜》《智取威虎山》。","另有《海港》《奇袭白虎团》《杜鹃山》等。","唱腔、乐队、舞美全面改革，加用西洋乐器。","艺术上有创新，但创作被高度政治化。"],"keys":["红灯记","沙家浜","智取威虎山","样板戏"],"tip":"三出必记：《红灯记》《沙家浜》《智取威虎山》。"},{"q":"民族音乐研究与音乐考古","type":"简答","pts":["杨荫浏《中国古代音乐史稿》完成。","《中国民间歌曲集成》等「十大集成」启动。","1978 年曾侯乙编钟出土，引发音乐考古热潮。","传统音乐研究走向系统化。"],"keys":["音乐史稿","十大集成","曾侯乙编钟","音乐考古"],"tip":"「一史稿、一集成、一编钟」。"}]},{"id":"cn14","num":"十四","title":"改革开放后音乐","era":"1978 至今","intro":"新潮音乐、流行音乐、影视音乐多元并进。","cards":[{"q":"「新潮音乐」","type":"名词解释","pts":["1980 年代兴起的现代作曲潮流。","代表：谭盾、瞿小松、叶小钢、郭文景、陈其钢。","借鉴西方现代技法（音块、微分音、偶然音乐），并融入中国素材。","标志中国当代作曲与国际接轨。"],"keys":["新潮音乐","谭盾","瞿小松","叶小钢","郭文景"],"tip":"五个人名 + 一句「现代技法 + 中国素材」。"},{"q":"谭盾","type":"名词解释","pts":["作曲家，新潮音乐代表人物。","《离骚》《九歌》《地图》《水乐》。","《卧虎藏龙》配乐获奥斯卡最佳原创配乐。","擅长以非常规音响与多媒体构建「有机音乐」。"],"keys":["谭盾","卧虎藏龙","地图","水乐"],"tip":"「一奖两作」：奥斯卡 + 《地图》《水乐》。"},{"q":"中国流行音乐的发展","type":"简答","pts":["1980 年代港台流行歌曲涌入内地。","内地流行音乐兴起，西北风、摇滚等潮流。","崔健《一无所有》（1986）标志中国摇滚的诞生。","流行音乐逐渐获得文化合法性。"],"keys":["港台流行","西北风","崔健","一无所有"],"tip":"「1986 崔健」是摇滚元年考点。"},{"q":"影视音乐","type":"简答","pts":["王立平：《红楼梦》（1987）配乐、《大海啊故乡》。","赵季平：《红高粱》《霸王别姬》配乐。","三宝等新一代影视音乐人。","影视音乐成为大众音乐生活的重要部分。"],"keys":["王立平","红楼梦","赵季平","红高粱"],"tip":"「王红楼、赵红高粱」——两人两作。"},{"q":"改革开放后的歌剧与舞剧","type":"简答","pts":["歌剧《原野》（金湘，1987）：走向国际。","舞剧《丝路花雨》（1979）：敦煌题材。","《木兰》等新编剧目。","创作观念由政治叙事转向人性与审美。"],"keys":["原野","金湘","丝路花雨"],"tip":"「一歌剧一舞剧」：原野、丝路花雨。"},{"q":"声乐与合唱的发展","type":"简答","pts":["艺术歌曲创作复兴。","合唱事业蓬勃发展，职业与业余合唱团并起。","青歌赛等赛事推动声乐人才成长。","民族唱法、美声唱法、流行唱法三足鼎立。"],"keys":["艺术歌曲","合唱","青歌赛","三种唱法"],"tip":"「三唱法」是声乐领域的常用概括。"}]},{"id":"cn15","num":"十五","title":"港澳台地区音乐","era":"20 世纪以来","intro":"岭南与海岛语境下的流行、国乐与专业创作。","cards":[{"q":"香港音乐","type":"简答","pts":["粤语流行曲在 1970—80 年代走向高峰。","代表创作者：顾嘉辉、黄霑。","香港中乐团（1977）推动中乐现代化。","影视主题曲与流行乐相互成就。"],"keys":["粤语流行曲","顾嘉辉","黄霑","香港中乐团"],"tip":"「辉黄组合 + 香港中乐团」。"},{"q":"台湾音乐","type":"简答","pts":["1970 年代校园民歌运动，提倡「唱自己的歌」。","许常惠等推动现代音乐创作与民族音乐研究。","台北市立国乐团等职业国乐团体。","流行音乐产业高度发达。"],"keys":["校园民歌","唱自己的歌","许常惠","台北市立国乐团"],"tip":"「民歌运动」口号「唱自己的歌」是标志。"},{"q":"澳门音乐","type":"简答","pts":["澳门中乐团等团体推动中乐普及。","澳门国际音乐节成为重要文化品牌。","中西交融是澳门音乐的底色。"],"keys":["澳门中乐团","澳门国际音乐节"],"tip":"「一团一节」即可。"}]}]},{"part":"西方音乐史","short":"西","chapters":[{"id":"w01","num":"一","title":"古希腊与古罗马","era":"前12世纪—公元5世纪","intro":"西方音乐的观念源头：单音音乐、歌舞乐一体、理论先行。","cards":[{"q":"古希腊音乐的整体特征","type":"简答","pts":["歌舞乐三位一体：诗、歌、舞不可分。","单音音乐：单声部，齐唱或同度伴奏。","音乐与社会生活紧密：祭祀、戏剧、体育、教育。","理论成就突出：调式、音程、律学。"],"keys":["歌舞乐一体","单音音乐","调式"],"tip":"三点定性 + 一点理论，构成标准开头。"},{"q":"古希腊的音乐理论","type":"简答","pts":["四音音列：构成旋律的基本单位，下行排列。","大完美体系：由四音音列组合成的两八度音阶体系。","毕达哥拉斯：以数解释音程，提出五度相生与和谐论。","托勒密《和声学》：总结古希腊音乐理论。","三种主要调式：多利亚、弗里吉亚、利底亚。"],"keys":["四音音列","大完美体系","毕达哥拉斯","托勒密"],"tip":"「四音列→大完美→毕氏数论→托勒密」递进记。"},{"q":"古希腊的代表乐器","type":"简答","pts":["里拉琴（lyre）：弦乐器，阿波罗的象征，用于教育与祭祀。","基萨拉琴：里拉的大型化，用于专业演奏。","阿夫洛斯管（aulos）：双管吹奏乐器，狄奥尼索斯崇拜，戏剧中常用。"],"keys":["里拉琴","基萨拉琴","阿夫洛斯管"],"tip":"「阿波罗里拉、酒神阿夫洛斯」——神祇对应乐器。"},{"q":"古罗马音乐","type":"简答","pts":["继承希腊音乐，但更重实用与娱乐。","音乐用于军队、竞技、宴会，规模宏大。","水压风琴等大型乐器出现。","基督教音乐兴起，为中世纪圣咏埋下伏笔。"],"keys":["继承希腊","水压风琴","基督教音乐"],"tip":"「继承 + 世俗化 + 基督教兴起」三段论。"}]},{"id":"w02","num":"二","title":"中世纪音乐","era":"5—14世纪","intro":"格里高利圣咏一统，复调诞生，新艺术开启近代之门。","cards":[{"q":"中世纪音乐的分期与总体特征","type":"简答","pts":["早期（5—10 世纪）：教会音乐主导，单音圣咏。","中期（11—13 世纪）：复调产生，古艺术。","晚期（14 世纪）：新艺术，世俗音乐兴起。","总体：宗教音乐为中心，单声向复调过渡。"],"keys":["教会音乐","复调","古艺术","新艺术"],"tip":"「单—复—新」三阶段，一句一段。"},{"q":"格里高利圣咏","type":"名词解释","pts":["罗马教会仪式音乐，托名教皇格里高利一世。","单声部、无伴奏、拉丁文、男声演唱。","旋律平稳级进，风格肃穆，称「平旋律」。","用于日课与弥撒，采用教会调式。","是中世纪音乐的基础与后世创作的素材。"],"keys":["格里高利圣咏","单声部","无伴奏","拉丁文","教会调式"],"tip":"四要素「单、无、拉、男」+ 功能（日课弥撒）。"},{"q":"规多","type":"名词解释","pts":["中世纪音乐理论家，意大利阿雷佐的修士。","推行四线谱，使音高记录更精确。","创唱名法 ut、re、mi、fa、sol、la（六声音阶）。","编《交替圣歌集》，影响后世音乐教育。"],"keys":["规多","四线谱","唱名法","六声音阶"],"tip":"「四线谱 + 六声唱名」两大贡献。"},{"q":"复调音乐的诞生","type":"论述","pts":["奥尔加农：最早的复调形式，在圣咏下方加声部，初期平行进行。","第斯康特：声部进行反向、斜向，节奏更独立。","克劳苏拉：奥尔加农的段落，后独立成曲。","康杜克图斯：非圣咏定旋律的复调作品。","经文歌：13 世纪成熟，多声部、多歌词，复调音乐的典型体裁。"],"keys":["奥尔加农","第斯康特","克劳苏拉","康杜克图斯","经文歌"],"tip":"五个体裁按出现顺序背，经文歌是终点。"},{"q":"古艺术（Ars Antiqua）","type":"名词解释","pts":["12—13 世纪法国复调音乐，以巴黎圣母院乐派为中心。","莱奥南：编纂《大奥尔加农》（Magnus Liber Organi），收集并创作奥尔加农。","佩罗坦：发展三、四声部复调，节奏更活跃。","弗朗科：创立有量记谱法，使节奏时值可精确记录。"],"keys":["古艺术","莱奥南","佩罗坦","有量记谱法"],"tip":"「莱编、佩扩、弗记谱」——三人分工。"},{"q":"新艺术（Ars Nova）","type":"名词解释","pts":["14 世纪法国、意大利的新音乐风格。","马肖：《圣母弥撒》，现存最早的完整常规弥撒曲。","世俗歌曲：维勒莱、回旋歌、叙事歌。","兰迪尼：意大利代表，兰迪尼终止式。","记谱法革新，节奏更自由，世俗性增强。"],"keys":["新艺术","马肖","圣母弥撒","兰迪尼终止式"],"tip":"「马肖弥撒 + 兰迪尼终止」两个硬考点。"},{"q":"中世纪的世俗音乐","type":"简答","pts":["游吟诗人（法国南方）：贵族与骑士，用奥克语歌唱。","恋歌诗人（法国北方）：用奥依语，题材多爱情。","名歌手（德国）：市民行会歌手，重规则与技巧。","多为单声部歌曲，旋律来自民歌。"],"keys":["游吟诗人","恋歌诗人","名歌手"],"tip":"「南游吟、北恋歌、德名歌手」——地域对应。"}]},{"id":"w03","num":"三","title":"文艺复兴音乐","era":"约1430—1600","intro":"人文主义抬头，复调声乐达顶峰，器乐开始独立。","cards":[{"q":"文艺复兴音乐的总体特征","type":"简答","pts":["人文主义：关注人的情感与现世生活。","复调声乐达到顶峰，四声部模仿复调成熟。","印刷术推广乐谱，音乐传播加速。","世俗体裁（牧歌、尚松）兴盛，器乐逐步独立。"],"keys":["人文主义","复调","印刷术","世俗体裁"],"tip":"「人文、复调、印刷、世俗」四点开头。"},{"q":"勃艮第乐派","type":"名词解释","pts":["15 世纪上半叶，勃艮第宫廷为中心。","代表：迪费、班舒瓦。","体裁：弥撒、经文歌、尚松。","风格：三声部为主，旋律优美，音响清澈。"],"keys":["勃艮第乐派","迪费","班舒瓦","尚松"],"tip":"「迪费班舒瓦，三声部尚松」。"},{"q":"弗兰德乐派","type":"论述","pts":["15 世纪下半叶至 16 世纪，欧洲音乐的主流。","代表：奥克冈、若斯坎、拉索。","四声部模仿复调成熟，弥撒与经文歌创作高峰。","若斯坎：以音乐表达歌词情感，被视为「音乐人文主义」的先声。","拉索：《回声》等，风格多样，集文艺复兴之大成。"],"keys":["弗兰德乐派","奥克冈","若斯坎","拉索"],"tip":"「奥奠基、若表情、拉拉索大成」。"},{"q":"罗马乐派与威尼斯乐派","type":"简答","pts":["罗马乐派：帕莱斯特里那，《马切洛斯教皇弥撒》，风格纯净、声部均衡。","威尼斯乐派：维拉尔特奠基，A. 加布里埃利与 G. 加布里埃利发展「复合唱」。","威尼斯乐派善用乐器与空间对比，色彩华丽。","两派形成「纯净」与「华丽」的对照。"],"keys":["帕莱斯特里那","罗马乐派","威尼斯乐派","复合唱"],"tip":"「罗马纯、威尼斯艳」——一句话抓住对比。"},{"q":"文艺复兴的世俗声乐体裁","type":"简答","pts":["牧歌（意大利）：多声部，重歌词表达，后发展出独唱牧歌。","尚松（法国）：节奏轻快，题材世俗。","利德（德国）：多声部歌曲。","三者共同推动世俗音乐的发展。"],"keys":["牧歌","尚松","利德"],"tip":"「意牧、法尚、德利」——国别对应体裁。"},{"q":"文艺复兴的器乐","type":"简答","pts":["利切卡尔：由模仿复调发展而来的器乐体裁，赋格的前身。","坎佐纳：由尚松改编的器乐曲。","幻想曲：自由展开的器乐曲。","舞曲：帕凡、加利亚德等成对出现。","器乐逐渐脱离声乐独立。"],"keys":["利切卡尔","坎佐纳","幻想曲","舞曲"],"tip":"「利切卡尔→赋格，坎佐纳→奏鸣曲」两条演化线。"}]},{"id":"w04","num":"四","title":"巴洛克音乐","era":"1600—1750","intro":"通奏低音、歌剧诞生、器乐勃兴，巴赫与亨德尔集大成。","cards":[{"q":"巴洛克音乐的总体特征","type":"简答","pts":["通奏低音（数字低音）贯穿全曲，是巴洛克的标志。","主调音乐兴起，与复调并存。","歌剧、清唱剧、康塔塔等大型声乐体裁诞生。","器乐独立发展：协奏曲、奏鸣曲、赋格。","「情感论」：用音乐表现特定情绪。"],"keys":["通奏低音","主调音乐","歌剧","情感论"],"tip":"「低音、主调、歌剧、器乐、情感」五点。"},{"q":"歌剧的诞生","type":"论述","pts":["16 世纪末佛罗伦萨「卡梅拉塔」社团，试图复兴古希腊戏剧。","佩里《达芙妮》（1597，失传）被视为第一部歌剧。","佩里《尤丽狄茜》（1600）现存最早完整歌剧。","蒙特威尔第《奥菲欧》（1607）确立歌剧的戏剧表现力。"],"keys":["卡梅拉塔","达芙妮","尤丽狄茜","奥菲欧"],"tip":"「1597 达芙妮、1600 尤丽狄茜、1607 奥菲欧」三个年份。"},{"q":"巴洛克歌剧的发展","type":"简答","pts":["威尼斯歌剧：蒙特威尔第、卡瓦利，公开歌剧院兴起。","那不勒斯歌剧：A. 斯卡拉蒂，确立「返始咏叹调」，重歌唱技艺。","阉人歌手盛行，声乐炫技达到极致。","法国歌剧：吕利创「抒情悲剧」，重芭蕾与朗诵。","英国：普赛尔《狄多与埃涅阿斯》；德国：许茨。"],"keys":["返始咏叹调","斯卡拉蒂","吕利","普赛尔"],"tip":"「意—法—英」三国歌剧路线，各记一人一作。"},{"q":"清唱剧、康塔塔与受难曲","type":"简答","pts":["清唱剧：大型声乐戏剧，无舞台表演，代表作亨德尔《弥赛亚》。","康塔塔：多乐章声乐套曲，巴赫创作大量教堂康塔塔。","受难曲：以福音书为词的清唱剧，巴赫《马太受难曲》。"],"keys":["清唱剧","康塔塔","受难曲","弥赛亚"],"tip":"「清唱剧无演、康塔塔多章、受难曲讲福音」。"},{"q":"巴洛克器乐","type":"简答","pts":["维瓦尔第《四季》：小提琴协奏曲，标题性描绘。","科雷利：三重奏鸣曲、大协奏曲的奠基者。","D. 斯卡拉蒂：键盘奏鸣曲，结构清晰。","体裁：托卡塔、赋格、变奏曲、协奏曲（大协奏曲、独奏协奏曲）。"],"keys":["四季","科雷利","三重奏鸣曲","大协奏曲"],"tip":"「维四季、科三重、D 键盘」。"},{"q":"巴赫","type":"论述","pts":["德国作曲家、管风琴家，巴洛克音乐的集大成者。","键盘：《平均律钢琴曲集》《哥德堡变奏曲》《赋格的艺术》。","器乐：《勃兰登堡协奏曲》《管弦乐组曲》。","宗教声乐：《马太受难曲》《b 小调弥撒》《约翰受难曲》。","被誉为「西方音乐之父」，复调技术的顶峰。"],"keys":["巴赫","平均律","勃兰登堡","马太受难曲"],"tip":"按「键盘—器乐—宗教」三类记作品，条理清楚。"},{"q":"亨德尔","type":"论述","pts":["德国出生、英国发展的作曲家。","清唱剧《弥赛亚》，其中《哈利路亚》合唱最为著名。","管弦乐《水上音乐》《皇家焰火音乐》。","歌剧创作丰富，风格国际化和世俗化。","与巴赫并称巴洛克双峰，但一为宗教一为世俗。"],"keys":["亨德尔","弥赛亚","水上音乐","哈利路亚"],"tip":"「巴赫内省宗教、亨德尔外向世俗」——对比评价。"},{"q":"巴洛克时期的法国与德国音乐","type":"简答","pts":["吕利：法国歌剧奠基，创「抒情悲剧」，序曲形式影响深远。","库普兰：键盘音乐，古钢琴小品。","拉莫：《和声学》，理论奠基。","许茨：德国宗教音乐的先驱，融合意大利风格。"],"keys":["吕利","库普兰","拉莫","许茨"],"tip":"「吕歌剧、库键盘、拉和声、许宗教」。"}]},{"id":"w05","num":"五","title":"古典主义音乐","era":"1750—1820","intro":"启蒙时代的理性与均衡，奏鸣曲式与古典交响曲成熟。","cards":[{"q":"古典主义音乐的总体特征","type":"简答","pts":["受启蒙运动影响，追求理性、均衡、清晰。","主调音乐占主导，织体透明。","奏鸣曲式确立，成为大型器乐的核心结构。","交响曲、弦乐四重奏、协奏曲、奏鸣曲四大体裁成熟。"],"keys":["启蒙运动","主调音乐","奏鸣曲式","四大体裁"],"tip":"「理性、主调、奏鸣曲式、四体裁」。"},{"q":"奏鸣曲式的成熟","type":"名词解释","pts":["大型器乐曲的核心结构，古典时期确立。","三部分：呈示部（主部、连接部、副部、结束部）。","展开部：发展主题材料，调性游移。","再现部：主题回归，调性统一。","体现「对立—发展—统一」的古典美学。"],"keys":["呈示部","展开部","再现部","调性统一"],"tip":"结构图必背：呈示（主连副结）—展开—再现。"},{"q":"海顿","type":"论述","pts":["奥地利作曲家，被誉为「交响曲之父」「弦乐四重奏之父」。","作 104 部交响曲，代表作《伦敦交响曲》《惊愕》《告别》。","清唱剧《创世纪》《四季》。","确立四乐章结构与乐队编制，风格明朗幽默。"],"keys":["海顿","104 部交响曲","惊愕","创世纪"],"tip":"两个「之父」+ 104 部 + 两部清唱剧。"},{"q":"莫扎特","type":"论述","pts":["奥地利作曲家，古典主义的完美代表。","歌剧《费加罗的婚礼》《唐璜》《魔笛》。","交响曲第 40、41《朱庇特》。","协奏曲、室内乐、宗教音乐均有极高成就。","风格优雅、均衡，旋律天赋极高。"],"keys":["莫扎特","费加罗的婚礼","魔笛","朱庇特"],"tip":"「三歌剧、两交响」——最常考的组合。"},{"q":"贝多芬","type":"论述","pts":["德国作曲家，古典向浪漫过渡的关键人物。","创作分三时期：早期继承古典、中期英雄性、晚期内省。","9 部交响曲：第三《英雄》、第五《命运》、第六《田园》、第九《合唱》。","32 首钢琴奏鸣曲，如《悲怆》《月光》《热情》。","晚期《庄严弥撒》《第九交响曲》拓展了音乐的精神维度。"],"keys":["贝多芬","英雄","命运","田园","合唱"],"tip":"「三、五、六、九」四部交响曲是论述骨架。"},{"q":"曼海姆乐派与格鲁克歌剧改革","type":"简答","pts":["曼海姆乐派：善用渐强渐弱、震音，推进交响曲发展。","格鲁克：歌剧改革，主张音乐服从戏剧，代表作《奥菲欧与尤丽狄茜》。","喜歌剧兴起，题材世俗、语言通俗。","二者共同推动古典风格的形成。"],"keys":["曼海姆乐派","格鲁克","歌剧改革","喜歌剧"],"tip":"「曼海姆强交响、格鲁克改歌剧」。"}]},{"id":"w06","num":"六","title":"浪漫主义音乐","era":"19世纪","intro":"情感、标题、民族与和声色彩，个性张扬的百年。","cards":[{"q":"浪漫主义音乐的总体特征","type":"简答","pts":["强调个人情感与主观体验，反对古典的克制。","标题音乐兴盛，音乐与文学、绘画结合。","民族乐派兴起，挖掘本民族民间音乐。","和声色彩化、半音化，调性开始松动。","体裁小型化（艺术歌曲、钢琴小品）与大型化（交响诗、乐剧）并行。"],"keys":["标题音乐","民族乐派","半音化","艺术歌曲"],"tip":"「情感、标题、民族、和声、体裁」五点。"},{"q":"德奥浪漫主义作曲家","type":"论述","pts":["韦伯《魔弹射手》：德国民族歌剧的开山之作。","舒伯特：艺术歌曲《魔王》《冬之旅》，「未完成」交响曲。","门德尔松：《仲夏夜之梦》序曲，创办莱比锡音乐学院。","舒曼：《童年情景》《狂欢节》，音乐评论家。","勃拉姆斯：4 部交响曲，继承古典传统。","马勒：交响曲套曲，《大地之歌》。","理查·施特劳斯：交响诗《查拉图斯特拉如是说》。"],"keys":["韦伯","舒伯特","门德尔松","舒曼","勃拉姆斯","马勒"],"tip":"按「歌剧—歌曲—序曲—钢琴—交响」分工记，不要混。"},{"q":"法国浪漫主义音乐","type":"简答","pts":["柏辽兹《幻想交响曲》：标题音乐典范，「固定乐思」。","古诺《浮士德》、比才《卡门》、奥芬巴赫《地狱中的奥菲欧》。","法国歌剧重戏剧性与现实题材。"],"keys":["柏辽兹","幻想交响曲","固定乐思","卡门"],"tip":"「柏固定、比卡门」两个关键词。"},{"q":"意大利歌剧","type":"论述","pts":["罗西尼《塞维利亚的理发师》，美声歌剧代表。","贝利尼《诺尔玛》、多尼采蒂《拉美莫尔的露琪亚》。","威尔第《茶花女》《阿依达》《奥赛罗》《弄臣》。","普契尼《波希米亚人》《托斯卡》《蝴蝶夫人》《图兰朵》。","意大利歌剧以人声为中心，旋律优美。"],"keys":["罗西尼","威尔第","普契尼","图兰朵"],"tip":"「罗—贝—多—威—普」五代链条，各记一部。"},{"q":"瓦格纳","type":"论述","pts":["德国作曲家，创「乐剧」（Musikdrama）。","《尼伯龙根的指环》（《莱茵的黄金》《女武神》《齐格弗里德》《众神的黄昏》）。","「主导动机」贯穿全剧，交响化乐队。","《特里斯坦与伊索尔德》的「特里斯坦和弦」推动半音化和声。","创办拜罗伊特节日剧院。"],"keys":["瓦格纳","乐剧","指环","主导动机","特里斯坦和弦"],"tip":"「乐剧 + 主导动机 + 指环 + 拜罗伊特」四件套。"},{"q":"民族乐派","type":"论述","pts":["挪威：格里格《培尔·金特》组曲。","捷克：斯美塔那《我的祖国》、德沃夏克《自新大陆交响曲》。","俄罗斯：格林卡奠基，「五人团」（巴拉基列夫、穆索尔斯基、里姆斯基-科萨科夫、鲍罗丁、居伊），柴可夫斯基。","芬兰：西贝柳斯《芬兰颂》。","西班牙：阿尔贝尼斯、法雅。","共同点：民族题材、民间音调、民族精神。"],"keys":["格里格","斯美塔那","德沃夏克","五人团","西贝柳斯"],"tip":"「挪格、捷斯德、俄五柴、芬西」——国别 + 人名速记。"},{"q":"肖邦","type":"名词解释","pts":["波兰作曲家、钢琴家，「钢琴诗人」。","体裁：玛祖卡、波罗乃兹、夜曲、练习曲、叙事曲、圆舞曲。","作品融合波兰民间音乐与法国沙龙趣味。","一生几乎只为钢琴创作。"],"keys":["肖邦","玛祖卡","波罗乃兹","夜曲"],"tip":"「一器一体裁」：钢琴 + 玛祖卡/波罗乃兹。"},{"q":"李斯特","type":"名词解释","pts":["匈牙利作曲家、钢琴家，炫技演奏的代表。","创「交响诗」体裁，如《前奏曲》《塔索》。","《匈牙利狂想曲》融合民族音调。","魏玛乐派的核心人物。"],"keys":["李斯特","交响诗","匈牙利狂想曲","魏玛乐派"],"tip":"「交响诗之父」是最高频标签。"},{"q":"浪漫主义艺术歌曲与钢琴小品","type":"简答","pts":["艺术歌曲：诗歌与音乐结合，舒伯特、舒曼、勃拉姆斯、沃尔夫。","声乐套曲：《冬之旅》《诗人之恋》。","钢琴小品：门德尔松《无词歌》、舒曼《童年情景》、勃拉姆斯间奏曲。","小型体裁的繁荣反映浪漫主义的私人化倾向。"],"keys":["艺术歌曲","声乐套曲","无词歌","童年情景"],"tip":"「歌成套、琴成集」——两条线索。"},{"q":"浪漫主义和声的发展","type":"简答","pts":["离调、副属和弦大量使用。","半音化增强，瓦格纳「特里斯坦和弦」为标志。","调性扩张，出现「调性模糊」。","为 20 世纪无调性音乐埋下伏笔。"],"keys":["离调","半音化","调性扩张"],"tip":"「离调→半音→模糊→无调性」演化链。"}]},{"id":"w07","num":"七","title":"20世纪音乐","era":"1900 至今","intro":"印象、表现、新古典、民族与实验，多元并置的世纪。","cards":[{"q":"20世纪音乐的总体特征","type":"简答","pts":["风格多元：印象主义、表现主义、新古典主义、民族主义、先锋派。","调性体系瓦解，出现无调性、十二音、多调性。","节奏复杂化，不协和音被解放。","音色与音响成为新的表现手段，电子音乐出现。","作曲家与听众的距离拉大。"],"keys":["多元","无调性","十二音","音色"],"tip":"「调性没了、节奏碎了、音色新了」。"},{"q":"印象主义音乐","type":"名词解释","pts":["受印象派绘画与象征主义诗歌影响。","德彪西《牧神午后》前奏曲、《大海》《月光》。","拉威尔《波莱罗》《达夫尼与克罗埃》。","手法：全音阶、五声音阶、色彩性和声、弱化功能。","重感官印象而非叙事。"],"keys":["德彪西","牧神午后","拉威尔","全音阶"],"tip":"「德牧神、拉波莱罗」+ 全音阶。"},{"q":"表现主义音乐","type":"论述","pts":["勋伯格：无调性、《月迷彼埃罗》，创「十二音技法」。","贝尔格《沃采克》：表现主义歌剧代表作。","韦伯恩：点描风格，音色与静默的极致。","第二维也纳乐派的核心。","强调内心焦虑与潜意识的极端表达。"],"keys":["勋伯格","十二音","月迷彼埃罗","沃采克","韦伯恩"],"tip":"「勋—贝—韦」三人的代表作各记一部。"},{"q":"新古典主义","type":"简答","pts":["1920 年代兴起，主张回到古典的形式与客观。","斯特拉文斯基《春之祭》（原始主义）、《士兵的故事》、《诗篇交响曲》。","萨蒂、六人团。","以现代手法重建古典结构。"],"keys":["新古典主义","斯特拉文斯基","春之祭","士兵的故事"],"tip":"「春之祭是原始主义，不是新古典」——注意区分。"},{"q":"民族主义与英美作曲家","type":"论述","pts":["巴托克《乐队协奏曲》，采集民间音乐。","柯达伊：匈牙利民歌研究。","布里顿《彼得·格莱姆斯》《战争安魂曲》。","肖斯塔科维奇《第五交响曲》《第七「列宁格勒」》。","普罗科菲耶夫《彼得与狼》《古典交响曲》。","科普兰《阿巴拉契亚之春》；格什温《蓝色狂想曲》。"],"keys":["巴托克","布里顿","肖斯塔科维奇","普罗科菲耶夫","科普兰"],"tip":"「东欧巴托克、苏联肖普、英国布里顿、美国科普兰」。"},{"q":"先锋派与实验音乐","type":"简答","pts":["施托克豪森：电子音乐《青年之歌》，序列与空间音乐。","瓦列兹《电离》：打击乐与噪音实验。","约翰·凯奇《4 分 33 秒》：偶然音乐，观念艺术。","微分音音乐、具体音乐。","音乐的概念被重新定义。"],"keys":["施托克豪森","瓦列兹","凯奇","偶然音乐"],"tip":"「电子、噪音、无声」三件作品对应三人。"},{"q":"苏联与东欧音乐","type":"简答","pts":["肖斯塔科维奇：15 部交响曲，在政治压力下写作。","普罗科菲耶夫：舞剧《罗密欧与朱丽叶》。","哈恰图良：民族色彩浓郁。","创作在「社会主义现实主义」框架下展开。"],"keys":["肖斯塔科维奇","普罗科菲耶夫","社会主义现实主义"],"tip":"「肖十五、普罗朱、哈民族」。"},{"q":"美国音乐","type":"简答","pts":["科普兰《阿巴拉契亚之春》《小伙子比利》，美国风味。","格什温《蓝色狂想曲》《波吉与贝丝》，爵士与古典融合。","伯恩斯坦《西区故事》，音乐剧经典。","艾夫斯：实验性先驱。"],"keys":["科普兰","格什温","伯恩斯坦","西区故事"],"tip":"「科美国、格爵士、伯音乐剧」。"},{"q":"20世纪音乐的历史意义","type":"论述","pts":["打破调性中心，拓展了音响的可能性。","作曲家角色转变，从工匠走向探索者。","与大众趣味分离，形成「现代音乐」的接受难题。","为当代音乐、影视音乐、电子音乐提供语汇。"],"keys":["调性瓦解","音响拓展","接受难题"],"tip":"「破调性、拓音响、远大众」——三点收尾。"}]}]},{"part":"作品分析","short":"析","chapters":[{"id":"f01","num":"附","title":"曲式与和声基础","era":"考试第三部分 · 选学","intro":"作品分析的骨架：结构原则、曲式类型、和声语汇。","cards":[{"q":"曲式发展的基本结构原则与陈述类型","type":"简答","pts":["结构原则：重复、对比、展开（变奏）、再现。","陈述类型：呈示型（稳定、完整）、展开型（片段、不稳定）、结束型（收束）。","表现手段：旋律、节奏、织体、和声、音色。","分析时先判断原则，再判断曲式类型。"],"keys":["重复","对比","展开","呈示型","展开型"],"tip":"「四原则、三陈述」——答题先列框架。"},{"q":"一部曲式（乐段）","type":"名词解释","pts":["由若干乐句构成的完整结构单位，可独立成曲。","乐句通常 4 或 8 小节，以终止划分。","平行乐段（a+a'）与对比乐段（a+b）。","单乐段、复乐段；可带引子与尾声。"],"keys":["乐段","乐句","终止","平行乐段"],"tip":"「句—段—终止」三级单位，图示要标小节数。"},{"q":"单二部曲式","type":"名词解释","pts":["由两个乐段构成，AB。","有再现的单二（AB，B 含 A 材料）与无再现的单二（AB 对比）。","常用于艺术歌曲、舞曲、进行曲。","结构图需标明引子、尾声与调性。"],"keys":["单二部","AB","有再现","无再现"],"tip":"「单二看 B 段有没有回头」。"},{"q":"单三部曲式","type":"名词解释","pts":["ABA 三段结构，A 与 A' 为再现关系。","中段分「展开性中段」（发展 A 材料）与「对比性中段」（新材料）。","常用于钢琴小品、歌曲。","与单二部的区别：A 段是否完整再现。"],"keys":["单三部","ABA","展开性中段","对比性中段"],"tip":"「单三 ABA、复三 ABA 但每部大于乐段」。"},{"q":"复三部曲式","type":"名词解释","pts":["ABA 结构，每个部分本身大于乐段（常为单二或单三部）。","中段常为「三声中部」（Trio），结构完整、调性对比。","典型用于交响曲的谐谑曲、圆舞曲。","图示须标出各部的次级结构与调性。"],"keys":["复三部","三声中部","Trio"],"tip":"判断标准只有一条：每部是否大于乐段。"},{"q":"和声分析的基本语汇","type":"简答","pts":["正三和弦（I、IV、V）与副三和弦（II、III、VI、VII）。","终止四六和弦（K46）、属七、属九、属十一、十三和弦。","重属和弦、副属和弦，形成离调。","一级关系转调、等音转调、交替大小调。","和弦外音：经过音、辅助音、延留音、先现音。","持续音：主持续、属持续。"],"keys":["正三和弦","终止四六","重属和弦","离调","持续音"],"tip":"标记用 T/S/D 或罗马数字均可，但全篇要统一。"},{"q":"调性布局与综合分析","type":"论述","pts":["呈示部：主调与副部调性形成对比（近关系调）。","展开部：调性游移，常走向下属方向。","再现部：副部回归主调，实现调性统一。","分析维度：主题材料、和声语言、节奏织体、调性布局、结构比例。","中国作品另需辨识调式与地域、民族特征。"],"keys":["调性布局","呈示-展开-再现","结构比例"],"tip":"论述题按「材料—和声—调性—结构—风格」五段写。"}]}]}],"built":"2026-11-10","exam":{"items":[{"id":"x-p01","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w02"],"q":"比较奥尔加农与第斯康特的异同，并说明二者在复调音乐发展中的位置。","rubric":[{"t":"界定奥尔加农：在格里高利圣咏定旋律上附加声部，9 世纪起","s":2},{"t":"界定第斯康特：声部节奏相近、音对音进行，12—13 世纪","s":2},{"t":"指出相同点：都以圣咏为定旋律，都属于复调","s":2},{"t":"指出不同：节奏关系、声部独立性、对记谱的要求","s":3},{"t":"串出发展链：奥尔加农—克劳苏拉—经文歌","s":2},{"t":"结构清晰、术语准确","s":2}],"answer":"奥尔加农是 9 世纪起在圣咏定旋律上附加声部的复调形式，早期为平行进行，后发展为花唱奥尔加农；第斯康特是 12—13 世纪巴黎圣母院乐派发展的写法，两个声部节奏相近、音对音进行。二者都以圣咏为定旋律、都是复调，区别在于节奏关系与声部独立性。第斯康特的段落独立后成为克劳苏拉，填入新词后演化为经文歌，构成中世纪复调发展的主线。","refCards":["w02-4","w02-5"]},{"id":"x-p02","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w04"],"q":"巴赫与亨德尔同为巴洛克晚期的集大成者，请比较二人在创作领域、风格与历史影响上的不同。","rubric":[{"t":"创作领域：巴赫以宗教康塔塔、受难曲、管风琴与键盘乐为主；亨德尔以歌剧、清唱剧为主","s":3},{"t":"风格：巴赫复调严密、内省；亨德尔主调化、戏剧性强、面向公众","s":3},{"t":"各举两部代表作","s":3},{"t":"历史影响：巴赫被重新发现并奠定德奥传统；亨德尔影响英国清唱剧与合唱传统","s":2},{"t":"结构清晰、比较意识明确","s":2}],"answer":"巴赫一生以教堂与宫廷职位为主，创作集中于宗教康塔塔、受难曲、管风琴与键盘音乐，复调技术登峰造极，风格内省；亨德尔长期在英国发展，以意大利正歌剧与英语清唱剧成名，风格外向、戏剧性强、面向市民公众。代表作分别为《马太受难曲》《平均律钢琴曲集》与《弥赛亚》《水上音乐》。二人一内一外，共同构成巴洛克的双峰。","refCards":["w04-6","w04-7"]},{"id":"x-p03","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w05","w06"],"q":"从音乐观念、体裁与和声语言三个方面，论述古典主义与浪漫主义音乐的主要差异。","rubric":[{"t":"观念：理性、均衡、客观 vs 情感、个性、主观","s":3},{"t":"体裁：奏鸣曲、交响曲、四重奏成熟 vs 艺术歌曲、钢琴小品、交响诗、乐剧兴起","s":3},{"t":"和声：功能清晰、调性稳定 vs 半音化、离调、调性扩张","s":3},{"t":"两个时期各举两位代表作曲家","s":2},{"t":"结构清晰、能指出承续关系","s":2}],"answer":"古典主义受启蒙运动影响，追求理性与均衡，主调织体透明，奏鸣曲式与交响曲、四重奏等体裁成熟，和声以功能逻辑为主、调性稳定；浪漫主义强调个人情感与想象，标题音乐兴盛，艺术歌曲、钢琴小品、交响诗与乐剧并行，和声走向半音化与调性扩张。二者并非断裂：贝多芬处于转折点，浪漫主义在古典的形式上注入了主观表达。","refCards":["w05-1","w06-1"]},{"id":"x-p04","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w06"],"q":"瓦格纳与威尔第代表了 19 世纪歌剧的两条道路，请比较二者的歌剧观念与音乐手法。","rubric":[{"t":"瓦格纳：乐剧观念、整体艺术、主导动机、无终旋律","s":3},{"t":"威尔第：人声中心、分曲结构、戏剧张力与旋律性","s":3},{"t":"各举两部代表作","s":3},{"t":"对后世的影响：瓦格纳式和声与乐剧观念、威尔第式意大利歌剧传统","s":2},{"t":"结构清晰","s":2}],"answer":"瓦格纳提出「整体艺术」的乐剧观念，以主导动机贯穿全剧、用无终旋律取消分曲，乐队交响化，《特里斯坦与伊索尔德》的和声推动调性瓦解；威尔第坚持人声中心与分曲结构，旋律鲜明、戏剧冲突强烈，代表作《茶花女》《阿依达》。前者把歌剧推向交响化与哲学化，后者把意大利美声传统推向戏剧高峰。","refCards":["w06-5","w06-4"]},{"id":"x-p05","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w07"],"q":"比较印象主义与表现主义音乐在美学观念、音高组织与代表作品上的差异。","rubric":[{"t":"美学：感官印象与色彩 vs 内心焦虑与潜意识","s":3},{"t":"音高：全音阶、五声、色彩性和声 vs 无调性、十二音","s":3},{"t":"代表作品：德彪西《牧神午后》、拉威尔《波莱罗》 vs 勋伯格《月迷彼埃罗》、贝尔格《沃采克》","s":3},{"t":"共同点：都突破功能调性、都弱化传统发展手法","s":2},{"t":"结构清晰","s":2}],"answer":"印象主义受绘画与象征主义诗歌影响，重感官与色彩，用全音阶、五声与色彩性和声弱化功能，代表作《牧神午后》《波莱罗》；表现主义直面焦虑与潜意识，勋伯格走向无调性并创立十二音技法，代表作《月迷彼埃罗》《沃采克》。二者方向相反，却共同瓦解了功能调性体系。","refCards":["w07-2","w07-3"]},{"id":"x-p06","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w03"],"q":"比较勃艮第乐派与弗兰德乐派在体裁、织体与历史地位上的异同。","rubric":[{"t":"勃艮第：三声部为主，尚松与弥撒，迪费、班舒瓦","s":3},{"t":"弗兰德：四声部模仿复调成熟，奥克冈、若斯坎、拉索","s":3},{"t":"相同：同属文艺复兴早期，都服务于宫廷与教会","s":2},{"t":"历史地位：勃艮第是过渡，弗兰德成为欧洲主流并影响后世","s":3},{"t":"结构清晰","s":2}],"answer":"勃艮第乐派以三声部为主，尚松与弥撒并重，风格清澈优美，代表迪费与班舒瓦；弗兰德乐派把四声部模仿复调推向成熟，若斯坎以音乐表达歌词情感，拉索集文艺复兴之大成。二者都属于文艺复兴早期、都服务于宫廷与教会，但弗兰德乐派影响遍及欧洲，成为 16 世纪音乐的主流。","refCards":["w03-2","w03-3"]},{"id":"x-p07","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w06"],"q":"民族乐派与浪漫主义主流在题材、音调来源与美学追求上有何不同？请结合具体作曲家说明。","rubric":[{"t":"题材：民族历史与民间生活 vs 个人情感与文学幻想","s":3},{"t":"音调：民间调式与节奏 vs 共性写作语言","s":3},{"t":"举出格里格、斯美塔那、德沃夏克、五人团、西贝柳斯中的至少三位","s":3},{"t":"指出民族乐派是浪漫主义的延伸而非对立","s":2},{"t":"结构清晰","s":2}],"answer":"民族乐派把目光转向本民族的历史、传说与民间音乐，用民间调式、舞曲节奏与民族题材写作，如格里格《培尔·金特》、斯美塔那《我的祖国》、德沃夏克《自新大陆》、西贝柳斯《芬兰颂》；浪漫主义主流更关注个人情感与文学幻想。二者并非对立，民族乐派正是浪漫主义「回到民间」思潮的产物。","refCards":["w06-6","w06-1"]},{"id":"x-p08","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"比较题","chIds":["w02","w03"],"q":"从格里高利圣咏到文艺复兴弥撒，欧洲复调音乐经历了怎样的变化？","rubric":[{"t":"圣咏：单声、无伴奏、拉丁文、教会调式","s":3},{"t":"中世纪复调：奥尔加农、第斯康特、经文歌","s":3},{"t":"文艺复兴弥撒：定旋律弥撒与模仿弥撒、四声部织体","s":3},{"t":"变化实质：从仪式功能走向艺术表达，人的情感进入音乐","s":2},{"t":"结构清晰","s":2}],"answer":"格里高利圣咏是单声部、无伴奏的仪式音乐，用教会调式；中世纪在圣咏上附加声部，产生奥尔加农、第斯康特，并发展出经文歌；文艺复兴时期弥撒曲走向四声部模仿复调，定旋律弥撒与模仿弥撒相继成熟，帕莱斯特里那把声部均衡与纯净推向极致。这一过程既是技术的累积，也是从仪式功能向人文表达的转变。","refCards":["w02-2","w03-4"]},{"id":"x-c01","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"比较题","chIds":["cn03","cn08"],"q":"简述三分损益法与朱载堉新法密率的联系与区别。","rubric":[{"t":"三分损益：见于《管子·地员》，先益后损求五音","s":3},{"t":"《吕氏春秋》推全十二律，仲吕不能还生黄钟的缺陷","s":3},{"t":"新法密率：朱载堉 1584 年提出，以 2 的十二次方根求十二平均律","s":3},{"t":"区别：不平均律与平均律、能否自由旋宫","s":3},{"t":"表述准确","s":3}],"answer":"三分损益法以弦长或管长的三分损一、三分益一相生，见于《管子·地员》，《吕氏春秋》推全十二律，但仲吕不能还生黄钟，无法自由旋宫。朱载堉《律学新说》提出新法密率，用 2 的十二次方根算出十二平均律，使十二律可自由旋宫，早于欧洲约半个世纪。二者都是解决旋宫问题的律学探索，前者是不平均律，后者是平均律。","refCards":["cn03-5","cn08-6"]},{"id":"x-c02","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"比较题","chIds":["cn05"],"q":"比较嵇康《声无哀乐论》与阮籍《乐论》的音乐思想。","rubric":[{"t":"嵇康：声音自当以善恶为主，无关于哀乐，哀乐生于人心","s":3},{"t":"阮籍：乐者天地之体、万物之性，仍强调乐与政通","s":3},{"t":"相同：都受魏晋玄学影响，都讨论音乐的本质","s":3},{"t":"不同：一个消解儒家教化论，一个保留乐的政教功能","s":3},{"t":"表述准确","s":3}],"answer":"嵇康认为音乐本体无哀乐，哀乐由人心而生，反对把音乐直接等同于政治，带有消解儒家教化论的意义；阮籍《乐论》主张「乐者，天地之体，万物之性」，仍强调乐的政教功能。二人同受玄学影响，却走向不同方向：嵇康重审美本体，阮籍重宇宙论与教化。","refCards":["cn05-3","cn05-4"]},{"id":"x-c03","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"比较题","chIds":["cn09","cn11"],"q":"比较学堂乐歌与三十年代左翼音乐运动在音乐功能、传播方式与历史意义上的不同。","rubric":[{"t":"学堂乐歌：新式学堂乐歌课，多依曲填词，重启蒙与美育","s":3},{"t":"左翼音乐：救亡歌咏，群众性、战斗性，聂耳、冼星海","s":3},{"t":"传播：课堂与教材 vs 歌咏运动、电影与唱片","s":3},{"t":"意义：近代音乐教育开端 vs 音乐与民族救亡结合","s":3},{"t":"表述准确","s":3}],"answer":"学堂乐歌依托新式学堂的乐歌课，多以日本、欧美曲调填词，承担启蒙与美育功能，代表人物沈心工、李叔同；三十年代左翼音乐运动以救亡歌咏为手段，面向群众，聂耳、冼星海把音乐变成战斗武器。前者开启近代音乐教育，后者把音乐与社会运动紧密结合。","refCards":["cn09-1","cn11-1"]},{"id":"x-c04","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"比较题","chIds":["cn07"],"q":"简述诸宫调与鼓子词的区别，并说明它们在说唱艺术史上的地位。","rubric":[{"t":"鼓子词：同一曲牌反复，以鼓伴奏，赵令畤《商调蝶恋花》","s":3},{"t":"诸宫调：多宫调联缀、篇幅宏大、孔三传创","s":3},{"t":"区别：宫调运用、结构规模与叙事能力","s":3},{"t":"地位：诸宫调为戏曲音乐准备了条件","s":3},{"t":"表述准确","s":3}],"answer":"鼓子词用同一曲牌反复咏唱，以鼓击节，结构短小；诸宫调把不同宫调的曲牌联缀起来铺叙长篇故事，孔三传创，代表作《西厢记诸宫调》。前者是小型说唱，后者是大型说唱，诸宫调的曲牌联缀与叙事结构为元杂剧准备了音乐基础。","refCards":["cn07-3"]},{"id":"x-c05","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"比较题","chIds":["cn10","cn11"],"q":"比较萧友梅与黄自在中国专业音乐教育史上的贡献。","rubric":[{"t":"萧友梅：1927 年创办上海国立音乐院，建立专业教育体系","s":3},{"t":"黄自：任教国立音专，培养作曲人才，创作《长恨歌》","s":3},{"t":"相同：都推动中国专业音乐教育的制度化","s":3},{"t":"不同：一个重制度建设，一个重创作与教学实践","s":3},{"t":"表述准确","s":3}],"answer":"萧友梅 1927 年创办上海国立音乐院，确立了中国专业音乐教育的体制与课程；黄自任教国立音专，培养贺绿汀、陈田鹤等一批作曲家，并以《长恨歌》开创中国清唱剧。萧友梅重在制度建设，黄自重在教学与创作，二者共同奠定中国专业音乐教育的根基。","refCards":["cn10-1","cn11-3"]},{"id":"x-h01","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w05"],"q":"2027 年是贝多芬逝世两百周年。试论贝多芬「承古典、启浪漫」的历史地位，并结合具体作品说明。","rubric":[{"t":"三个创作时期的分期与各自特征","s":3},{"t":"交响曲的突破：第三《英雄》、第五《命运》、第六《田园》、第九《合唱》","s":3},{"t":"钢琴奏鸣曲与晚期风格","s":2},{"t":"对浪漫主义的影响：标题性、英雄叙事、结构扩展、个人化表达","s":3},{"t":"结构清晰","s":2}],"answer":"贝多芬早期承海顿、莫扎特的形式，中期以《英雄》《命运》把交响曲变成个人意志的表达，篇幅、力度与和声都大幅扩张，晚期《第九交响曲》《庄严弥撒》走向内省与超越。他在古典的体裁里注入浪漫的精神，标题性、英雄叙事与结构扩展直接启发了柏辽兹、瓦格纳与马勒。","refCards":["w05-5"]},{"id":"x-h02","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"押题","chIds":["cn04","cn06","cn09"],"q":"试述中国音乐史上三次中外音乐交流高潮及其影响。","rubric":[{"t":"汉代丝绸之路：鼓吹、琵琶、箜篌、胡笳传入","s":3},{"t":"隋唐：多部乐、龟兹乐、苏祗婆五旦七调、八十四调","s":3},{"t":"近现代：学堂乐歌、西方乐理与专业音乐教育","s":3},{"t":"规律：每次交流都带来乐器、体裁与观念的更新","s":3},{"t":"表述准确","s":3}],"answer":"汉代张骞通西域，横吹、琵琶、箜篌、胡笳进入中原；隋唐设七部乐、九部乐、十部乐，龟兹乐与苏祗婆五旦七调推动八十四调理论；近代随学堂乐歌与专业音乐教育，西方乐理、记谱与体裁系统进入中国。三次高潮都由乐器始、以观念终，不断重塑中国音乐的面貌。","refCards":["cn04-8","cn06-1","cn09-1"]},{"id":"x-h03","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w06"],"q":"试论西方标题音乐从柏辽兹到理查·施特劳斯的发展脉络。","rubric":[{"t":"柏辽兹《幻想交响曲》与「固定乐思」","s":3},{"t":"李斯特创立交响诗，标题与文学结合","s":3},{"t":"瓦格纳乐剧与主导动机的叙事功能","s":2},{"t":"理查·施特劳斯《查拉图斯特拉如是说》等交响诗","s":3},{"t":"评价与结构","s":2}],"answer":"柏辽兹《幻想交响曲》用固定乐思把文学情节写进交响曲；李斯特创交响诗，让标题与文学、绘画结合；瓦格纳用主导动机在乐剧中承担叙事；理查·施特劳斯把交响诗推向音响的极致，《查拉图斯特拉如是说》《唐璜》皆是代表。标题音乐由此从「说明情节」走向「用音响思考」。","refCards":["w06-3","w06-8","w06-5"]},{"id":"x-h04","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"押题","chIds":["cn09","cn10","cn13"],"q":"简述中国近现代音乐教育的几次重要转型。","rubric":[{"t":"学堂乐歌时期：乐歌课进入新式学堂，沈心工、李叔同","s":3},{"t":"专业教育建立：1927 年上海国立音乐院，萧友梅","s":3},{"t":"建国后：院系调整，专业与师范教育体系成型","s":3},{"t":"改革开放后：普及、考级与多元发展","s":3},{"t":"表述准确","s":3}],"answer":"清末民初学堂乐歌把音乐课带进新式学堂，完成从「师徒传授」到「课堂普及」的转变；1927 年萧友梅创办上海国立音乐院，建立专业音乐教育体系；建国后院系调整，形成专业院校与师范教育并行的格局；改革开放后音乐教育走向普及与多元。四次转型共同构成中国近现代音乐教育的主线。","refCards":["cn09-1","cn10-1","cn13-1"]},{"id":"x-h05","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"押题","chIds":["cn08","cn15"],"q":"结合「非物质文化遗产保护」，谈谈中国传统音乐在当代的传承困境与可能路径。","rubric":[{"t":"传统音乐的活态性与口传心授特征","s":3},{"t":"困境：传承人断层、原生语境消失、过度商业化","s":3},{"t":"路径：教育传承、录音记录、舞台化与适度创新","s":3},{"t":"结合具体乐种举例（如福建南音、西安鼓乐、木卡姆）","s":3},{"t":"表述准确、有观点","s":3}],"answer":"中国传统音乐多为口传心授的活态艺术，依附于具体的民俗语境。当代困境在于传承人断层、仪式语境消失与过度商业化。可行路径包括把乐种引入学校教育、用录音与影像做系统性存档、在保留核心风格的前提下做舞台化改编，福建南音、西安鼓乐与新疆木卡姆的实践都可作为例证。","refCards":["cn08-5","cn08-1"]},{"id":"x-h06","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w07"],"q":"20 世纪音乐「调性瓦解」有哪几条主要路径？请结合作曲家与作品说明。","rubric":[{"t":"勋伯格：无调性走向十二音，《月迷彼埃罗》","s":3},{"t":"斯特拉文斯基：节奏与原始主义，《春之祭》；后期新古典","s":3},{"t":"巴托克：民族音调与调式综合，《乐队协奏曲》","s":3},{"t":"德彪西：全音阶与色彩性和声","s":2},{"t":"结构清晰","s":2}],"answer":"调性瓦解有多条路径：勋伯格从无调性走向十二音，《月迷彼埃罗》《升华之夜》是标志；斯特拉文斯基以节奏与不协和音响冲击传统，《春之祭》之后又转向新古典；巴托克把民间调式与半音手法综合；德彪西用全音阶与色彩和声弱化功能。它们共同把「调性」从唯一语法变成一种可选语言。","refCards":["w07-3","w07-4","w07-5"]}],"chapters":[{"id":"x-ch-w01","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w01"],"q":"试论古希腊音乐的观念与理论成就，并说明它对后世西方音乐的影响。","rubric":[{"t":"歌舞乐一体、单音音乐的基本形态","s":3},{"t":"四音音列、大完美体系、调式理论","s":3},{"t":"毕达哥拉斯的数理和谐观","s":3},{"t":"对中世纪教会调式与文艺复兴人文主义的影响","s":2},{"t":"结构清晰","s":2}],"answer":"古希腊音乐是诗、歌、舞一体的单音音乐，理论上有四音音列、大完美体系与多利亚等调式，毕达哥拉斯以数解释音程。其调式观念经中世纪教会调式传承，其「音乐净化心灵」的观念在文艺复兴被重新发现。","refCards":["w01-1","w01-2"]},{"id":"x-ch-w02","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w02"],"q":"试论中世纪音乐从单声圣咏走向复调的发展过程。","rubric":[{"t":"格里高利圣咏的地位与特征","s":3},{"t":"奥尔加农到第斯康特的演进","s":3},{"t":"古艺术与巴黎圣母院乐派","s":3},{"t":"新艺术与世俗音乐的兴起","s":2},{"t":"结构清晰","s":2}],"answer":"中世纪以格里高利圣咏为中心，9 世纪起在圣咏上附加声部产生奥尔加农，12 世纪巴黎圣母院乐派把复调推向三、四声部，14 世纪新艺术带来世俗音乐与记谱革新。","refCards":["w02-2","w02-4","w02-6"]},{"id":"x-ch-w03","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w03"],"q":"试论文艺复兴时期复调声乐的成就与器乐的独立。","rubric":[{"t":"人文主义背景与印刷术的推动","s":3},{"t":"勃艮第、弗兰德、罗马、威尼斯四个乐派","s":3},{"t":"弥撒、经文歌、牧歌、尚松等体裁","s":3},{"t":"利切卡尔、坎佐纳等器乐体裁的出现","s":2},{"t":"结构清晰","s":2}],"answer":"文艺复兴以人文主义为底色，四声部模仿复调成熟，勃艮第、弗兰德、罗马、威尼斯四派相继主导，弥撒与经文歌达到高峰，牧歌与尚松繁荣；同时利切卡尔、坎佐纳等器乐体裁出现，器乐开始脱离声乐独立。","refCards":["w03-1","w03-6"]},{"id":"x-ch-w04","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w04"],"q":"试论巴洛克时期歌剧的诞生与器乐的发展。","rubric":[{"t":"佛罗伦萨卡梅拉塔与早期歌剧","s":3},{"t":"蒙特威尔第、那不勒斯歌剧与返始咏叹调","s":3},{"t":"通奏低音与主调音乐的兴起","s":3},{"t":"协奏曲、奏鸣曲、赋格等器乐体裁","s":2},{"t":"结构清晰","s":2}],"answer":"巴洛克以通奏低音为标志，佛罗伦萨卡梅拉塔催生歌剧，蒙特威尔第《奥菲欧》确立戏剧表现力，那不勒斯歌剧确立返始咏叹调；器乐方面协奏曲、奏鸣曲与赋格成熟，维瓦尔第、巴赫把器乐推向高峰。","refCards":["w04-2","w04-5"]},{"id":"x-ch-w05","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w05"],"q":"试论古典主义时期器乐体裁的成熟，并以海顿、莫扎特、贝多芬为例说明。","rubric":[{"t":"启蒙背景与主调风格","s":3},{"t":"奏鸣曲式的结构与意义","s":3},{"t":"交响曲、四重奏、协奏曲、奏鸣曲的成熟","s":3},{"t":"三位作曲家的各自贡献","s":2},{"t":"结构清晰","s":2}],"answer":"古典时期在启蒙运动影响下追求理性与均衡，奏鸣曲式确立，交响曲、弦乐四重奏、协奏曲与奏鸣曲四大体裁成熟。海顿确立四乐章结构与乐队编制，莫扎特把旋律与戏剧性推向完美，贝多芬则把形式撑到极限并注入个人意志。","refCards":["w05-2","w05-3","w05-5"]},{"id":"x-ch-w06","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w06"],"q":"试论浪漫主义音乐的特征，并结合歌剧、艺术歌曲与钢琴音乐说明。","rubric":[{"t":"情感至上、标题音乐、民族乐派","s":3},{"t":"歌剧：意大利、法国、德国三条线索","s":3},{"t":"艺术歌曲与声乐套曲","s":3},{"t":"钢琴小品与炫技传统","s":2},{"t":"结构清晰","s":2}],"answer":"浪漫主义强调个人情感，标题音乐与民族乐派兴起，和声走向半音化。歌剧形成意大利（罗西尼、威尔第、普契尼）、法国（柏辽兹、比才）与德国（瓦格纳）三条线索；艺术歌曲由舒伯特、舒曼推向高峰；钢琴音乐有肖邦的诗意与李斯特的炫技。","refCards":["w06-1","w06-4","w06-9"]},{"id":"x-ch-w07","part":"西方音乐史","type":"论述","full":13,"difficulty":2,"chIds":["w07"],"q":"试论 20 世纪音乐的多元格局。","rubric":[{"t":"调性体系瓦解与不协和的解放","s":3},{"t":"印象主义、表现主义、新古典主义","s":3},{"t":"民族主义与英美作曲家","s":3},{"t":"先锋派、电子音乐与偶然音乐","s":2},{"t":"结构清晰","s":2}],"answer":"20 世纪音乐走向多元：印象主义重色彩，表现主义走向无调性与十二音，新古典主义回到古典形式，民族主义从民间音乐取材，先锋派则用电子、噪音与偶然性重新定义音乐。调性从唯一语法变成一种可选语言。","refCards":["w07-1","w07-6"]}],"real":[{"id":"r-2013-1","year":2013,"part":"中国音乐史","type":"名词解释","full":5,"difficulty":1,"q":"八音分类法","rubric":[{"t":"按制作材料把乐器分为八类，见于《周礼·春官》","s":2},{"t":"金、石、土、革、丝、木、匏、竹八类","s":2},{"t":"是中国最早的乐器科学分类法","s":1}],"answer":"八音分类法是中国古代按乐器制作材料划分的八类分类法，见于《周礼·春官》，即金、石、土、革、丝、木、匏、竹，是世界上最早的乐器科学分类之一。","refCards":["cn03-3"],"chIds":["cn03"]},{"id":"r-2013-2","year":2013,"part":"中国音乐史","type":"名词解释","full":5,"difficulty":2,"q":"减字谱","rubric":[{"t":"唐代曹柔在文字谱基础上创制","s":2},{"t":"以减笔汉字拼合记录指法、弦序、徽位","s":2},{"t":"古琴专用谱式，沿用至今","s":1}],"answer":"减字谱是唐代曹柔在文字谱基础上创制的古琴专用记谱法，用减笔汉字拼合表示指法、弦序与徽位，只记音位不记节奏，沿用至今。","refCards":["cn06-8"],"chIds":["cn06"]},{"id":"r-2013-3","year":2013,"part":"中国音乐史","type":"名词解释","full":5,"difficulty":1,"q":"明代「四大声腔」","rubric":[{"t":"海盐腔、余姚腔、弋阳腔、昆山腔","s":3},{"t":"昆山腔经魏良辅改革形成水磨调","s":1},{"t":"是明代戏曲音乐的主流","s":1}],"answer":"明代戏曲的四种主要声腔：海盐腔、余姚腔、弋阳腔、昆山腔。其中昆山腔经魏良辅改革形成「水磨调」，成为明代戏曲音乐的主流。","refCards":["cn08-3"],"chIds":["cn08"]},{"id":"r-2013-4","year":2013,"part":"中国音乐史","type":"名词解释","full":5,"difficulty":1,"q":"萧友梅","rubric":[{"t":"中国专业音乐教育的奠基人","s":2},{"t":"1927 年创办上海国立音乐院","s":2},{"t":"代表作《问》","s":1}],"answer":"萧友梅是中国专业音乐教育的奠基人，1927 年创办上海国立音乐院，著有《问》《新霓裳羽衣舞》等作品，奠定了中国现代专业音乐教育体系。","refCards":["cn10-1"],"chIds":["cn10"]},{"id":"r-2019-1","year":2019,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":2,"q":"梨园","rubric":[{"t":"唐玄宗设立的音乐机构","s":3},{"t":"专习法曲，乐工称「皇帝梨园弟子」","s":3},{"t":"与教坊、大乐署共同构成唐代宫廷音乐体系","s":2},{"t":"对后世戏曲界称「梨园」有深远影响","s":2}],"answer":"梨园是唐玄宗设立的音乐机构，专司法曲的排练与演出，乐工被称为「皇帝梨园弟子」。它与大乐署、教坊共同构成唐代宫廷音乐机构体系，后世戏曲界因此自称「梨园行」。","refCards":["cn06-3"],"chIds":["cn06"]},{"id":"r-2019-2","year":2019,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":2,"q":"国立音乐院","rubric":[{"t":"1927 年萧友梅创办于上海","s":3},{"t":"1929 年改组为国立音乐专科学校","s":2},{"t":"设理论作曲、声乐、钢琴、管弦等组","s":3},{"t":"中国专业音乐教育的摇篮","s":2}],"answer":"国立音乐院是 1927 年萧友梅在上海创办的中国第一所独立高等音乐学府，1929 年改组为国立音乐专科学校，设理论作曲、声乐、钢琴、管弦等组，培养出贺绿汀、冼星海、丁善德等一批音乐家。","refCards":["cn11-2"],"chIds":["cn11"]},{"id":"r-2022-1","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":1,"q":"葛天氏之乐","rubric":[{"t":"传说中的原始乐舞，八阙歌舞","s":3},{"t":"内容涉及载民、玄鸟、遂草木、奋五谷等","s":3},{"t":"反映农耕祭祀与图腾崇拜","s":2}],"answer":"《葛天氏之乐》是传说中的原始乐舞，由八阙组成，内容涉及载民、玄鸟、遂草木、奋五谷、敬天常等，反映原始先民的农耕生活与祭祀、图腾崇拜。","refCards":["cn01-1"],"chIds":["cn01"]},{"id":"r-2022-2","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"诸宫调","rubric":[{"t":"宋代说唱形式，孔三传创","s":3},{"t":"联合多个宫调的曲牌演唱长篇故事","s":3},{"t":"代表作《西厢记诸宫调》，为戏曲音乐准备条件","s":2}],"answer":"诸宫调是宋代的大型说唱形式，相传为孔三传所创，把不同宫调的曲牌联缀起来演唱长篇故事，代表作《西厢记诸宫调》，其曲牌联缀与叙事结构为元杂剧准备了音乐基础。","refCards":["cn07-3"],"chIds":["cn07"]},{"id":"r-2022-3","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"大司乐","rubric":[{"t":"周代最高音乐机构与乐官之称","s":3},{"t":"掌乐教，教国子以乐德、乐语、乐舞","s":3},{"t":"是礼乐制度的组织保障","s":2}],"answer":"大司乐是周代最高的音乐机构，也是乐官之名，掌管乐教，教国子以乐德、乐语、乐舞，统筹祭祀与典礼用乐，是礼乐制度得以运行的组织保障。","refCards":["cn03-1"],"chIds":["cn03"]},{"id":"r-2022-4","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"三分损益法","rubric":[{"t":"以弦长或管长为基准，损一或益一相生","s":3},{"t":"《管子·地员》先益后损求五音，《吕氏春秋》推十二律","s":3},{"t":"仲吕不能还生黄钟，无法自由旋宫","s":2}],"answer":"三分损益法是中国古代生律法，以弦长或管长为基准，三分损一（×2/3）或三分益一（×4/3）依次相生。《管子·地员》用它求五音，《吕氏春秋》推全十二律，但仲吕不能还生黄钟，无法自由旋宫。","refCards":["cn03-5"],"chIds":["cn03"]},{"id":"r-2022-5","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"《新诗歌集》","rubric":[{"t":"赵元任的艺术歌曲集","s":3},{"t":"中国第一部个人艺术歌曲集","s":3},{"t":"收《教我如何不想他》《卖布谣》等，讲究依字行腔","s":2}],"answer":"《新诗歌集》是赵元任的艺术歌曲集，中国第一部个人艺术歌曲集，收录《教我如何不想他》《卖布谣》《海韵》等，讲究依字行腔，把汉语声调与旋律结合。","refCards":["cn10-2"],"chIds":["cn10"]},{"id":"r-2022-6","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"大同乐会","rubric":[{"t":"1920 年郑觐文创办于上海","s":3},{"t":"以整理国乐、改良乐器为宗旨","s":3},{"t":"改编《春江花月夜》，推动国乐合奏","s":2}],"answer":"大同乐会是 1920 年郑觐文在上海创办的国乐社团，以整理国乐、改良乐器、编配合奏为宗旨，曾把《夕阳箫鼓》改编为《春江花月夜》，对近代国乐合奏影响深远。","refCards":["cn10-6"],"chIds":["cn10"]},{"id":"r-2022-7","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":2,"q":"国乐改进社","rubric":[{"t":"1927 年刘天华等发起","s":3},{"t":"主张从东西调和与合作中打出一条新路","s":3},{"t":"出版《音乐杂志》，改进二胡、琵琶创作","s":2}],"answer":"国乐改进社是 1927 年刘天华等发起的国乐社团，主张「从东西调和与合作中打出一条新路」，出版《音乐杂志》，推动二胡、琵琶的创作与教学，把民间乐器提升到专业独奏地位。","refCards":["cn10-4"],"chIds":["cn10"]},{"id":"r-2022-8","year":2022,"part":"中国音乐史","type":"名词解释","full":8,"difficulty":1,"q":"《小小画家》","rubric":[{"t":"黎锦晖的儿童歌舞剧","s":3},{"t":"以儿童生活为题材，载歌载舞","s":3},{"t":"中国儿童歌舞剧的代表作之一","s":2}],"answer":"《小小画家》是黎锦晖创作的儿童歌舞剧，以儿童生活为题材，歌舞与戏剧结合，与《麻雀与小孩》《可怜的秋香》同为我国儿童歌舞剧的代表作。","refCards":["cn10-3"],"chIds":["cn10"]},{"id":"r-2023-1","year":2023,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":3,"q":"律吕字谱","rubric":[{"t":"用十二律律名记录音高的谱式","s":3},{"t":"以黄钟、大吕等律名逐字标音","s":3},{"t":"见于《白石道人歌曲》等，是研究古代音高的直接材料","s":2},{"t":"与减字谱、工尺谱并列为传统谱式","s":2}],"answer":"律吕字谱是用十二律律名（黄钟、大吕、太簇等）逐字记录音高的谱式，姜夔《白石道人歌曲》中的旁谱即属此类，是研究古代音高的直接材料。","refCards":["cn06-8"],"chIds":["cn06"]},{"id":"r-2023-2","year":2023,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":3,"q":"《碧鸡漫志》","rubric":[{"t":"南宋王灼著","s":3},{"t":"论述词调源流与宋代词乐","s":3},{"t":"是研究宋代词乐的重要文献","s":2},{"t":"与《乐书》《琴史》同为宋代音乐著作","s":2}],"answer":"《碧鸡漫志》是南宋王灼所著的词乐著作，考述词调源流、宫调与歌唱方法，是研究宋代词乐与曲子词的重要文献，与陈旸《乐书》、朱长文《琴史》并称宋代音乐著作。","refCards":["cn07-8"],"chIds":["cn07"]},{"id":"r-2023-3","year":2023,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":2,"q":"鲁迅艺术学院","rubric":[{"t":"1938 年创办于延安","s":3},{"t":"设音乐系，培养革命音乐干部","s":3},{"t":"创作《黄河大合唱》《白毛女》等","s":2},{"t":"体现文艺为工农兵服务的方向","s":2}],"answer":"鲁迅艺术学院是 1938 年创办于延安的综合性艺术学院，设音乐系，培养革命音乐干部，师生创作了《黄河大合唱》《白毛女》等作品，是延安文艺方向的代表。","refCards":["cn12-4"],"chIds":["cn12"]},{"id":"r-2023-4","year":2023,"part":"中国音乐史","type":"名词解释","full":10,"difficulty":2,"q":"王光祈","rubric":[{"t":"音乐学家，比较音乐学先驱","s":3},{"t":"著《东西乐制之研究》《东方民族之音乐》《中国音乐史》","s":4},{"t":"引入现代学术方法研究中国音乐","s":3}],"answer":"王光祈是中国近代音乐学家、比较音乐学的先驱，著有《东西乐制之研究》《东方民族之音乐》《中国音乐史》，用比较方法研究世界音乐，为中国音乐学引入现代学术方法。","refCards":["cn10-5"],"chIds":["cn10"]},{"id":"r-2013-5","year":2013,"part":"中国音乐史","type":"简答","full":15,"difficulty":2,"q":"曾侯乙墓出土了哪些乐器？这些乐器反映了当时乐律学的哪些成就？","rubric":[{"t":"1978 年湖北随州出土，战国早期","s":3},{"t":"编钟 65 件、编磬及鼓、瑟、笙、排箫等","s":4},{"t":"一钟双音、十二律俱全、可旋宫转调","s":4},{"t":"铭文记载各国律名，证明先秦乐律学高度发达","s":4}],"answer":"曾侯乙墓 1978 年出土于湖北随州，随葬编钟 65 件，另有编磬、鼓、瑟、笙、排箫等。编钟一钟双音、十二律俱全、可在多调上旋宫转调，钟体铭文记载各国律名对照，证明先秦乐律学与铸造工艺已达到很高水平。","refCards":["cn03-4"],"chIds":["cn03"]},{"id":"r-2013-6","year":2013,"part":"中国音乐史","type":"简答","full":15,"difficulty":2,"q":"简述学堂乐歌及其历史意义。","rubric":[{"t":"清末新式学堂设乐歌课，多依曲填词","s":4},{"t":"沈心工、李叔同、曾志忞等代表人物","s":4},{"t":"开近代音乐教育之先，普及五线谱与简谱","s":4},{"t":"传播新思想，为专业音乐发展准备人才","s":3}],"answer":"学堂乐歌是清末民初新式学堂的乐歌课及其歌曲，多采用日本、欧美曲调重新填词，代表人物有沈心工、李叔同、曾志忞。它开中国近代音乐教育之先，普及了记谱法与集体歌唱，传播新思想，为专业音乐的发展准备了人才与听众。","refCards":["cn09-1"],"chIds":["cn09"]},{"id":"r-2019-3","year":2019,"part":"中国音乐史","type":"简答","full":20,"difficulty":2,"q":"春秋战国时期音乐思想「百家争鸣」主要有哪些派别？反映了哪些不同的音乐思想？","rubric":[{"t":"儒家：孔子尽善尽美、荀子《乐论》，主张乐教","s":6},{"t":"墨家：墨子《非乐》，反对奢乐","s":5},{"t":"道家：老子大音希声、庄子天籁，崇尚自然","s":5},{"t":"儒道互补构成中国古代音乐美学两大源头","s":4}],"answer":"主要有儒、墨、道三家。儒家以孔子「尽善尽美」、荀子《乐论》为代表，主张以乐教化、礼乐相济；墨家墨子《非乐》反对统治者的奢侈享乐；道家老子「大音希声」、庄子「天籁」崇尚自然、否定人为。三家争鸣奠定了中国古代音乐美学的基础。","refCards":["cn03-9"],"chIds":["cn03"]},{"id":"r-2013-7","year":2013,"part":"中国音乐史","type":"论述","full":25,"difficulty":3,"q":"宋代市民音乐的发展及其历史意义。","rubric":[{"t":"城市繁荣，瓦舍勾栏等固定演艺场所出现","s":6},{"t":"曲子词、说唱（鼓子词、唱赚、诸宫调）、杂剧繁荣","s":7},{"t":"音乐重心由宫廷转向市民，职业化、商品化","s":6},{"t":"为元杂剧与明清戏曲说唱奠定基础","s":6}],"answer":"宋代城市经济繁荣，出现了瓦舍、勾栏等固定演艺场所，曲子词、鼓子词、唱赚、诸宫调、杂剧等在市井繁荣。音乐重心由宫廷转向市民，艺人职业化、演出商品化。这一转向为元杂剧的成熟和明清戏曲、说唱的发展奠定了基础。","refCards":["cn07-9","cn07-3"],"chIds":["cn07"]},{"id":"r-2013-8","year":2013,"part":"中国音乐史","type":"论述","full":25,"difficulty":3,"q":"中国歌剧史上的三次高潮及其代表性作品评述。","rubric":[{"t":"第一次：20—30 年代，《扬子江暴风雨》等探索","s":6},{"t":"第二次：40 年代延安，《白毛女》标志民族新歌剧成熟","s":7},{"t":"第三次：建国后《洪湖赤卫队》《江姐》等","s":6},{"t":"评述：民族化与西方歌剧形式的结合","s":6}],"answer":"中国歌剧的三次高潮：20—30 年代以《扬子江暴风雨》《秋子》等为代表，开始借鉴西方歌剧形式；40 年代延安秧歌运动催生《白毛女》，标志民族新歌剧的成熟；建国后《洪湖赤卫队》《江姐》把民族音调、板腔体与西方歌剧结构结合，形成中国歌剧的黄金期。三次高潮的共同主题是「民族化」。","refCards":["cn11-8","cn12-5","cn13-3"],"chIds":["cn11","cn12","cn13"]},{"id":"r-2019-4","year":2019,"part":"中国音乐史","type":"论述","full":30,"difficulty":3,"q":"论述 19 世纪末以来西方音乐传入中国的影响并举例说明。","rubric":[{"t":"传入渠道：教会、学堂、留学生、唱片与电影","s":7},{"t":"学堂乐歌与西方乐理、记谱法的普及","s":8},{"t":"专业音乐教育与交响乐、歌剧等体裁的引入","s":8},{"t":"中西融合的创作实践与民族化探索","s":7}],"answer":"19 世纪末以来，西方音乐经教会、新式学堂、留学生与唱片电影等渠道传入。学堂乐歌带来西方记谱法与集体歌唱，专业音乐教育引入交响乐、歌剧等体裁，出现《梁祝》等中西融合的作品。这一过程既重塑了中国音乐的形态，也引发了「全盘西化」与「国乐改进」的长期争论。","refCards":["cn09-5","cn11-2"],"chIds":["cn09","cn11"]},{"id":"r-2022-9","year":2022,"part":"中国音乐史","type":"论述","full":30,"difficulty":3,"q":"请论述周代礼乐制度的内涵与具体的制度表现，并论述其在春秋战国时期的发展。","rubric":[{"t":"周公制礼作乐，以乐配礼、维护宗法等级","s":7},{"t":"八佾、乐悬、大司乐、六代之乐等制度表现","s":8},{"t":"春秋战国礼崩乐坏，郑卫之音兴起","s":8},{"t":"诸子对礼乐的反思，音乐思想空前活跃","s":7}],"answer":"周代礼乐制度由周公「制礼作乐」确立，以乐配礼维护宗法等级，表现为八佾、乐悬的等级规范，大司乐掌乐教，六代之乐用于祭祀。春秋战国礼崩乐坏，郑卫之音流行，孔子「恶郑声之乱雅乐」，诸子围绕礼乐展开争鸣，音乐思想空前活跃。","refCards":["cn03-1","cn03-9"],"chIds":["cn03"]},{"id":"r-2022-10","year":2022,"part":"中国音乐史","type":"论述","full":30,"difficulty":3,"q":"请论述学堂乐歌在中国音乐历史上的价值与意义。","rubric":[{"t":"近代音乐教育的开端，乐歌课进入学堂","s":7},{"t":"依曲填词的方式与西方记谱法的普及","s":8},{"t":"启蒙与救亡的双重主题","s":8},{"t":"为专业音乐创作与教育培养人才和听众","s":7}],"answer":"学堂乐歌是中国近代音乐教育的开端，乐歌课进入新式学堂，依曲填词的创作方式普及了西方记谱法与集体歌唱。它承载启蒙与救亡的双重主题，塑造了近代国民音乐生活，并为专业音乐创作与教育培养了人才和听众。","refCards":["cn09-1"],"chIds":["cn09"]},{"id":"r-2023-5","year":2023,"part":"中国音乐史","type":"论述","full":20,"difficulty":3,"q":"请谈一谈中国古代三大音乐美学代表作的主要观点及其对中国音乐发展的影响。","rubric":[{"t":"《乐记》：物动心感、礼辨异乐和同","s":6},{"t":"《声无哀乐论》：声音无关于哀乐","s":6},{"t":"《溪山琴况》：二十四况、以和为纲","s":5},{"t":"三者构成中国古代音乐美学的主线","s":3}],"answer":"《乐记》提出「物动心感」「礼辨异、乐和同」，奠定儒家音乐功能论；嵇康《声无哀乐论》主张声音本体无哀乐，转向审美本体；徐上瀛《溪山琴况》以二十四况论琴，标举清微淡远。三者分别代表教化论、本体论与境界论，构成中国古代音乐美学的主线。","refCards":["cn03-10","cn05-3","cn08-10"],"chIds":["cn03","cn05","cn08"]},{"id":"r-2023-6","year":2023,"part":"中国音乐史","type":"论述","full":20,"difficulty":3,"q":"什么叫「旋宫转调」？「八十四调」与「二十八调」与先秦宫调理论有何不同？","rubric":[{"t":"旋宫：调高转换；转调：调式转换","s":5},{"t":"先秦：十二律与五声、三分损益的宫调体系","s":5},{"t":"八十四调：十二律×七声，隋代郑译、万宝常","s":5},{"t":"二十八调：唐代燕乐调体系，与实际实践结合","s":5}],"answer":"旋宫指十二律轮流作宫、改变调高，转调指调式转换。先秦宫调以十二律配五声、由三分损益生律，理论上可旋宫而实践受限。隋代郑译、万宝常推八十四调（十二律×七声），唐代燕乐实际用二十八调。由理论推演走向实践选择，是宫调理论的重要变化。","refCards":["cn06-9","cn03-5"],"chIds":["cn06","cn03"]},{"id":"r-2023-7","year":2023,"part":"中国音乐史","type":"论述","full":20,"difficulty":3,"q":"元杂剧与南戏之比较。","rubric":[{"t":"杂剧：四折一楔子、一人主唱、一宫到底","s":5},{"t":"南戏：结构灵活、多人分唱、曲牌自由","s":5},{"t":"代表作：关汉卿、王实甫 vs 四大传奇","s":5},{"t":"北曲与南曲的音调差异及合流","s":5}],"answer":"元杂剧用北曲，四折一楔子，一人主唱、一宫到底，结构严整，代表作《窦娥冤》《西厢记》；南戏用南曲，结构灵活、多人分唱、曲牌自由，代表作「四大传奇」。二者在音调、体制上形成南北对照，后经「南北合套」走向融合，为明清传奇铺路。","refCards":["cn07-4"],"chIds":["cn07"]},{"id":"r-2012-1","year":2012,"part":"西方音乐史","type":"名词解释","full":5,"difficulty":2,"q":"通奏低音","rubric":[{"t":"巴洛克时期的核心织体手法","s":2},{"t":"低音声部标数字指示和弦，演奏者即兴填充","s":2},{"t":"标志主调音乐的兴起","s":1}],"answer":"通奏低音是巴洛克音乐的核心手法，作曲家在低音声部标出数字指示上方和弦，由键盘与低音乐器即兴填充，形成「旋律—低音」两极的织体，标志主调音乐的兴起。","refCards":["w04-1"],"chIds":["w04"]},{"id":"r-2012-2","year":2012,"part":"西方音乐史","type":"名词解释","full":5,"difficulty":2,"q":"罗马乐派","rubric":[{"t":"16 世纪以罗马为中心的音乐流派","s":2},{"t":"帕莱斯特里那为代表，风格纯净均衡","s":2},{"t":"《马切洛斯教皇弥撒》为典范","s":1}],"answer":"罗马乐派是 16 世纪以罗马为中心的音乐流派，代表作曲家帕莱斯特里那，风格纯净、声部均衡、不协和音处理谨慎，《马切洛斯教皇弥撒》为典范，是文艺复兴复调的最高成就之一。","refCards":["w03-4"],"chIds":["w03"]},{"id":"r-2012-3","year":2012,"part":"西方音乐史","type":"名词解释","full":5,"difficulty":1,"q":"门德尔松","rubric":[{"t":"德国浪漫主义作曲家、指挥家","s":2},{"t":"《仲夏夜之梦》序曲、《无词歌》","s":2},{"t":"创办莱比锡音乐学院，复兴巴赫","s":1}],"answer":"门德尔松是德国浪漫主义作曲家、指挥家，作有《仲夏夜之梦》序曲、《无词歌》、《意大利交响曲》，创办莱比锡音乐学院，并推动巴赫《马太受难曲》的复兴。","refCards":["w06-2"],"chIds":["w06"]},{"id":"r-2012-4","year":2012,"part":"西方音乐史","type":"名词解释","full":5,"difficulty":2,"q":"乐剧","rubric":[{"t":"瓦格纳创立的音乐戏剧形式","s":2},{"t":"整体艺术：诗、乐、剧、舞台一体","s":2},{"t":"主导动机与无终旋律，《指环》为代表","s":1}],"answer":"乐剧是瓦格纳创立的音乐戏剧形式，主张「整体艺术」，把诗、音乐、戏剧、舞台美术融为一体，用主导动机贯穿全剧、以无终旋律取消分曲，代表作《尼伯龙根的指环》。","refCards":["w06-5"],"chIds":["w06"]},{"id":"r-2012-5","year":2012,"part":"西方音乐史","type":"名词解释","full":5,"difficulty":2,"q":"交响诗","rubric":[{"t":"李斯特创立的单乐章标题管弦乐体裁","s":2},{"t":"与文学、绘画、诗歌结合","s":2},{"t":"《前奏曲》《塔索》为代表","s":1}],"answer":"交响诗是李斯特创立的单乐章标题管弦乐体裁，把文学、诗歌、绘画的内容转化为音乐结构，代表作《前奏曲》《塔索》，是浪漫主义标题音乐的重要形式。","refCards":["w06-8"],"chIds":["w06"]},{"id":"r-2012-6","year":2012,"part":"西方音乐史","type":"简答","full":15,"difficulty":2,"q":"文艺复兴时期器乐的发展情况及历史意义。","rubric":[{"t":"由声乐改编走向独立创作","s":4},{"t":"利切卡尔、坎佐纳、幻想曲、舞曲等体裁","s":5},{"t":"乐器制作与演奏技术提高","s":3},{"t":"为巴洛克器乐的繁荣奠定基础","s":3}],"answer":"文艺复兴时期器乐从声乐改编（如坎佐纳）逐步走向独立创作，出现利切卡尔、幻想曲、舞曲等体裁，乐器制作与演奏技术提高。器乐的独立为巴洛克协奏曲、奏鸣曲与赋格的繁荣奠定了基础。","refCards":["w03-6"],"chIds":["w03"]},{"id":"r-2012-7","year":2012,"part":"西方音乐史","type":"简答","full":15,"difficulty":2,"q":"巴赫的复调音乐作品及特征。","rubric":[{"t":"《平均律钢琴曲集》确立十二平均律的实践","s":4},{"t":"赋格的结构：主题、答题、对题、插部","s":4},{"t":"《赋格的艺术》《哥德堡变奏曲》","s":4},{"t":"复调技术的集大成，兼具宗教性与科学性","s":3}],"answer":"巴赫的复调作品以《平均律钢琴曲集》为代表，48 首前奏曲与赋格确立十二平均律的实践；赋格由主题、答题、对题、插部构成，逻辑严密。《赋格的艺术》《哥德堡变奏曲》把复调技术推向顶峰，兼具宗教情感与数理结构。","refCards":["w04-6"],"chIds":["w04"]},{"id":"r-2012-8","year":2012,"part":"西方音乐史","type":"简答","full":15,"difficulty":2,"q":"海顿在交响曲领域的贡献。","rubric":[{"t":"确立四乐章结构与乐队编制","s":4},{"t":"104 部交响曲，《伦敦》《惊愕》《告别》","s":5},{"t":"主题发展与奏鸣曲式的完善","s":3},{"t":"被誉为「交响曲之父」","s":3}],"answer":"海顿作有 104 部交响曲，确立四乐章结构（快—慢—小步舞曲—快）与双管编制的乐队模式，完善奏鸣曲式与主题发展手法，代表作《伦敦交响曲》《惊愕》《告别》，被誉为「交响曲之父」。","refCards":["w05-3"],"chIds":["w05"]},{"id":"r-2012-9","year":2012,"part":"西方音乐史","type":"论述","full":30,"difficulty":3,"q":"结合实例论述 19 世纪下半叶法国歌剧的各种类型及其风格特征。","rubric":[{"t":"大歌剧：宏大场面与历史题材","s":7},{"t":"抒情歌剧：古诺《浮士德》","s":7},{"t":"喜歌剧／轻歌剧：奥芬巴赫《地狱中的奥菲欧》","s":8},{"t":"比才《卡门》：现实主义与西班牙色彩","s":8}],"answer":"19 世纪下半叶法国歌剧分为几类：大歌剧以宏大场面和历史题材取胜；抒情歌剧以古诺《浮士德》为代表，旋律优美、情感细腻；轻歌剧以奥芬巴赫《地狱中的奥菲欧》为代表，讽刺俏皮；比才《卡门》则以现实主义题材与西班牙色彩开创新风。","refCards":["w06-3"],"chIds":["w06"]},{"id":"r-2020-1","year":2020,"part":"西方音乐史","type":"论述","full":20,"difficulty":3,"q":"文艺复兴时期器乐的出现及发展情况。","rubric":[{"t":"从声乐改编到独立创作","s":5},{"t":"利切卡尔、坎佐纳、幻想曲、舞曲","s":6},{"t":"乐器改良与演奏技术","s":4},{"t":"为巴洛克器乐奠定基础","s":5}],"answer":"文艺复兴时期器乐先依附于声乐，由尚松、弥撒改编为坎佐纳、利切卡尔，随后出现独立的幻想曲与舞曲。乐器制作与演奏技术进步，器乐逐渐获得独立地位，为巴洛克奏鸣曲、协奏曲的繁荣准备条件。","refCards":["w03-6"],"chIds":["w03"]},{"id":"r-2020-2","year":2020,"part":"西方音乐史","type":"论述","full":20,"difficulty":3,"q":"巴洛克时期歌剧的产生及主要乐派。","rubric":[{"t":"佛罗伦萨卡梅拉塔与《达芙妮》《尤丽狄茜》","s":5},{"t":"蒙特威尔第《奥菲欧》","s":5},{"t":"威尼斯、那不勒斯乐派与返始咏叹调","s":5},{"t":"法国吕利、英国普赛尔","s":5}],"answer":"歌剧诞生于 16 世纪末佛罗伦萨的卡梅拉塔社团，佩里《达芙妮》《尤丽狄茜》是最早的作品，蒙特威尔第《奥菲欧》确立戏剧表现力。此后形成威尼斯乐派（公开歌剧院）、那不勒斯乐派（返始咏叹调），法国有吕利的抒情悲剧，英国有普赛尔《狄多与埃涅阿斯》。","refCards":["w04-2","w04-3"],"chIds":["w04"]},{"id":"r-2020-3","year":2020,"part":"西方音乐史","type":"论述","full":20,"difficulty":3,"q":"浪漫主义早期的代表性作曲家及贡献。","rubric":[{"t":"韦伯与德国民族歌剧《魔弹射手》","s":5},{"t":"舒伯特与艺术歌曲、《未完成交响曲》","s":5},{"t":"柏辽兹与标题音乐《幻想交响曲》","s":5},{"t":"门德尔松、舒曼的贡献","s":5}],"answer":"浪漫主义早期：韦伯以《魔弹射手》开创德国民族歌剧；舒伯特把艺术歌曲推向高峰，作《魔王》《冬之旅》与《未完成交响曲》；柏辽兹《幻想交响曲》确立标题音乐与固定乐思；门德尔松、舒曼在管弦乐、钢琴小品与音乐评论上各有建树。","refCards":["w06-2","w06-3"],"chIds":["w06"]},{"id":"r-2020-4","year":2020,"part":"西方音乐史","type":"论述","full":20,"difficulty":3,"q":"浪漫主义时期俄罗斯民族乐派的音乐创作情况。","rubric":[{"t":"格林卡奠基，《鲁斯兰与柳德米拉》","s":5},{"t":"五人团及各自贡献","s":6},{"t":"柴可夫斯基的独立地位","s":5},{"t":"民族题材与东方色彩","s":4}],"answer":"俄罗斯民族乐派由格林卡奠基，五人团（巴拉基列夫、穆索尔斯基、里姆斯基-科萨科夫、鲍罗丁、居伊）以民间音调与民族历史题材创作，穆索尔斯基《图画展览会》、鲍罗丁《伊戈尔王》为代表；柴可夫斯基虽不属于五人团，却把俄罗斯音乐推向世界。","refCards":["w06-6"],"chIds":["w06"]},{"id":"r-2020-5","year":2020,"part":"西方音乐史","type":"论述","full":20,"difficulty":2,"q":"列举一首西方音乐作品，谈一谈你的表演或欣赏感受。","rubric":[{"t":"准确说明作品、作曲家与体裁","s":5},{"t":"分析音乐要素（旋律、和声、结构、音色）","s":6},{"t":"结合个人表演或欣赏经验","s":5},{"t":"表达有条理、有真情实感","s":4}],"answer":"（开放题）先点明作品与体裁，再从旋律、和声、结构、音色等要素分析，最后结合自己的演奏或聆听经验谈感受。评分重点在「音乐要素分析是否具体」与「个人体验是否真实」。","refCards":["w05-5"],"chIds":["w05"]}],"hot":[{"id":"h07","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"押题","chIds":["cn11","cn13"],"q":"2027 年是建军百年。试述中国革命音乐中的军歌传统及其演变。","rubric":[{"t":"《国民革命歌》《三大纪律八项注意》等早期军歌","s":4},{"t":"聂耳《义勇军进行曲》与救亡歌咏","s":4},{"t":"《中国人民解放军军歌》等建国后军旅歌曲","s":4},{"t":"军歌的节奏特征与集体歌唱功能","s":3}],"answer":"革命军歌从《国民革命歌》《三大纪律八项注意》起步，抗战时期由聂耳《义勇军进行曲》与救亡歌咏推向高潮，建国后《中国人民解放军军歌》等延续传统。军歌多用进行曲节奏、附点与切分，强调集体性与号召力。","refCards":["cn11-7","cn09-1"]},{"id":"h08","part":"中国音乐史","type":"简答","full":15,"difficulty":3,"tag":"押题","chIds":["cn12","cn15"],"q":"2027 年是香港回归三十周年。试述粤语流行曲的兴起与广东音乐的关系。","rubric":[{"t":"广东音乐：《步步高》《雨打芭蕉》，吕文成等","s":4},{"t":"粤曲与粤剧的音乐传统","s":4},{"t":"1970—80 年代粤语流行曲兴起，顾嘉辉、黄霑","s":4},{"t":"影视主题曲与流行乐互相成就","s":3}],"answer":"广东音乐以《步步高》《雨打芭蕉》为代表，粤曲、粤剧提供声腔与乐队传统。1970—80 年代粤语流行曲兴起，顾嘉辉、黄霑把粤曲的腔韵与西方编曲结合，影视主题曲成为传播主渠道，形成独特的香港声音。","refCards":["cn12-7","cn15-1"]},{"id":"h09","part":"中国音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["cn06","cn14"],"q":"从《霓裳羽衣曲》到舞剧《丝路花雨》，谈谈「丝绸之路」题材在中国音乐舞蹈中的延续。","rubric":[{"t":"《霓裳羽衣曲》与唐代西域乐舞的吸收","s":4},{"t":"唐代多部乐与中外交流的格局","s":3},{"t":"《丝路花雨》的敦煌题材与舞剧语言","s":3},{"t":"「丝路」作为文化母题的当代意义","s":3}],"answer":"《霓裳羽衣曲》吸收《婆罗门曲》素材，是唐代西域乐舞东传的产物；十部乐的制度化说明交流已成规模。1979 年舞剧《丝路花雨》以敦煌壁画为素材，把「丝路」从历史题材转化为当代舞台语言，形成跨越千年的呼应。","refCards":["cn06-4","cn14-5"]},{"id":"h10","part":"中国音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["cn03","cn08","cn14"],"q":"试论中国音乐史上的「雅俗之争」及其当代回响。","rubric":[{"t":"先秦：雅乐与郑卫之音的对立","s":3},{"t":"明清：花雅之争与地方戏的兴起","s":3},{"t":"近现代：学堂乐歌、流行音乐的合法性争论","s":3},{"t":"规律：俗乐不断吸收、改造并进入主流","s":2},{"t":"结构清晰","s":2}],"answer":"先秦以雅乐为正声、郑卫之音为淫声；明清花部乱弹冲击雅部昆曲，地方戏兴起；近现代流行音乐再次引发「雅俗」争论。贯穿其中的规律是：俗乐不断被吸收、改造，最终进入主流，雅俗边界始终在移动。","refCards":["cn03-9","cn08-4"]},{"id":"h11","part":"中国音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["cn01","cn03","cn13"],"q":"音乐考古如何改写中国音乐史？请以贾湖骨笛与曾侯乙编钟为例说明。","rubric":[{"t":"贾湖骨笛：距今约八千年，七声音阶","s":3},{"t":"曾侯乙编钟：一钟双音、十二律、旋宫转调","s":4},{"t":"出土乐器与铭文对文献的印证与修正","s":3},{"t":"音乐史研究的方法论意义","s":3}],"answer":"贾湖骨笛把中国音乐的可考历史推到八千年前，证明七声音阶早已存在；曾侯乙编钟以实物与铭文证明先秦十二律与旋宫转调的高度发达，修正了「先秦乐律简陋」的旧说。音乐考古以实物证据补充文献，改变了音乐史的叙述方式。","refCards":["cn01-2","cn03-4"]},{"id":"h12","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w04","w05","w07"],"q":"试论协奏曲体裁从巴洛克到 20 世纪的演变。","rubric":[{"t":"巴洛克：大协奏曲与独奏协奏曲，维瓦尔第","s":3},{"t":"古典：莫扎特的对话性与贝多芬的戏剧性","s":3},{"t":"浪漫：炫技与交响化，李斯特、勃拉姆斯","s":3},{"t":"20 世纪：巴托克、肖斯塔科维奇的再创造","s":2},{"t":"结构清晰","s":2}],"answer":"巴洛克协奏曲以「竞奏」为核心，维瓦尔第确立快慢快三乐章；古典时期莫扎特把独奏与乐队写成对话，贝多芬注入戏剧冲突；浪漫主义走向炫技与交响化；20 世纪巴托克、肖斯塔科维奇重新定义独奏与乐队的关系。","refCards":["w04-5","w05-4","w07-5"]},{"id":"h13","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w06","w07"],"q":"民族乐派的观念在 20 世纪如何延续？请结合巴托克、布里顿与当代中国作曲家说明。","rubric":[{"t":"19 世纪民族乐派的基本主张","s":3},{"t":"巴托克：民间音乐的科学研究与创作转化","s":3},{"t":"布里顿：英国民歌与歌剧传统","s":3},{"t":"中国当代作曲家的「民族性」实践","s":2},{"t":"结构清晰","s":2}],"answer":"19 世纪民族乐派以民间音调与民族题材对抗德奥中心；20 世纪巴托克把民歌采集与调式研究转化为作曲语言，布里顿重建英国歌剧传统；中国当代作曲家则在现代技法中寻找本土语汇，民族性从「素材」变成「观念」。","refCards":["w06-6","w07-5"]},{"id":"h14","part":"西方音乐史","type":"论述","full":13,"difficulty":3,"tag":"押题","chIds":["w07"],"q":"人工智能与数字技术正在改变音乐创作与表演。结合 20 世纪以来的音乐技术史，谈谈你的看法。","rubric":[{"t":"20 世纪：录音、电子音乐与具体音乐","s":3},{"t":"技术如何改变音色、结构与传播","s":3},{"t":"AI 对创作主体与表演价值的挑战","s":3},{"t":"结合个人专业实践的观点","s":2},{"t":"结构清晰","s":2}],"answer":"20 世纪录音技术、电子音乐与具体音乐已经把「声音本身」变成素材，施托克豪森、瓦列兹是先行者。AI 进一步把创作与演奏的部分环节自动化，挑战「作者」与「表演」的定义。技术从未取代音乐，而是不断改写音乐的边界与听赏方式。","refCards":["w07-6"]}]}};
+
+/* ---------------- 数据展开 ---------------- */
+var CHAPTERS = [], CARDS = [], BY_ID = {};
+DATA.parts.forEach(function(p){
+  p.chapters.forEach(function(ch){
+    var chap = {id:ch.id, num:ch.num, title:ch.title, era:ch.era, intro:ch.intro,
+                part:p.part, short:p.short, cards:[]};
+    chap.n = p.chapters.indexOf(ch) + 1;
+    ch.cards.forEach(function(c, i){
+      var card = {
+        id: ch.id + "-" + (i+1), q: c.q, type: c.type, pts: c.pts, keys: c.keys, tip: c.tip,
+        chId: ch.id, chTitle: ch.title, num: ch.num, part: p.part, short: p.short, idx: i
+      };
+      chap.cards.push(card); CARDS.push(card); BY_ID[card.id] = card;
+    });
+    CHAPTERS.push(chap);
+  });
+});
+
+/* ---------------- 工具 ---------------- */
+function $(s, r){ return (r||document).querySelector(s); }
+function $$(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+function pad(n){ return n < 10 ? "0" + n : "" + n; }
+function fmt(d){ return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+function todayStr(){ return fmt(new Date()); }
+function parseD(s){ var p = s.split("-").map(Number); return new Date(p[0], p[1]-1, p[2]); }
+function addDays(s, n){ var d = parseD(s); d.setDate(d.getDate() + n); return fmt(d); }
+function diffDays(a, b){ return Math.round((parseD(b) - parseD(a)) / 86400000); }
+var WD = ["周日","周一","周二","周三","周四","周五","周六"];
+function cnDate(s){ var d = parseD(s); return d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日 · " + WD[d.getDay()]; }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function markText(text, keys){
+  var src = esc(text);
+  var ks = (keys||[]).filter(Boolean).map(esc).map(function(k){ return k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); })
+             .sort(function(a,b){ return b.length - a.length; });
+  if(!ks.length) return src;
+  try { return src.replace(new RegExp("(" + ks.join("|") + ")", "g"), "<mark>$1</mark>"); }
+  catch(e){ return src; }
+}
+function toast(msg){
+  var t = $("#toast"); t.textContent = msg; t.classList.add("on");
+  clearTimeout(toast._t); toast._t = setTimeout(function(){ t.classList.remove("on"); }, 1900);
+}
+
+/* ---------------- 状态 ---------------- */
+var KEY = "gzmu-music-history-checkin-v1";
+var S = null, storageOK = true;
+var state = {tab:"today", q:"", part:"全部", open:{}, modal:null};
+var study = null;
+
+var PACES = {
+  standard: {label:"标准", days:[1,2,4,7,15,30,60]},
+  sprint:   {label:"冲刺", days:[1,2,3,5,7,12,20]}
+};
+
+function defaultState(){
+  return {v:1, settings:{quota:8, exam:"2026-12-19", pace:"auto"}, cards:{}, days:{}};
+}
+function probeStorage(){
+  try { localStorage.setItem("__probe__", "1"); localStorage.removeItem("__probe__"); return true; }
+  catch(e){ return false; }
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(KEY);
+    if(raw){
+      var o = JSON.parse(raw);
+      if(o && o.settings && o.cards){
+        if(!o.days) o.days = {};
+        return o;
+      }
+    }
+  } catch(e){ storageOK = false; }
+  return defaultState();
+}
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ if(storageOK){ storageOK = false; toast("进度无法保存，请用浏览器打开或导出备份"); } }
+}
+
+/* ---------------- 计算 ---------------- */
+function daysLeft(){
+  var n = diffDays(todayStr(), S.settings.exam);
+  return n < 0 ? 0 : n;
+}
+function examPassed(){ return diffDays(todayStr(), S.settings.exam) < 0; }
+function paceDays(){
+  var p = S.settings.pace;
+  if(p === "standard") return PACES.standard.days;
+  if(p === "sprint") return PACES.sprint.days;
+  return daysLeft() < 60 ? PACES.sprint.days : PACES.standard.days;
+}
+function dueList(){
+  var t = todayStr();
+  return CARDS.filter(function(c){ var s = S.cards[c.id]; return s && s.due <= t; })
+    .sort(function(a,b){ return S.cards[a.id].due < S.cards[b.id].due ? -1 : 1; });
+}
+function dueCount(){ return dueList().length; }
+function newList(){ return CARDS.filter(function(c){ return !S.cards[c.id]; }); }
+function newCount(){ return newList().length; }
+function mastered(){ return Object.keys(S.cards).filter(function(id){ return S.cards[id].stage >= 3; }).length; }
+function day(t){
+  t = t || todayStr();
+  if(!S.days[t]) S.days[t] = {rev:0, neu:0, check:false, due0:dueCount()};
+  return S.days[t];
+}
+function streak(){
+  var t = todayStr(), d = S.days[t];
+  if(!(d && d.check)) t = addDays(t, -1);
+  var n = 0;
+  while(S.days[t] && S.days[t].check){ n++; t = addDays(t, -1); }
+  return n;
+}
+function intervalLabel(n){ return n <= 1 ? "明天" : n + " 天后"; }
+
+/* ---------------- 今日 ---------------- */
+function ringHTML(pct){
+  var C = 2 * Math.PI * 42;
+  var off = C * (1 - pct);
+  return '<svg class="ring" viewBox="0 0 100 100" aria-hidden="true">' +
+    '<defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">' +
+    '<stop offset="0" stop-color="#c0603f"/><stop offset="1" stop-color="#b0863f"/></linearGradient></defs>' +
+    '<circle cx="50" cy="50" r="42" fill="none" stroke="var(--line)" stroke-width="7"/>' +
+    '<circle class="ring-fg" cx="50" cy="50" r="42" fill="none" stroke="url(#rg)" stroke-width="7" stroke-linecap="round" ' +
+    'stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 50 50)"/>' +
+    '<text class="ring-t" x="50" y="52" text-anchor="middle">' + Math.round(pct*100) + '%</text>' +
+    '<text class="ring-s" x="50" y="64" text-anchor="middle">今日进度</text>' +
+    '</svg>';
+}
+
+function renderToday(){
+  var t = todayStr(), d = day(t);
+  var due = dueCount(), quota = S.settings.quota;
+  var newLeft = Math.max(0, Math.min(quota - d.neu, newCount()));
+  var target = Math.max(1, d.due0 + quota);
+  var pct = Math.min(1, (d.rev + d.neu) / target);
+  if(due === 0 && newLeft === 0 && (d.rev + d.neu) > 0) pct = 1;
+
+  var forecast = "";
+  var maxN = 1, arr = [];
+  for(var k = 0; k < 7; k++){
+    var dd = addDays(t, k);
+    var n = CARDS.filter(function(c){ return S.cards[c.id] && S.cards[c.id].due === dd; }).length;
+    arr.push({d:dd, n:n}); if(n > maxN) maxN = n;
+  }
+  arr.forEach(function(x, i){
+    var h = x.n === 0 ? 4 : Math.max(5, Math.round(38 * x.n / maxN));
+    var lab = i === 0 ? "今天" : (i === 1 ? "明天" : WD[parseD(x.d).getDay()]);
+    forecast += '<div class="fcol' + (i===0?" today":"") + '">' +
+      '<span class="fnum">' + (x.n || "") + '</span>' +
+      '<div class="fbar' + (x.n===0?" low":"") + '" style="height:' + h + 'px"></div>' +
+      '<span class="flab">' + lab + '</span></div>';
+  });
+
+  var weekTotal = arr.reduce(function(a, x){ return a + x.n; }, 0);
+  var forecastEmpty = weekTotal === 0;
+  var done = due === 0 && newLeft === 0;
+  var btnLabel = done ? "再复习一组（加练）" : "开始今日背诵";
+  var sub = d.check ? "今日已打卡 · 连续 " + streak() + " 天" : "完成到期复习即可打卡";
+
+  var warn = storageOK ? "" :
+    '<div class="warnbar"><b>!</b><span>当前浏览器不允许保存进度，刷新后会丢失。请改用 Chrome 打开，或在文件夹里运行 python3 -m http.server 后访问 localhost。</span></div>';
+
+  $("#view-today").innerHTML = warn +
+    '<div class="hero">' +
+      '<div class="hero-row">' +
+        '<div style="min-width:0">' +
+          '<p class="eyebrow">' + (examPassed() ? "初试已结束" : "距离 2027 考研初试") + '</p>' +
+          '<div class="big"><b>' + (examPassed() ? "0" : daysLeft()) + '</b><span>天</span></div>' +
+          '<p class="datesub">' + esc(cnDate(S.settings.exam)) + '</p>' +
+        '</div>' +
+        ringHTML(pct) +
+      '</div>' +
+    '</div>' +
+    '<div class="stack" style="margin-top:12px">' +
+      '<div class="task card">' +
+        '<div class="tico rev">↻</div>' +
+        '<div class="tx"><b>到期复习</b><small>' + (due ? "按遗忘曲线今日到期" : "暂无到期卡片") + '</small></div>' +
+        '<em class="' + (due?"":"zero") + '">' + due + '</em>' +
+      '</div>' +
+      '<div class="task card">' +
+        '<div class="tico new">✦</div>' +
+        '<div class="tx"><b>今日新学</b><small>计划 ' + quota + ' 张 · 已学 ' + d.neu + ' 张</small></div>' +
+        '<em class="' + (newLeft?"":"zero") + '">' + newLeft + '</em>' +
+      '</div>' +
+    '</div>' +
+    '<div style="margin-top:14px"><button class="btn" data-act="start">' + btnLabel + '</button></div>' +
+    '<p class="center muted" style="font-size:11px;margin:10px 0 0">' + sub + '</p>' +
+    '<div class="sec-title"><b>接下来 7 天</b><span>待复习量</span></div>' +
+    (forecastEmpty
+      ? '<div class="card" style="padding:16px"><p class="muted center" style="margin:0;font-size:12px">未来 7 天暂无复习安排，先开始今天的学习吧</p></div>'
+      : '<div class="card forecast">' + forecast + '</div>') +
+    '<div class="sec-title"><b>记忆提示</b></div>' +
+    '<div class="tipcard"><h4>艾宾浩斯复习点</h4><p>' + tipText() + '</p></div>';
+}
+
+function tipText(){
+  var iv = paceDays();
+  var labels = iv.slice(0, 5).map(function(n){ return n + "天"; }).join(" → ");
+  return "每张卡片首次学习后，将在 " + labels + " 等节点自动回到复习队列。" +
+    "点「记住了」进入下一档，点「有点模糊」保持原档，点「忘记了」回到第一档并当天重来一次。" +
+    "建议每天固定时段完成，比一次背很久更有效。";
+}
+
+/* ---------------- 书库 ---------------- */
+function statusOf(id){
+  var s = S.cards[id];
+  if(!s) return "new";
+  return s.stage >= 3 ? "mastered" : "learn";
+}
+function renderLib(){
+  var segs = ["全部"].concat(DATA.parts.map(function(p){ return p.part; }));
+  $("#libSegs").innerHTML = '<div class="segs">' + segs.map(function(s){
+    return '<button class="seg' + (state.part === s ? " on" : "") + '" data-act="part" data-part="' + esc(s) + '">' + esc(s) + '</button>';
+  }).join("") + '</div>';
+  renderLibList();
+}
+function renderLibList(){
+  var q = state.q.trim().toLowerCase();
+  var box = $("#libList");
+  if(q){
+    var hits = CARDS.filter(function(c){
+      if(state.part !== "全部" && c.part !== state.part) return false;
+      var hay = (c.q + " " + c.chTitle + " " + c.pts.join(" ") + " " + (c.keys||[]).join(" ")).toLowerCase();
+      return hay.indexOf(q) >= 0;
+    });
+    box.innerHTML = '<div class="sec-title"><b>搜索结果</b><span>' + hits.length + ' 条</span></div>' +
+      (hits.length ? '<div class="card" style="padding:6px 8px">' + hits.map(crowHTML).join("") + '</div>'
+                   : '<p class="muted center" style="padding:30px 0">没有找到相关考点</p>');
+    return;
+  }
+  var list = CHAPTERS.filter(function(ch){ return state.part === "全部" || ch.part === state.part; });
+  box.innerHTML = list.map(function(ch){
+    var learned = ch.cards.filter(function(c){ return S.cards[c.id]; }).length;
+    var doneN = ch.cards.filter(function(c){ return statusOf(c.id) === "mastered"; }).length;
+    var open = !!state.open[ch.id];
+    return '<div class="chap' + (open ? " open" : "") + '">' +
+      '<button class="chaphead" data-act="chapter" data-ch="' + ch.id + '">' +
+        '<span class="chnum">' + ch.n + '</span>' +
+        '<span class="cht"><b>' + esc(ch.title) + '</b><small>' + ch.cards.length + ' 张 · 已掌握 ' + doneN + ' · ' + esc(ch.part) + '</small></span>' +
+        '<span class="chev">›</span>' +
+      '</button>' +
+      '<div class="chapbody"' + (open ? "" : " hidden") + '>' +
+        '<p class="muted" style="font-size:11px;margin:6px 8px 8px;line-height:1.6">' + esc(ch.intro) + '</p>' +
+        ch.cards.map(crowHTML).join("") +
+      '</div></div>';
+  }).join("");
+}
+function crowHTML(c){
+  var st = statusOf(c.id);
+  return '<button class="crow" data-act="card" data-id="' + c.id + '">' +
+    '<i class="dot" data-s="' + st + '"></i><span>' + esc(c.q) + '</span><em>' + esc(c.type) + '</em></button>';
+}
+
+/* ---------------- 统计 ---------------- */
+function renderStats(){
+  var total = CARDS.length, learned = Object.keys(S.cards).length, mast = mastered();
+  var due = dueCount();
+  var newn = total - learned;
+  var pM = total ? Math.round(learned / total * 100) : 0;
+
+  var cells = "";
+  var start = addDays(todayStr(), -(26 * 7 - 1));
+  var dow = parseD(start).getDay();
+  start = addDays(start, -((dow + 6) % 7));
+  var cur = start, guard = 0;
+  while(diffDays(cur, todayStr()) >= 0 && guard++ < 200){
+    var rec = S.days[cur];
+    var n = rec ? (rec.rev + rec.neu) : 0;
+    var l = n === 0 ? 0 : n < 5 ? 1 : n < 10 ? 2 : n < 20 ? 3 : 4;
+    cells += '<i data-l="' + l + '" title="' + cur + ' · ' + n + ' 次"></i>';
+    cur = addDays(cur, 1);
+  }
+
+  var weakest = Object.keys(S.cards).filter(function(id){ return S.cards[id].lapses > 0; })
+    .sort(function(a,b){ return S.cards[b].lapses - S.cards[a].lapses; }).slice(0, 5);
+
+  var chapHTML = CHAPTERS.map(function(ch){
+    var dn = ch.cards.filter(function(c){ return statusOf(c.id) === "mastered"; }).length;
+    var p = Math.round(dn / ch.cards.length * 100);
+    return '<div class="chline"><span>' + esc(ch.title) + '</span><div class="bar"><i style="width:' + p + '%"></i></div>' +
+      '<em>' + dn + '/' + ch.cards.length + '</em></div>';
+  }).join("");
+
+  $("#view-stats").innerHTML =
+    '<div class="sec-title"><b>学习概览</b><span>' + CARDS.length + ' 张卡片</span></div>' +
+    '<div class="tiles">' +
+      '<div class="tile"><b>' + streak() + '</b><small>连续打卡（天）</small></div>' +
+      '<div class="tile"><b>' + learned + '</b><small>累计学习（张）</small></div>' +
+      '<div class="tile"><b>' + mast + '</b><small>已掌握（张）</small></div>' +
+      '<div class="tile"><b>' + due + '</b><small>今日待复习（张）</small></div>' +
+    '</div>' +
+    '<div class="sec-title"><b>掌握程度</b><span>' + pM + '% 已学习</span></div>' +
+    '<div class="panel">' +
+      '<div class="bar" style="height:10px"><i style="width:' + pM + '%"></i></div>' +
+      '<div class="legend">' +
+        '<span><i style="background:var(--ok)"></i>已掌握 ' + mast + '</span>' +
+        '<span><i style="background:var(--accent2)"></i>学习中 ' + (learned - mast) + '</span>' +
+        '<span><i style="background:var(--paper2)"></i>未学习 ' + newn + '</span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="sec-title"><b>打卡热力</b><span>最近 26 周</span></div>' +
+    '<div class="panel"><div class="heat">' + cells + '</div>' +
+      '<p class="muted" style="font-size:10.5px;margin:10px 0 0">颜色越深表示当日学习次数越多</p></div>' +
+    (examHistory().length ?
+      '<div class="sec-title"><b>模拟考</b><span>共 ' + examHistory().length + ' 次</span></div>' +
+      '<div class="tiles">' +
+        '<div class="tile"><b>' + examHistory().filter(function(p){ return p.result; }).length + '</b><small>已批改（套）</small></div>' +
+        '<div class="tile"><b>' + bestScore() + '</b><small>最高分（/150）</small></div>' +
+      '</div>' : "") +
+    '<div class="sec-title"><b>章节进度</b></div>' +
+    '<div class="panel">' + chapHTML + '</div>' +
+    (weakest.length ?
+      '<div class="sec-title"><b>需要回炉</b><span>遗忘次数最多</span></div>' +
+      '<div class="panel">' + weakest.map(function(id){
+        var c = BY_ID[id];
+        return '<button class="weakrow" data-act="card" data-id="' + id + '"><span>' + esc(c.q) + '</span><em>遗忘 ' + S.cards[id].lapses + ' 次</em></button>';
+      }).join("") + '</div>' : "");
+}
+
+/* ---------------- 设置 ---------------- */
+function renderMe(){
+  var pace = S.settings.pace;
+  $("#view-me").innerHTML =
+    '<div class="sec-title"><b>学习计划</b><span>随时可改</span></div>' +
+    '<div class="panel">' +
+      '<div class="setrow"><div class="tx"><b>每日新学卡片</b><small>建议 ' + suggest() + ' 张，可在考前背完全部</small></div>' +
+        '<div class="stepper"><button data-act="quota-dec">−</button><b>' + S.settings.quota + '</b><button data-act="quota-inc">+</button></div></div>' +
+      '<div class="setrow"><div class="tx"><b>初试日期</b><small>用于倒计时与节奏推算</small></div>' +
+        '<input class="dateinput" type="date" id="examInput" value="' + esc(S.settings.exam) + '"></div>' +
+      '<div class="setrow" style="display:block"><b>复习节奏</b>' +
+        '<small style="margin-bottom:9px">标准：1/2/4/7/15/30 天；冲刺：1/2/3/5/7/12 天</small>' +
+        '<div class="segs" style="margin:0">' +
+          '<button class="seg' + (pace==="auto"?" on":"") + '" data-act="pace" data-pace="auto">自动</button>' +
+          '<button class="seg' + (pace==="standard"?" on":"") + '" data-act="pace" data-pace="standard">标准</button>' +
+          '<button class="seg' + (pace==="sprint"?" on":"") + '" data-act="pace" data-pace="sprint">冲刺</button>' +
+        '</div></div>' +
+    '</div>' +
+    '<div class="sec-title"><b>数据</b><span>' + (offlineReady() ? "离线可用" : (storageOK ? "本机保存" : "未能保存")) + '</span></div>' +
+    '<div class="panel">' +
+      '<div class="setrow"><div class="tx"><b>导出备份</b><small>得到 JSON 文件，可换设备导入</small></div>' +
+        '<button class="seg" data-act="export">导出</button></div>' +
+      '<div class="setrow"><div class="tx"><b>导入备份</b><small>导入会覆盖当前进度</small></div>' +
+        '<button class="seg" data-act="import">选择文件</button></div>' +
+      '<div class="setrow"><div class="tx"><b>离线缓存</b><small>' +
+        (offlineReady() ? "已缓存，断网也能打开" : "通过网址打开并刷新一次后即可离线使用") +
+        '</small></div><span class="mini">' + (offlineReady() ? "已开启" : "未开启") + '</span></div>' +
+      '<div class="setrow"><div class="tx"><b>清空进度</b><small>所有打卡记录将被删除，不可恢复</small></div>' +
+        '<button class="seg" style="color:var(--accent)" data-act="reset">清空</button></div>' +
+    '</div>' +
+    '<div class="sec-title"><b>关于</b></div>' +
+    '<div class="panel about">' +
+      '<p style="margin:0 0 8px"><b>内容依据</b>：广州大学硕士研究生入学考试「中西音乐史」考试大纲（中国音乐史 15 个时期 + 西方音乐史 7 个时期），并参考刘再生《中国音乐史简明教程》、于润洋《西方音乐通史》、汪毓和《中国近现代音乐史》等书目整理。模拟题依据 2012—2023 年真题的题型与高频考点编写。</p>' +
+      '<p style="margin:0 0 8px"><b>使用提醒</b>：卡片为考点提纲，不能替代教材原文；论述题仍需回到教材与作品听赏。请以学校当年发布的正式大纲为准。</p>' +
+      '<p style="margin:0">数据仅保存在本机浏览器，不会上传。建议每周导出一次备份。</p>' +
+    '</div>';
+}
+function bestScore(){
+  var best = 0;
+  examHistory().forEach(function(p){ if(p.result && p.result.mid > best) best = p.result.mid; });
+  return best || "--";
+}
+function suggest(){
+  var left = newCount(), days = Math.max(1, daysLeft());
+  return Math.max(4, Math.ceil(left / days));
+}
+
+/* ---------------- 学习流程 ---------------- */
+function startSession(extra){
+  var t = todayStr(), d = day(t);
+  var queue = dueList().map(function(c){ return c.id; });
+  var quotaLeft = Math.max(0, S.settings.quota - d.neu);
+  var news = newList().slice(0, quotaLeft).map(function(c){ return c.id; });
+  queue = queue.concat(news);
+  if(extra || queue.length === 0){
+    var pool = CARDS.filter(function(c){ return S.cards[c.id] && S.cards[c.id].stage < 4; })
+      .sort(function(a,b){ return (S.cards[a.id].due < S.cards[b.id].due) ? -1 : 1; });
+    if(!pool.length) pool = CARDS.slice();
+    queue = pool.slice(0, 10).map(function(c){ return c.id; });
+  }
+  if(!queue.length){ toast("暂时没有可学习的卡片"); return; }
+  study = {queue:queue, i:0, revealed:false, stats:{got:0, vague:0, forgot:0}};
+  $("#overlay").hidden = false;
+  renderStudy();
+}
+function closeStudy(){
+  $("#overlay").hidden = true;
+  $("#overlay").innerHTML = "";
+  study = null;
+  maybeCheckIn();
+  render();
+}
+function maybeCheckIn(){
+  var t = todayStr(), d = S.days[t];
+  if(!d) return false;
+  if(dueCount() === 0 && (d.rev + d.neu) > 0 && !d.check){ d.check = true; save(); return true; }
+  return !!d.check;
+}
+
+function partClass(short){ return short === "中" ? "" : (short === "西" ? " w" : " f"); }
+
+function renderStudy(){
+  var ov = $("#overlay");
+  if(!study || study.i >= study.queue.length){ renderDone(); return; }
+  var c = BY_ID[study.queue[study.i]];
+  var st = S.cards[c.id];
+  var pct = study.i / study.queue.length * 100;
+
+  var head =
+    '<div class="study-top">' +
+      '<button class="icon-btn" data-act="close">✕</button>' +
+      '<div class="sprog"><i style="width:' + pct + '%"></i></div>' +
+      '<span class="scount">' + (study.i + 1) + '/' + study.queue.length + '</span>' +
+    '</div>';
+
+  var body;
+  if(!study.revealed){
+    body = '<div class="qcard front">' +
+      '<div class="qmeta"><span class="ptag' + partClass(c.short) + '">' + esc(c.part) + '</span>' +
+      '<span class="qtype">' + esc(c.type) + '</span>' +
+      (st ? '<span class="qtype">第 ' + (st.seen + 1) + ' 次</span>' : "") + '</div>' +
+      '<h2 class="qtitle serif">' + esc(c.q) + '</h2>' +
+      '<p class="qhint">先在心里默答，再翻开核对 →</p>' +
+    '</div>';
+  } else {
+    body = '<div class="qcard back">' +
+      '<div class="qmeta"><span class="ptag' + partClass(c.short) + '">' + esc(c.part) + '</span>' +
+      '<span class="qtype">' + esc(c.type) + '</span></div>' +
+      '<h2 class="qtitle serif" style="font-size:20px">' + esc(c.q) + '</h2>' +
+      '<div class="qbody">' +
+        '<p class="qlabel">答题要点</p>' +
+        '<ul class="pts">' + c.pts.map(function(p){ return "<li>" + markText(p, c.keys) + "</li>"; }).join("") + '</ul>' +
+        (c.keys && c.keys.length ? '<div class="keys">' + c.keys.map(function(k){ return '<span class="key">' + esc(k) + '</span>'; }).join("") + '</div>' : "") +
+        (c.tip ? '<div class="tipbox"><b>记忆钩子</b>' + esc(c.tip) + '</div>' : "") +
+      '</div>' +
+    '</div>';
+  }
+
+  var foot = study.revealed
+    ? '<div class="rate">' +
+        '<button class="rbtn" data-act="rate" data-lvl="forgot">忘记了<small>' + hintFor("forgot", c) + '</small></button>' +
+        '<button class="rbtn" data-act="rate" data-lvl="vague">有点模糊<small>' + hintFor("vague", c) + '</small></button>' +
+        '<button class="rbtn" data-act="rate" data-lvl="got">记住了<small>' + hintFor("got", c) + '</small></button>' +
+      '</div>'
+    : '<button class="btn" data-act="reveal">显示答案</button>';
+
+  ov.innerHTML = '<div class="panel-full">' + head + '<div class="study-body">' + body + '</div>' +
+    '<div class="study-foot">' + foot + '</div></div>';
+}
+
+function hintFor(lvl, c){
+  if(lvl === "forgot") return "稍后重来";
+  var iv = paceDays();
+  var st = S.cards[c.id];
+  if(lvl === "vague") return "明天再巩固";
+  if(!st) return intervalLabel(iv[0]);
+  var ns = Math.min(st.stage + 1, iv.length - 1);
+  return intervalLabel(iv[ns]);
+}
+
+function rate(id, lvl){
+  var t = todayStr();
+  var isNew = !S.cards[id];
+  var c = S.cards[id] || {stage:0, due:t, last:"", seen:0, lapses:0};
+  var iv = paceDays();
+  if(lvl === "forgot"){
+    c.stage = 0; c.lapses = (c.lapses||0) + 1; c.due = addDays(t, 1);
+  } else if(lvl === "vague"){
+    var cur = Math.min(c.stage, iv.length-1);
+    c.due = addDays(t, Math.max(1, Math.round(iv[cur] / 2)));
+  } else {
+    if(isNew){ c.stage = 0; c.due = addDays(t, iv[0]); }
+    else { c.stage = Math.min(c.stage + 1, iv.length - 1); c.due = addDays(t, iv[c.stage]); }
+  }
+  c.seen = (c.seen||0) + 1; c.last = t;
+  S.cards[id] = c;
+
+  var d = day(t);
+  if(isNew) d.neu++; else d.rev++;
+  save();
+
+  if(lvl === "forgot" && study && study.queue.length < 160){
+    var at = Math.min(study.i + 1 + 2, study.queue.length);
+    study.queue.splice(at, 0, id);
+  }
+  study.stats[lvl]++;
+  study.i++;
+  study.revealed = false;
+  renderStudy();
+}
+
+function renderDone(){
+  var t = todayStr(), d = day(t);
+  var checked = maybeCheckIn();
+  var st = study ? study.stats : {got:0, vague:0, forgot:0};
+  $("#overlay").innerHTML = '<div class="panel-full">' +
+    '<div class="study-top"><button class="icon-btn" data-act="close">✕</button><div class="sprog"><i style="width:100%"></i></div><span class="scount">完成</span></div>' +
+    '<div class="done">' +
+      '<div class="done-mark">✓</div>' +
+      '<h2>' + (checked ? "今日打卡完成" : "本次学习完成") + '</h2>' +
+      '<p>' + (checked ? "连续打卡 " + streak() + " 天，保持节奏。" : "还有到期卡片未复习，完成后自动打卡。") + '</p>' +
+      '<div class="done-stat">' +
+        '<div><b>' + st.got + '</b><small>记住了</small></div>' +
+        '<div><b>' + st.vague + '</b><small>有点模糊</small></div>' +
+        '<div><b>' + st.forgot + '</b><small>忘记了</small></div>' +
+      '</div>' +
+      '<p class="muted" style="font-size:11.5px">今日已复习 ' + d.rev + ' 次 · 新学 ' + d.neu + ' 张</p>' +
+      '<div style="width:100%;margin-top:22px"><button class="btn" data-act="close">回到首页</button></div>' +
+    '</div>' +
+  '</div>';
+  render();
+}
+
+/* ---------------- 卡片详情 ---------------- */
+function openCard(id){
+  var c = BY_ID[id]; if(!c) return;
+  var s = S.cards[id];
+  var stTxt = !s ? "未学习" : "第 " + s.seen + " 次学习 · 下次复习 " + s.due;
+  $("#modal").hidden = false;
+  $("#modal").innerHTML = '<div class="sheet">' +
+    '<div class="qmeta"><span class="ptag' + partClass(c.short) + '">' + esc(c.part) + '</span>' +
+      '<span class="qtype">' + esc(c.type) + '</span><span class="qtype">' + esc(c.chTitle) + '</span></div>' +
+    '<h2 class="serif">' + esc(c.q) + '</h2>' +
+    '<p class="muted" style="font-size:11px;margin:6px 0 0">' + stTxt + '</p>' +
+    '<div class="mbody"><ul class="pts">' + c.pts.map(function(p){ return "<li>" + markText(p, c.keys) + "</li>"; }).join("") + '</ul>' +
+      (c.keys && c.keys.length ? '<div class="keys">' + c.keys.map(function(k){ return '<span class="key">' + esc(k) + '</span>'; }).join("") + '</div>' : "") +
+      (c.tip ? '<div class="tipbox"><b>记忆钩子</b>' + esc(c.tip) + '</div>' : "") +
+    '</div>' +
+    '<div class="sheet-actions">' +
+      '<button class="btn ghost" data-act="modal-close">关闭</button>' +
+      '<button class="btn" data-act="master" data-id="' + id + '">标记为已掌握</button>' +
+    '</div>' +
+  '</div>';
+}
+function closeCard(){ $("#modal").hidden = true; $("#modal").innerHTML = ""; state.modal = null; }
+
+/* ---------------- 渲染 ---------------- */
+function render(){
+  if(state.tab === "today") renderToday();
+  else if(state.tab === "exam") renderExam();
+  else if(state.tab === "lib") renderLib();
+  else if(state.tab === "stats") renderStats();
+  else renderMe();
+  var dl = daysLeft();
+  $("#examPill").textContent = examPassed() ? "初试已结束" : "距初试 " + dl + " 天";
+}
+
+/* ================= 模拟考 ================= */
+var EX = (DATA.exam || {items:[], chapters:[]});
+var EXAM_DEFAULT = {difficulty:"standard", hot:true, duration:180, mode:"paper"};
+var examView = "home";
+var examTimer = null;
+var examChecks = {};
+
+function examCfg(){
+  if(!S.settings.examCfg) S.settings.examCfg = {difficulty:"standard", hot:true, duration:180, mode:"paper"};
+  return S.settings.examCfg;
+}
+function examHistory(){
+  if(!S.exams) S.exams = [];
+  return S.exams;
+}
+function findExam(id){
+  var list = examHistory();
+  for(var i = 0; i < list.length; i++) if(list[i].id === id) return list[i];
+  return null;
+}
+function lvlName(d){ return d === "basic" ? "基础" : (d === "hard" ? "拔高" : "标准"); }
+
+var EXAM_MAP = {};
+["items", "chapters", "real", "hot"].forEach(function(k){
+  (EX[k] || []).forEach(function(it){ EXAM_MAP[it.id] = it; });
+});
+function fitItem(it, full){
+  if(Math.abs(it.full - full) < 0.01) return it;
+  var k = full / it.full;
+  var rub = it.rubric.map(function(r){ return {t:r.t, s: Math.round(r.s * k * 2) / 2}; });
+  var sum = 0; rub.forEach(function(r){ sum += r.s; });
+  rub[rub.length - 1].s = Math.round((rub[rub.length - 1].s + (full - sum)) * 2) / 2;
+  return {qid: it.qid || it.id, type: it.type, part: it.part, full: full,
+          diff: it.diff || it.difficulty || 2, tag: it.tag || (it.year ? "真题 " + it.year : ""),
+          pref: it.pref || 1, q: it.q, chIds: (it.chIds || []).slice(), refCards: (it.refCards || []).slice(),
+          rubric: rub, answer: it.answer || "", hint: it.hint || ""};
+}
+
+function balanceRubric(list, full){
+  var sum = 0;
+  list.forEach(function(r){ sum += r.s; });
+  if(list.length && Math.abs(sum - full) > 0.001){
+    var last = list[list.length - 1];
+    last.s = Math.round((last.s + (full - sum)) * 2) / 2;
+  }
+  return list;
+}
+function rubricFromCard(c, type, full){
+  var pts = c.pts.slice(0, 6);
+  var content, extra;
+  if(type === "名词解释"){ content = full - 2; extra = [{t:"表述准确、条理清晰", s:2}]; }
+  else if(type === "简答"){ content = full - 3; extra = [{t:"条理清晰，能举例说明", s:3}]; }
+  else { content = full - 4; extra = [{t:"论证充分，有作品举例", s:2},{t:"结构完整，术语准确", s:2}]; }
+  var per = Math.round((content / pts.length) * 2) / 2;
+  var list = pts.map(function(p){ return {t:p, s:per}; });
+  return balanceRubric(list.concat(extra), full);
+}
+function cardItem(c, type, full){
+  var q = c.exam || c.q;
+  var pre = type === "简答" ? "简述" : (type === "论述" ? "试论" : "");
+  if(pre && !/[？?]$/.test(q) && !/^(简述|试述|试论|比较|说明|论述|分析|评述|为什么)/.test(q)) q = pre + q;
+  return {
+    qid: "c-" + c.id + "-" + type, type: type, part: c.part, full: full,
+    diff: c.type === "名词解释" ? 1 : 2, tag: "",
+    pref: type === "论述" && c.type !== "论述" ? 0.45 : 1,
+    q: q, chIds: [c.chId], refCards: [c.id],
+    rubric: rubricFromCard(c, type, full),
+    answer: "", hint: c.tip || ""
+  };
+}
+function snapItem(e){
+  return {
+    qid: e.id, type: e.type, part: e.part, full: e.full, diff: e.difficulty || 2,
+    tag: e.tag || "", pref: (e.difficulty || 2) >= 3 ? 1.2 : 0.9, q: e.q, chIds: (e.chIds || []).slice(), refCards: (e.refCards || []).slice(),
+    rubric: e.rubric.map(function(r){ return {t:r.t, s:r.s}; }), answer: e.answer, hint: ""
+  };
+}
+function buildPools(){
+  var ming = [], jian = [], lun = [];
+  CARDS.forEach(function(c){
+    if(c.part === "中国音乐史"){
+      if(c.type === "名词解释") ming.push(cardItem(c, "名词解释", 10));
+      else jian.push(cardItem(c, "简答", 15));
+    } else if(c.part === "西方音乐史"){
+      lun.push(cardItem(c, "论述", 13));
+    }
+  });
+  (EX.chapters || []).forEach(function(e){
+    if(e.part === "西方音乐史") lun.push(snapItem(e));
+  });
+  ["items", "real", "hot"].forEach(function(k){
+    (EX[k] || []).forEach(function(e){
+      var it = snapItem(e);
+      if(k === "real") it.pref = 1.3;
+      if(it.type === "名词解释" && it.part === "中国音乐史") ming.push(it);
+      else if(it.type === "简答" && it.part === "中国音乐史") jian.push(it);
+      else if(it.type === "论述" && it.part === "西方音乐史") lun.push(it);
+    });
+  });
+  return {ming:ming, jian:jian, lun:lun};
+}
+function weightedPick(arr, ws){
+  var total = 0;
+  ws.forEach(function(w){ total += w; });
+  var r = Math.random() * total;
+  for(var i = 0; i < arr.length; i++){ r -= ws[i]; if(r <= 0) return arr[i]; }
+  return arr[arr.length - 1];
+}
+function recentQids(n){
+  var set = {}, list = examHistory().slice(-n);
+  list.forEach(function(p){ (p.items || []).forEach(function(it){ set[it.qid] = 1; }); });
+  return set;
+}
+function genItems(){
+  var cfg = examCfg();
+  var target = cfg.difficulty === "basic" ? 1 : (cfg.difficulty === "hard" ? 3 : 2);
+  var pools = buildPools();
+  var recent = recentQids(3);
+
+  function prep(pool){
+    return pool.filter(function(it){
+      if(cfg.difficulty === "basic" && it.diff > 2) return false;
+      if(!cfg.hot && it.tag === "押题") return false;
+      return true;
+    });
+  }
+  function pickMany(pool, count, minUnique){
+    var base = prep(pool);
+    var cands = base.filter(function(it){ return !recent[it.qid]; });
+    if(cands.length < count) cands = base;
+    var out = [], used = {};
+    for(var i = 0; i < count; i++){
+      var avail = cands.filter(function(it){ return out.indexOf(it) < 0; });
+      if(!avail.length) break;
+      if(out.length < (minUnique || 0)){
+        var strict = avail.filter(function(it){ return !it.chIds.some(function(c){ return used[c]; }); });
+        if(strict.length) avail = strict;
+      }
+      var ws = avail.map(function(it){
+        var w = Math.max(0.12, 1 - 0.5 * Math.abs(it.diff - target));
+        if(it.tag === "押题") w *= 1.5;
+        if(it.pref) w *= it.pref;
+        var dup = it.chIds.some(function(c){ return used[c]; });
+        if(dup) w *= 0.22;
+        return w;
+      });
+      var it = weightedPick(avail, ws);
+      out.push(it);
+      it.chIds.forEach(function(c){ used[c] = 1; });
+    }
+    return out;
+  }
+  return pickMany(pools.ming, 4, 3).map(function(it){ return fitItem(it, 10); })
+    .concat(pickMany(pools.jian, 3, 3).map(function(it){ return fitItem(it, 15); }))
+    .concat(pickMany(pools.lun, 5, 4).map(function(it){ return fitItem(it, 13); }));
+}
+function newPaper(){
+  var cfg = examCfg();
+  var items = genItems();
+  var d = todayStr().replace(/-/g, "").slice(2);
+  var n = examHistory().filter(function(p){ return p.date === todayStr(); }).length + 1;
+  var paper = {
+    id: "M-" + d + "-" + (n < 10 ? "0" : "") + n,
+    date: todayStr(), ts: Date.now(),
+    cfg: {difficulty:cfg.difficulty, hot:cfg.hot, duration:cfg.duration, mode:cfg.mode},
+    items: items, answers: {}, startedAt: Date.now(), elapsed: 0, result: null
+  };
+  paper.items.forEach(function(it, i){ it.no = i + 1; });
+  S.examDraft = paper;
+  save();
+  return paper;
+}
+function startExam(){
+  if(S.examDraft && !confirm("还有一份未交卷的模拟卷，开始新的会丢弃它，继续吗？")) return;
+  newPaper();
+  examView = "paper";
+  renderExam();
+  startTimer();
+}
+function stopTimer(){ if(examTimer){ clearInterval(examTimer); examTimer = null; } }
+function clockText(){
+  var p = S.examDraft;
+  if(!p) return "--:--";
+  var total = (p.cfg.duration || 180) * 60;
+  var left = total - Math.floor((Date.now() - p.startedAt) / 1000);
+  var m = Math.floor(Math.abs(left) / 60), s = Math.abs(left) % 60;
+  return (left < 0 ? "+" : "") + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+}
+function startTimer(){
+  stopTimer();
+  examTimer = setInterval(function(){
+    var el = $("#clock");
+    if(!el) return;
+    el.textContent = clockText();
+    var p = S.examDraft;
+    if(p){
+      var left = (p.cfg.duration || 180) * 60 - Math.floor((Date.now() - p.startedAt) / 1000);
+      el.classList.toggle("warn", left < 900);
+    }
+  }, 1000);
+}
+function submitPaper(){
+  var p = S.examDraft;
+  if(!p) return;
+  var blank = 0;
+  p.items.forEach(function(it){ if(!p.answers[it.no]) blank++; });
+  var msg = "确认交卷？交卷后不能再修改答案。";
+  if(p.cfg.mode !== "paper" && blank) msg = "还有 " + blank + " 题没有作答，仍要交卷吗？";
+  if(!confirm(msg)) return;
+  p.elapsed = Math.max(1, Math.round((Date.now() - p.startedAt) / 60000));
+  p.submittedAt = Date.now();
+  examHistory().push(p);
+  S.examCurrent = p.id;
+  S.examDraft = null;
+  save();
+  stopTimer();
+  examView = "review";
+  renderExam();
+}
+
+function renderExam(){
+  if(S.examDraft){ examView = "paper"; return renderPaper(); }
+  if(examView === "review" && S.examCurrent && findExam(S.examCurrent)) return renderReview();
+  if(examView === "result" && S.examCurrent && findExam(S.examCurrent)) return renderResult();
+  if(examView === "hot" || examView === "real") return renderList(examView);
+  return renderExamHome();
+}
+function renderExamHome(){
+  var cfg = examCfg(), hist = examHistory().slice().reverse().slice(0, 6);
+  var html = '<div class="sec-title"><b>模拟考</b><span>按考纲随机组卷</span></div>';
+  html += '<div class="panel" style="margin-bottom:12px">' +
+    '<p class="mini" style="margin:0 0 4px">中国音乐史 名词解释 4 题（40 分）+ 简答 3 题（45 分）</p>' +
+    '<p class="mini" style="margin:0">西方音乐史 论述 5 题（65 分）　合计 150 分 / ' + cfg.duration + ' 分钟</p></div>';
+
+  html += '<div class="panel" style="margin-bottom:12px">' +
+    '<div class="setrow" style="display:block"><b>难度</b>' +
+      '<div class="segs" style="margin:8px 0 0">' +
+        '<button class="seg' + (cfg.difficulty==="basic"?" on":"") + '" data-act="exam-diff" data-v="basic">基础</button>' +
+        '<button class="seg' + (cfg.difficulty==="standard"?" on":"") + '" data-act="exam-diff" data-v="standard">标准</button>' +
+        '<button class="seg' + (cfg.difficulty==="hard"?" on":"") + '" data-act="exam-diff" data-v="hard">拔高</button>' +
+      '</div></div>' +
+    '<div class="setrow" style="display:block"><b>押题</b>' +
+      '<div class="segs" style="margin:8px 0 0">' +
+        '<button class="seg' + (cfg.hot?" on":"") + '" data-act="exam-hot" data-v="1">开启（含比较题与周年押题）</button>' +
+        '<button class="seg' + (!cfg.hot?" on":"") + '" data-act="exam-hot" data-v="0">关闭</button>' +
+      '</div></div>' +
+    '<div class="setrow" style="display:block"><b>作答方式</b>' +
+      '<div class="segs" style="margin:8px 0 0">' +
+        '<button class="seg' + (cfg.mode==="paper"?" on":"") + '" data-act="exam-mode" data-v="paper">纸上作答</button>' +
+        '<button class="seg' + (cfg.mode==="screen"?" on":"") + '" data-act="exam-mode" data-v="screen">屏幕作答</button>' +
+      '</div></div>' +
+    '<div class="setrow" style="display:block"><b>时长</b>' +
+      '<div class="segs" style="margin:8px 0 0">' +
+        '<button class="seg' + (cfg.duration===150?" on":"") + '" data-act="exam-dur" data-v="150">150 分钟</button>' +
+        '<button class="seg' + (cfg.duration===180?" on":"") + '" data-act="exam-dur" data-v="180">180 分钟</button>' +
+      '</div></div>' +
+  '</div>';
+
+  html += '<div class="stack" style="gap:9px;margin:2px 0 12px">' +
+    '<button class="task card" style="text-align:left" data-act="exam-hot-list">' +
+      '<span class="tico new">✦</span><span class="tx"><b>押题专区</b><small>周年、比较、热点共 ' +
+      ((EX.items || []).concat(EX.hot || []).filter(function(i){ return i.tag === "押题"; }).length) + ' 道</small></span><span class="chev">›</span></button>' +
+    '<button class="task card" style="text-align:left" data-act="exam-real-list">' +
+      '<span class="tico rev">卷</span><span class="tx"><b>历年真题</b><small>2012—2023 共 ' + (EX.real || []).length + ' 道</small></span><span class="chev">›</span></button>' +
+  '</div>';
+  html += '<button class="btn" data-act="exam-start">开始模拟考</button>';
+  html += '<p class="center mini" style="margin:10px 0 0">交卷后查看参考答案，复制「批改包」发给我即可批改</p>';
+
+  if(hist.length){
+    html += '<div class="sec-title"><b>最近模考</b><span>共 ' + examHistory().length + ' 次</span></div><div class="panel">';
+    hist.forEach(function(p){
+      var sc = p.result ? p.result.mid : "待批改";
+      html += '<div class="histrow" data-act="exam-open" data-id="' + p.id + '" style="cursor:pointer">' +
+        '<b>' + (p.result ? p.result.mid : "--") + '</b><span class="muted">/150</span>' +
+        '<span class="muted" style="margin-left:8px">' + p.id + '</span>' +
+        '<span class="muted">' + esc(lvlName(p.cfg.difficulty)) + '</span>' +
+        '<span class="muted">' + (p.result ? "已批改" : "待批改") + '</span></div>';
+    });
+    html += '</div>';
+  }
+  $("#view-exam").innerHTML = html;
+}
+
+function renderList(mode){
+  var isHot = mode === "hot";
+  var list = isHot
+    ? (EX.items || []).concat(EX.hot || []).filter(function(i){ return i.tag === "押题"; })
+    : (EX.real || []).slice().sort(function(a, b){
+        var ord = {"名词解释": 0, "简答": 1, "论述": 2};
+        return (a.year - b.year) || (ord[a.type] - ord[b.type]);
+      });
+  var html = '<div class="exam-top"><span class="pill">' + (isHot ? "押题专区" : "历年真题") + '</span>' +
+    '<span class="clock">' + list.length + ' 道</span>' +
+    '<button class="seg" data-act="exam-home">返回</button></div>';
+  if(isHot){
+    html += '<div class="panel" style="margin-bottom:12px"><p class="mini" style="margin:0">' +
+      '按广大出题规律做的预测：周年纪念、跨时期比较、当代议题。点开看评分点与思路，可直接加入背诵。</p></div>';
+  } else {
+    html += '<div class="panel" style="margin-bottom:12px"><p class="mini" style="margin:0">' +
+      '2012—2023 年回忆版真题（剔除作品分析部分）。注意高频主题：学堂乐歌、礼乐制度、乐律、宋代市民音乐、歌剧。</p></div>';
+  }
+  var lastYear = null;
+  html += '<div class="card" style="padding:4px 8px">';
+  list.forEach(function(it){
+    if(!isHot && it.year !== lastYear){
+      lastYear = it.year;
+      html += '<p class="mini" style="margin:10px 6px 4px;letter-spacing:.1em">' + it.year + ' 年</p>';
+    }
+    html += '<button class="crow" data-act="exam-item" data-id="' + it.id + '">' +
+      '<i class="dot" data-s="learn"></i><span>' + esc(it.q) + '</span>' +
+      '<em>' + esc(it.type) + ' · ' + it.full + '分</em></button>';
+  });
+  html += '</div>';
+  $("#view-exam").innerHTML = html;
+}
+
+function openItem(id){
+  var it = EXAM_MAP[id];
+  if(!it) return;
+  $("#modal").hidden = false;
+  $("#modal").innerHTML = '<div class="sheet">' +
+    '<div class="qmeta"><span class="ptag">' + esc(it.part) + '</span>' +
+    '<span class="qtype">' + esc(it.type) + '</span>' +
+    (it.year ? '<span class="qtype">' + it.year + ' 真题</span>' : '<span class="qtype">押题</span>') + '</div>' +
+    '<h2 class="serif" style="font-size:19px">' + esc(it.q) + '</h2>' +
+    '<div class="mbody"><p class="qlabel">评分点（原卷 ' + it.full + ' 分）</p><table class="rub">' +
+      it.rubric.map(function(r){ return '<tr><td>' + esc(r.t) + '</td><td>' + r.s + ' 分</td></tr>'; }).join("") +
+    '</table>' +
+    (it.answer ? '<div class="tipbox" style="margin-top:12px"><b>答题思路</b>' + esc(it.answer) + '</div>' : "") +
+    '</div>' +
+    '<div class="sheet-actions"><button class="btn ghost" data-act="modal-close">关闭</button>' +
+    '<button class="btn" data-act="exam-add" data-id="' + id + '">加入背诵</button></div></div>';
+}
+function addItemToReview(id){
+  var it = EXAM_MAP[id];
+  if(!it) return;
+  var t = todayStr(), n = 0;
+  (it.refCards || []).forEach(function(cid){
+    if(!BY_ID[cid]) return;
+    var c = S.cards[cid] || {stage:0, seen:0, lapses:0};
+    c.stage = 0; c.due = t; c.last = t; c.seen = (c.seen || 0) + 1;
+    S.cards[cid] = c; n++;
+  });
+  save();
+  closeCard();
+  toast(n ? "已加入今日复习（" + n + " 张卡片）" : "该题暂无关联卡片");
+}
+
+function renderPaper(){
+  var p = S.examDraft;
+  if(!p){ examView = "home"; return renderExamHome(); }
+  var mode = p.cfg.mode;
+  var html = '<div class="exam-top"><span class="pill">' + p.id + '</span>' +
+    '<span class="clock" id="clock">' + clockText() + '</span>' +
+    '<button class="seg" data-act="exam-submit">交卷</button></div>';
+  if(mode === "paper") html += '<div class="panel" style="margin-bottom:12px"><p class="mini" style="margin:0">' +
+    '本次为纸上作答：在答题纸上按题号作答，交卷后拍照上传。' + p.cfg.duration + ' 分钟，满分 150 分。</p></div>';
+  html += '<div class="stack">';
+  p.items.forEach(function(it){
+    html += '<div class="qblock">' +
+      '<div class="qhead"><span class="qno">' + it.no + '</span><span>' + esc(it.type) + ' · ' + esc(it.part) + '</span>' +
+      (it.tag ? '<span class="qtype">' + esc(it.tag) + '</span>' : '') +
+      '<span class="qfull">' + it.full + ' 分</span></div>' +
+      '<p class="qtext">' + esc(it.q) + '</p>' +
+      (mode === "paper" ? "" :
+        '<textarea class="ansbox" data-no="' + it.no + '" placeholder="写下你的答案…">' + esc(p.answers[it.no] || '') + '</textarea>') +
+      '</div>';
+  });
+  html += '</div>';
+  html += '<div style="margin-top:14px"><button class="btn" data-act="exam-submit">交卷并查看参考答案</button></div>';
+  $("#view-exam").innerHTML = html;
+  updateClockNow();
+}
+function updateClockNow(){
+  var el = $("#clock");
+  if(!el) return;
+  el.textContent = clockText();
+  var p = S.examDraft;
+  if(p){
+    var left = (p.cfg.duration || 180) * 60 - Math.floor((Date.now() - p.startedAt) / 1000);
+    el.classList.toggle("warn", left < 900);
+  }
+}
+
+function renderReview(){
+  var p = findExam(S.examCurrent);
+  if(!p){ examView = "home"; return renderExamHome(); }
+  var html = '<div class="exam-top"><span class="pill">' + p.id + '</span>' +
+    '<span class="clock">用时 ' + p.elapsed + ' 分</span>' +
+    '<button class="seg" data-act="exam-home">返回</button></div>';
+  html += '<div class="panel" style="margin-bottom:12px"><p class="mini" style="margin:0">' +
+    '交卷完成。把答题纸拍照，点下面的「复制批改包」，连同照片一起发给我，我按评分细则批改后再把结果贴回来。</p></div>';
+  html += '<div class="stack">';
+  p.items.forEach(function(it){
+    html += '<div class="qblock">' +
+      '<div class="qhead"><span class="qno">' + it.no + '</span><span>' + esc(it.type) + '</span>' +
+      '<span class="qfull">' + it.full + ' 分</span></div>' +
+      '<p class="qtext" style="font-size:14px">' + esc(it.q) + '</p>';
+    if(p.cfg.mode !== "paper" && p.answers[it.no]){
+      html += '<p class="mini" style="margin:0 0 8px">你的作答：' + esc(p.answers[it.no]) + '</p>';
+    }
+    html += '<p class="qlabel" style="margin:6px 0 2px">评分细则</p><table class="rub">';
+    it.rubric.forEach(function(r){ html += '<tr><td>' + esc(r.t) + '</td><td>' + r.s + ' 分</td></tr>'; });
+    html += '</table>';
+    if(it.answer) html += '<div class="tipbox" style="margin-top:10px"><b>参考答案</b>' + esc(it.answer) + '</div>';
+    else if(it.hint) html += '<div class="tipbox" style="margin-top:10px"><b>记忆钩子</b>' + esc(it.hint) + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div style="display:grid;gap:9px;margin-top:14px">' +
+    '<button class="btn" data-act="exam-pack">复制批改包</button>' +
+    '<button class="btn ghost" data-act="exam-import">粘贴批改结果</button></div>';
+  $("#view-exam").innerHTML = html;
+}
+
+function renderResult(){
+  var p = findExam(S.examCurrent);
+  if(!p || !p.result){ examView = "review"; return renderReview(); }
+  var r = p.result;
+  var html = '<div class="exam-top"><span class="pill">' + p.id + '</span>' +
+    '<span class="clock">用时 ' + p.elapsed + ' 分</span>' +
+    '<button class="seg" data-act="exam-home">返回</button></div>';
+  html += '<div class="scoregrid">' +
+    '<div class="score"><b>' + r.strict + '</b><small>从严</small></div>' +
+    '<div class="score mid"><b>' + r.mid + '</b><small>适中</small></div>' +
+    '<div class="score"><b>' + r.lenient + '</b><small>从宽</small></div>' +
+  '</div>';
+  if(r.comment) html += '<div class="panel" style="margin-top:12px"><p class="mini" style="margin:0">' + esc(r.comment) + '</p></div>';
+
+  html += '<div class="sec-title"><b>逐题得分</b><span>满分 150</span></div><div class="panel"><table class="rub">';
+  (r.items || []).forEach(function(it){
+    var item = p.items[it.no - 1];
+    html += '<tr><td>' + it.no + '. ' + esc(item ? item.q.slice(0, 22) : "") + (item && item.q.length > 22 ? "…" : "") + '</td>' +
+      '<td>' + it.score + '/' + (item ? item.full : "") + '</td></tr>';
+    if(it.lost) html += '<tr><td colspan="2" class="lost">失分：' + esc(it.lost) + '</td></tr>';
+  });
+  html += '</table></div>';
+
+  var weak = [];
+  (r.items || []).forEach(function(it){
+    var item = p.items[it.no - 1];
+    if(!item) return;
+    if(it.score < item.full * 0.6){
+      (it.cards && it.cards.length ? it.cards : item.refCards || []).forEach(function(cid){
+        if(BY_ID[cid] && weak.indexOf(cid) < 0) weak.push(cid);
+      });
+    }
+  });
+  if(weak.length){
+    if(!Object.keys(examChecks).length) weak.forEach(function(c){ examChecks[c] = true; });
+    html += '<div class="sec-title"><b>没掌握的考点</b><span>勾选加入复习</span></div><div class="panel">';
+    weak.forEach(function(cid){
+      var c = BY_ID[cid];
+      html += '<label class="chk"><input type="checkbox" data-cid="' + cid + '"' + (examChecks[cid] ? " checked" : "") + '>' +
+        '<span><b style="font-weight:600">' + esc(c.q) + '</b><br><span class="mini">' + esc(c.part) + ' · ' + esc(c.chTitle) + '</span></span></label>';
+    });
+    html += '</div>';
+    if(p.applied) html += '<p class="mini center" style="margin:12px 0 0">✓ 这些考点已加入复习队列</p>';
+    else html += '<div style="margin-top:12px"><button class="btn" data-act="exam-apply">加入艾宾浩斯复习队列</button></div>';
+  }
+  html += '<div style="margin-top:12px"><button class="btn ghost" data-act="exam-again">再考一套</button></div>';
+  $("#view-exam").innerHTML = html;
+}
+
+function gradePack(p){
+  var L = [];
+  L.push("【模拟卷批改请求】");
+  L.push("试卷编号：" + p.id + "　日期：" + p.date);
+  L.push("科目：广州大学 713 中西音乐史（模拟）　满分：150 分");
+  L.push("难度：" + lvlName(p.cfg.difficulty) + "　用时：" + p.elapsed + " 分钟");
+  L.push("作答方式：" + (p.cfg.mode === "paper" ? "纸上作答，答题照片按题号顺序附上" : "电子作答，答案见每题下方"));
+  L.push("");
+  p.items.forEach(function(it){
+    L.push(it.no + ".（" + it.full + " 分）" + it.q);
+    if(p.cfg.mode !== "paper") L.push("   我的作答：" + (p.answers[it.no] || "（未作答）"));
+    L.push("   评分点：");
+    it.rubric.forEach(function(r){ L.push("   - " + r.t + "（" + r.s + " 分）"); });
+    if(it.answer) L.push("   参考答案：" + it.answer);
+    if(it.refCards && it.refCards.length) L.push("   关联卡片：" + it.refCards.join(","));
+    L.push("");
+  });
+  L.push("【请只返回下面这个 JSON，不要输出任何其他文字】");
+  L.push(JSON.stringify({paper:p.id, strict:0, mid:0, lenient:0,
+    items:[{no:1, score:0, lost:"", cards:[]}], comment:""}, null, 2));
+  L.push("");
+  L.push("打分口径：strict＝从严，只认踩点，表述含糊不给分；mid＝按考研评分标准；lenient＝从宽，有合理延伸可给分。");
+  L.push("cards 填该题失分对应的关联卡片 id；comment 控制在 100 字以内。");
+  return L.join("\n");
+}
+function copyText(text, ok){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok, function(){ fallbackCopy(text, ok); });
+  } else fallbackCopy(text, ok);
+}
+function fallbackCopy(text, ok){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); } catch(e){}
+  document.body.removeChild(ta);
+  ok();
+}
+function openImport(){
+  var p = findExam(S.examCurrent);
+  if(!p) return;
+  $("#modal").hidden = false;
+  $("#modal").innerHTML = '<div class="sheet">' +
+    '<h2 style="margin-top:0;font-size:17px">粘贴批改结果</h2>' +
+    '<p class="mini" style="margin:6px 0 12px">把 AI 返回的 JSON 原样贴进来即可。</p>' +
+    '<textarea class="ansbox" id="resBox" style="min-height:180px" placeholder=\'{"paper":"' + p.id + '", "strict":0, ...}\'></textarea>' +
+    '<div class="sheet-actions"><button class="btn ghost" data-act="modal-close">取消</button>' +
+    '<button class="btn" data-act="exam-apply-result">确认导入</button></div></div>';
+}
+function applyResultText(){
+  var p = findExam(S.examCurrent);
+  var box = $("#resBox");
+  if(!p || !box) return;
+  var raw = (box.value || "").trim().replace(/^```(json)?/i, "").replace(/```$/, "").trim();
+  if(!raw){ toast("先粘贴批改结果"); return; }
+  var obj;
+  try { obj = JSON.parse(raw); } catch(e){ toast("格式不对，请粘贴完整 JSON"); return; }
+  var num = function(v, d){ var n = Number(v); return isFinite(n) ? n : d; };
+  p.result = {
+    strict: Math.round(num(obj.strict, 0)),
+    mid: Math.round(num(obj.mid, 0)),
+    lenient: Math.round(num(obj.lenient, 0)),
+    items: (obj.items || []).map(function(it){
+      return {no: num(it.no, 0), score: num(it.score, 0), lost: it.lost || "", cards: it.cards || []};
+    }),
+    comment: obj.comment || ""
+  };
+  examChecks = {};
+  save();
+  closeCard();
+  examView = "result";
+  renderExam();
+  toast("批改结果已导入");
+}
+function applyWeak(){
+  var ids = Object.keys(examChecks).filter(function(k){ return examChecks[k]; });
+  if(!ids.length){ toast("没有勾选考点"); return; }
+  var t = todayStr(), n = 0;
+  ids.forEach(function(id){
+    if(!BY_ID[id]) return;
+    var c = S.cards[id] || {stage:0, seen:0, lapses:0};
+    c.stage = 0; c.lapses = (c.lapses || 0) + 1; c.due = addDays(t, 1); c.last = t;
+    c.seen = (c.seen || 0) + 1;
+    S.cards[id] = c; n++;
+  });
+  var cur = findExam(S.examCurrent);
+  if(cur) cur.applied = true;
+  save();
+  toast(n + " 个考点已加入复习，明天到期");
+  examChecks = {};
+  renderExam();
+}
+
+/* ---------------- 事件 ---------------- */
+document.addEventListener("click", function(ev){
+  var el = ev.target.closest("[data-act]");
+  if(!el) return;
+  var a = el.dataset.act;
+
+  if(a === "tab"){
+    state.tab = el.dataset.tab;
+    $$(".tab").forEach(function(b){ b.classList.toggle("on", b.dataset.tab === state.tab); });
+    $$(".view").forEach(function(v){ v.hidden = v.dataset.view !== state.tab; });
+    render();
+  }
+  else if(a === "exam-diff"){ examCfg().difficulty = el.dataset.v; save(); renderExamHome(); }
+  else if(a === "exam-hot"){ examCfg().hot = el.dataset.v === "1"; save(); renderExamHome(); }
+  else if(a === "exam-mode"){ examCfg().mode = el.dataset.v; save(); renderExamHome(); }
+  else if(a === "exam-dur"){ examCfg().duration = parseInt(el.dataset.v, 10) || 180; save(); renderExamHome(); }
+  else if(a === "exam-start"){ startExam(); }
+  else if(a === "exam-submit"){ submitPaper(); }
+  else if(a === "exam-home"){ examView = "home"; renderExam(); }
+  else if(a === "exam-open"){
+    var pid = el.dataset.id, pp = findExam(pid);
+    if(pp){ S.examCurrent = pid; examView = pp.result ? "result" : "review"; renderExam(); }
+  }
+  else if(a === "exam-pack"){
+    var pk = findExam(S.examCurrent);
+    if(pk) copyText(gradePack(pk), function(){ toast("批改包已复制，去对话里粘贴并发照片"); });
+  }
+  else if(a === "exam-import"){ openImport(); }
+  else if(a === "exam-apply-result"){ applyResultText(); }
+  else if(a === "exam-apply"){ applyWeak(); }
+  else if(a === "exam-again"){ examView = "home"; renderExam(); }
+  else if(a === "exam-hot-list"){ examView = "hot"; renderExam(); }
+  else if(a === "exam-real-list"){ examView = "real"; renderExam(); }
+  else if(a === "exam-item"){ openItem(el.dataset.id); }
+  else if(a === "exam-add"){ addItemToReview(el.dataset.id); }
+  else if(a === "start"){ startSession(false); }
+  else if(a === "close"){ closeStudy(); }
+  else if(a === "reveal"){ study.revealed = true; renderStudy(); }
+  else if(a === "rate"){ if(study && study.revealed) rate(study.queue[study.i], el.dataset.lvl); }
+  else if(a === "chapter"){
+    var ch = el.dataset.ch;
+    state.open[ch] = !state.open[ch];
+    renderLibList();
+  }
+  else if(a === "part"){ state.part = el.dataset.part; renderLib(); }
+  else if(a === "card"){ openCard(el.dataset.id); }
+  else if(a === "modal-close"){ closeCard(); }
+  else if(a === "master"){
+    var id = el.dataset.id;
+    S.cards[id] = {stage:5, due:addDays(todayStr(), 30), last:todayStr(), seen:(S.cards[id]?S.cards[id].seen:0)+1, lapses:(S.cards[id]?S.cards[id].lapses:0)};
+    save(); closeCard(); render(); toast("已标记为掌握");
+  }
+  else if(a === "quota-inc"){ S.settings.quota = Math.min(40, S.settings.quota + 1); save(); renderMe(); }
+  else if(a === "quota-dec"){ S.settings.quota = Math.max(2, S.settings.quota - 1); save(); renderMe(); }
+  else if(a === "pace"){ S.settings.pace = el.dataset.pace; save(); renderMe(); }
+  else if(a === "export"){ exportData(); }
+  else if(a === "import"){ $("#importFile").click(); }
+  else if(a === "reset"){
+    if(confirm("确定清空所有学习进度？此操作不可恢复。")){
+      S = defaultState(); save(); render(); toast("已清空");
+    }
+  }
+});
+
+document.addEventListener("input", function(ev){
+  if(ev.target && ev.target.id === "search"){
+    state.q = ev.target.value;
+    renderLibList();
+  }
+  if(ev.target && ev.target.classList && ev.target.classList.contains("ansbox") && ev.target.dataset.no){
+    if(S.examDraft){
+      S.examDraft.answers[ev.target.dataset.no] = ev.target.value;
+      clearTimeout(window.__ansT);
+      window.__ansT = setTimeout(function(){ save(); }, 500);
+    }
+  }
+});
+document.addEventListener("change", function(ev){
+  if(ev.target && ev.target.id === "examInput"){
+    var v = ev.target.value;
+    if(v){ S.settings.exam = v; save(); render(); }
+  }
+  if(ev.target && ev.target.dataset && ev.target.dataset.cid){
+    examChecks[ev.target.dataset.cid] = ev.target.checked;
+  }
+  if(ev.target && ev.target.id === "importFile"){
+    var f = ev.target.files && ev.target.files[0];
+    if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try {
+        var o = JSON.parse(reader.result);
+        if(!o || !o.settings || !o.cards) throw new Error("bad");
+        S = o; if(!S.days) S.days = {}; save(); render(); toast("导入成功");
+      } catch(e){ toast("文件格式不正确"); }
+      ev.target.value = "";
+    };
+    reader.readAsText(f);
+  }
+});
+
+document.addEventListener("keydown", function(ev){
+  if($("#overlay").hidden || !study) return;
+  if(ev.key === "Escape"){ closeStudy(); return; }
+  if(ev.key === " " || ev.key === "Enter"){
+    ev.preventDefault();
+    if(!study.revealed){ study.revealed = true; renderStudy(); }
+    return;
+  }
+  if(study.revealed){
+    if(ev.key === "1") rate(study.queue[study.i], "forgot");
+    else if(ev.key === "2") rate(study.queue[study.i], "vague");
+    else if(ev.key === "3") rate(study.queue[study.i], "got");
+  }
+});
+
+function registerSW(){
+  if(typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
+  if(location.protocol !== "http:" && location.protocol !== "https:") return;
+  var had = !!navigator.serviceWorker.controller;
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+  navigator.serviceWorker.addEventListener("controllerchange", function(){
+    if(had) setTimeout(function(){ toast("已更新到新版本"); }, 600);
+    had = true;
+  });
+}
+function offlineReady(){
+  return typeof navigator !== "undefined" && ("serviceWorker" in navigator) && !!navigator.serviceWorker.controller;
+}
+
+function exportData(){
+  var blob = new Blob([JSON.stringify(S, null, 2)], {type:"application/json"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = "音乐史打卡备份-" + todayStr() + ".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  toast("备份已导出");
+}
+
+/* ---------------- 启动 ---------------- */
+storageOK = probeStorage();
+registerSW();
+S = load();
+if(!S.exams) S.exams = [];
+if(!S.settings.examCfg) S.settings.examCfg = {difficulty:"standard", hot:true, duration:180, mode:"paper"};
+day();           // 记录当日基线
+render();
+})();
+</script>
+</body>
+</html>

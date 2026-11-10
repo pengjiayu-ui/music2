@@ -1,0 +1,16 @@
+{
+  "name": "音乐史 · 背诵打卡",
+  "short_name": "音乐史打卡",
+  "description": "广州大学音乐考研中西音乐史背诵打卡",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f3eb",
+  "theme_color": "#f7f3eb",
+  "lang": "zh-CN",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
