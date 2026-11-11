@@ -1315,6 +1315,28 @@ mark{background:linear-gradient(transparent 55%, rgba(255,157,194,.5) 55%) !impo
   background:transparent !important;background-color:transparent !important;
   border-radius:0 !important;box-shadow:none !important;
 }
+/* 音量滑块 */
+.vol{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:99px;
+  background:linear-gradient(90deg,#ffb7d5,#e0568c);outline:none}
+.vol::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:#fff;border:3px solid #e0568c;box-shadow:0 2px 6px rgba(224,86,140,.35);cursor:pointer}
+/* 满级 Combo 数字 */
+.combo-burst{
+  position:fixed;left:50%;top:42%;transform:translate(-50%,-50%) scale(.4);
+  z-index:9998;pointer-events:none;font-weight:800;font-size:34px;letter-spacing:.04em;
+  color:#e0568c;text-shadow:0 2px 0 #fff,0 0 18px rgba(255,157,194,.9);
+  animation:comboPop 1.25s cubic-bezier(.2,1.4,.4,1) forwards;
+}
+@keyframes comboPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-8deg)}
+  25%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(2deg)}
+  45%{transform:translate(-50%,-50%) scale(1) rotate(0)}
+  100%{opacity:0;transform:translate(-50%,-90%) scale(1.05)}
+}
+
+.bubble{opacity:1 !important}
+.bubble.in{animation:bubbleFade 5.6s ease forwards !important}
+@media (prefers-reduced-motion: reduce){ .bubble{opacity:1 !important;animation:none !important} }
 
 </style>
 </head>
@@ -1423,10 +1445,13 @@ CHARACTER.path = function(name){
   return f ? this.dir + f : this.placeholder;
 };
 /* 每日表情：同一天稳定，不同天轮换 */
+/* 每次打开随机一个（整次会话内保持不变） */
 CHARACTER.daily = function(){
-  var d = new Date();
-  var n = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
-  return this.order[n % this.order.length];
+  if(!this._open){
+    var k = this.order;
+    this._open = k[Math.floor(Math.random() * k.length)];
+  }
+  return this._open;
 };
 CHARACTER.pick = function(){
   var k = this.keys();
@@ -1766,6 +1791,16 @@ var Quotes = {
     this.last[scene] = t;
     return t;
   },
+  say: function(text){
+    try{
+      var el = document.getElementById("bubble");
+      if(!el) return;
+      el.textContent = text;
+      el.classList.remove("in");
+      void el.offsetWidth;
+      el.classList.add("in");
+    }catch(e){}
+  },
   show: function(scene){
     try{
       var el = document.getElementById("bubble");
@@ -1777,6 +1812,325 @@ var Quotes = {
     }catch(e){}
   }
 };
+
+</script>
+<script>
+/* 统一震动模块：Android 用 navigator.vibrate，iOS 17.4+ 用 switch 触感 hack
+   说明：iOS 17.4 ~ 26.4 有效；iOS 26.5+ 苹果收紧了可信事件判定，
+   脚本模拟的 click 可能不再触发 Taptic Engine，此时自动降级为视觉反馈。 */
+var Haptics = (function(){
+  var ua = (typeof navigator !== "undefined" && navigator.userAgent) || "";
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var m = ua.match(/OS (\d+)[_.](\d+)/);
+  var iosMajor = m ? parseInt(m[1], 10) : 0;
+  var iosMinor = m ? parseInt(m[2], 10) : 0;
+  var nativeVibrate = typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
+  var switchLabel = null, switchInput = null;
+
+  function iosSupportsSwitch(){
+    /* iOS 17.4 起支持 <input type="checkbox" switch> 的触感 */
+    return isIOS && (iosMajor > 17 || (iosMajor === 17 && iosMinor >= 4));
+  }
+  function supported(){ return nativeVibrate || iosSupportsSwitch(); }
+
+  function ensureSwitch(){
+    if(switchLabel) return;
+    try{
+      switchLabel = document.createElement("label");
+      switchInput = document.createElement("input");
+      switchInput.type = "checkbox";
+      try{ switchInput.setAttribute("switch", ""); }catch(e){}
+      switchLabel.appendChild(switchInput);
+      switchLabel.setAttribute("aria-hidden", "true");
+      switchLabel.style.cssText = "position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;";
+      document.body.appendChild(switchLabel);
+    }catch(e){}
+  }
+
+  /* 触发一次 tactile 反馈 */
+  function placeAt(x, y){
+    if(!switchLabel) return;
+    try{
+      switchLabel.style.left = (x||0) + "px";
+      switchLabel.style.top = (y||0) + "px";
+      switchLabel.style.width = "4px";
+      switchLabel.style.height = "4px";
+      switchLabel.style.opacity = "0.01";
+    }catch(e){}
+  }
+
+  function fireOnce(){
+    if(!iosSupportsSwitch()) return false;
+    ensureSwitch();
+    try{ switchInput.click(); return true; }catch(e){ return false; }
+  }
+
+  /* 视觉降级：轻缩一下被点的元素 */
+  function visualFallback(el){
+    try{
+      if(!el || !el.style) return;
+      el.style.transition = "transform .12s ease";
+      el.style.transform = "scale(.96)";
+      setTimeout(function(){ try{ el.style.transform = ""; }catch(e){} }, 120);
+    }catch(e){}
+  }
+
+  /* pattern 可以是数字或数组，语义同 navigator.vibrate */
+  function trigger(pattern, el, x, y){
+    placeAt(x, y);
+    if(nativeVibrate){
+      try{ navigator.vibrate(pattern); return true; }catch(e){}
+    }
+    if(iosSupportsSwitch()){
+      if(fireOnce()) return true;
+      /* 26.5+ 可能失效：降级 */
+      visualFallback(el);
+      return false;
+    }
+    visualFallback(el);
+    return false;
+  }
+
+  return { trigger: trigger, supported: supported, isIOS: isIOS,
+           iosVersion: iosMajor ? iosMajor + "." + iosMinor : "", native: nativeVibrate };
+})();
+
+</script>
+<script>
+/* 音效 + 连击 + 震动（Web Audio 合成） */
+var Sound = (function(){
+  var ctx=null, master=null, ready=false;
+  var cfg={on:true, combo:true, haptic:true, volume:0.3};
+  /* C 大调五声音阶，两个八度，最高 C7 */
+  var SCALE=[523.25,659.25,783.99,1046.50,1318.51,1567.98,2093.00]; /* C5 E5 G5 C6 E6 G6 C7 —— C 大调琶音 */
+  var combo=0, lastClick=0, lastMute=0, muteHits=0;
+  var COMBO_GAP=500;  /* 连击判定窗口（毫秒），想放宽改这里 */
+  var POOL=[
+    "🎵 华彩乐章！你的手速堪比李斯特啦！(✧◡✧)",
+    "✨ 满级连击！知识正在疯狂涌入大脑！(๑•̀ㅂ•́)و✧",
+    "🌟 这段旋律太棒了，这就是上岸的前奏吗！( ﾟ▽ﾟ)/",
+    "💖 弹得真好，我都有点崇拜你了！(๑¯ω¯๑)",
+    "🎹 功德加一！请继续保持这个节奏！(๑•̀ㅂ•́)و✧",
+    "🎶 太强了！丛老师听了都要给你鼓掌！(✧◡✧)"
+  ];
+
+  function now(){ return ctx?ctx.currentTime:0; }
+
+  function init(){
+    if(ready) return true;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC) return false;
+      ctx=new AC();
+      master=ctx.createGain();
+      master.gain.value=cfg.volume;
+      master.connect(ctx.destination);
+      try{ /* iOS 解锁：在用户手势内播一个静音样本 */
+        var b=ctx.createBuffer(1,1,ctx.sampleRate);
+        var src=ctx.createBufferSource(); src.buffer=b; src.connect(ctx.destination); src.start(0);
+      }catch(e){}
+      ready=true;
+    }catch(e){ ready=false; }
+    return ready;
+  }
+
+  function tone(freq,dur,gain,type,delay,pan){
+    if(!ready||!cfg.on) return;
+    try{
+      if(ctx.state!=="running"){ ctx.resume(); }
+      var t0=now()+(delay||0)+0.005;
+      var osc=ctx.createOscillator(), g=ctx.createGain();
+      osc.type=type||"sine";
+      osc.frequency.setValueAtTime(freq,t0);
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.exponentialRampToValueAtTime(Math.max(0.0002,gain),t0+0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+      var out=g;
+      if(ctx.createStereoPanner && pan!==undefined){
+        var p=ctx.createStereoPanner(); p.pan.value=pan; g.connect(p); out=p;
+      }
+      osc.connect(g); out.connect(master);
+      osc.start(t0); osc.stop(t0+dur+0.02);
+      osc.onended=function(){ try{ osc.disconnect(); g.disconnect(); if(out!==g) out.disconnect(); }catch(e){} };
+    }catch(e){}
+  }
+
+  /* 翻页沙沙声：短噪声 + 带通扫频 */
+  function noiseSweep(){
+    if(!ready||!cfg.on) return;
+    try{
+      var dur=0.18, t0=now();
+      var buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*dur),ctx.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+      var src=ctx.createBufferSource(); src.buffer=buf;
+      var bp=ctx.createBiquadFilter(); bp.type="bandpass";
+      bp.frequency.setValueAtTime(900,t0);
+      bp.frequency.exponentialRampToValueAtTime(2600,t0+dur);
+      bp.Q.value=1.2;
+      var g=ctx.createGain(); g.gain.value=0.06;
+      src.connect(bp); bp.connect(g); g.connect(master);
+      src.start(t0); src.stop(t0+dur);
+      src.onended=function(){ try{ src.disconnect(); bp.disconnect(); g.disconnect(); }catch(e){} };
+    }catch(e){}
+  }
+
+  function haptic(p, el, x, y){
+    if(!cfg.haptic) return;
+    try{ if(window.Haptics) Haptics.trigger(p, el, x, y); }catch(e){}
+  }
+
+  /* 泡泡破裂 */
+  function pop(){
+    if(!ready||!cfg.on) return;
+    try{
+      var t0=now();
+      var osc=ctx.createOscillator(), g=ctx.createGain();
+      osc.type="sine";
+      osc.frequency.setValueAtTime(700,t0);
+      osc.frequency.exponentialRampToValueAtTime(180,t0+0.12);
+      g.gain.setValueAtTime(0.06,t0);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+0.14);
+      osc.connect(g); g.connect(master);
+      osc.start(t0); osc.stop(t0+0.16);
+      osc.onended=function(){ try{ osc.disconnect(); g.disconnect(); }catch(e){} };
+    }catch(e){}
+  }
+
+  function burstFX(n){
+    try{
+      if(!window.Effects) return;
+      var cx=window.innerWidth/2, cy=window.innerHeight/2;
+      var kinds=["note","heart","star","cross"];
+      for(var i=0;i<Math.min(n||8,10);i++){
+        Effects.burst(kinds[i%kinds.length], cx+(Math.random()*220-110), cy+(Math.random()*160-80));
+      }
+    }catch(e){}
+  }
+
+  function comboBadge(){
+    try{
+      var el=document.createElement("div");
+      el.className="combo-burst";
+      el.textContent="Combo x"+(combo+1)+"!";
+      document.body.appendChild(el);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },1300);
+    }catch(e){}
+  }
+
+  function maxCombo(){
+    if(!ready||!cfg.on) return;
+    [523.25,659.25,783.99,1046.50,1318.51,1567.98].forEach(function(f,i){
+      tone(f,1.0,0.05,"sine",i*0.05,(i%2?0.3:-0.3));
+    });
+    haptic([30,40,30,40,80]);
+    burstFX(10); comboBadge();
+    try{
+      if(window.Quotes&&Quotes.say) Quotes.say(POOL[Math.floor(Math.random()*POOL.length)]);
+    }catch(e){}
+  }
+
+  function click(px, py){
+    var t=Date.now();
+    if(!init()) return;
+    if(ctx.state!=="running"){ try{ ctx.resume(); }catch(e){} }
+
+    if(!cfg.on){
+      if(t-lastMute<1500) muteHits++; else muteHits=1;
+      lastMute=t;
+      if(muteHits===10){
+        muteHits=0;
+        try{ if(window.Quotes&&Quotes.say) Quotes.say("(¬_¬) 你不开声音，是在用意念弹琴吗？"); }catch(e){}
+        haptic(30);
+      }
+      return;
+    }
+
+    var gap=t-lastClick;
+    if(gap>COMBO_GAP){
+      if(combo>=5){
+        pop();
+        try{ if(window.Quotes&&Quotes.say) Quotes.say("( ˘ω˘ ) 手酸啦？"); }catch(e){}
+      }
+      combo=0;
+    }else{
+      combo++;
+    }
+    lastClick=t;
+
+    var idx=Math.min(combo,SCALE.length-1);
+    /* 连击走琶音；单次点击随机取中间几个音，避免每次都一样 */
+    var f = combo === 0 ? SCALE[[1,2,3,4][Math.floor(Math.random()*4)]] : SCALE[idx];
+    tone(f,0.34,0.055,"sine",0,(Math.random()*0.24-0.12));
+
+    if(idx===SCALE.length-1) maxCombo();
+    else if(combo>=6) haptic([15,20,15,20,30], null, px, py);
+    else if(combo>=3) haptic([15,30,15], null, px, py);
+    else haptic(10, null, px, py);
+  }
+
+  function page(){ /* 翻书声已移除，保持安静 */ }
+
+  function got(){
+    if(!init()) return;
+    tone(880,0.16,0.09,"sine"); tone(1174.66,0.22,0.08,"sine",0.09);
+    haptic([15,40,15]);
+  }
+  function vague(){
+    if(!init()) return;
+    tone(659.25,0.18,0.07,"sine"); tone(587.33,0.26,0.06,"sine",0.12);
+    haptic([10,25,10]);
+  }
+  function forgot(){
+    if(!init()) return;
+    tone(392,0.34,0.06,"sine"); tone(349.23,0.4,0.04,"sine",0.1);
+    haptic(40);
+  }
+  function checkin(){
+    if(!init()) return;
+    [523.25,659.25,783.99,1046.50].forEach(function(f,i){ tone(f,0.6,0.06,"sine",i*0.13); });
+    haptic([20,50,20,50,60]);
+  }
+
+  /* 学习完成：约 3 秒，K46 → V7 → I 完满终止 */
+  function finale(){
+    if(!init()) return;
+    var G2=98.00, C3=130.81, E3=164.81, G3=196.00, B3=246.94, C4=261.63,
+        D4=293.66, E4=329.63, F4=349.23, G4=392.00, B4=493.88, C5=523.25, D5=587.33, E5=659.25;
+    /* K46（C 大调第二转位） */
+    [G2,C3,E3,G3].forEach(function(f,i){ tone(f,0.95,0.045,"sine",i*0.006,-0.25); });
+    tone(E5,0.5,0.05,"triangle",0.02,0.2);
+    /* V7（属七） */
+    [G2,B3,D4,F4].forEach(function(f,i){ tone(f,0.9,0.045,"sine",0.88+i*0.006,-0.2); });
+    tone(D5,0.4,0.045,"triangle",0.9,0.2);
+    tone(B4,0.4,0.04,"triangle",1.28,0.15);
+    /* I（主和弦，收满） */
+    [C3,E3,G3,C4].forEach(function(f,i){ tone(f,1.5,0.05,"sine",1.78+i*0.006,-0.15); });
+    tone(C5,1.4,0.05,"triangle",1.8,0.15);
+    tone(E5,1.2,0.035,"sine",1.86,0.25);
+    haptic([20,50,20,50,60]);
+  }
+
+  /* 切回前台/从后台回来时恢复音频，避免“静音一段时间” */
+  if(typeof document !== "undefined" && document.addEventListener){
+    document.addEventListener("visibilitychange", function(){
+      if(ready && document.visibilityState === "visible"){
+        try{ ctx.resume(); }catch(e){}
+      }
+    });
+  }
+
+  function setCfg(c){
+    if(!c) return;
+    cfg.on=c.on!==false; cfg.combo=c.combo!==false; cfg.haptic=c.haptic!==false;
+    cfg.volume=typeof c.volume==="number"?Math.max(0,Math.min(1,c.volume)):0.45;
+    if(master){ try{ master.gain.value=cfg.on?cfg.volume:0; }catch(e){} }
+  }
+  function comboNow(){ return combo; }
+
+  return {init:init,click:click,page:page,got:got,vague:vague,forgot:forgot,finale:finale,
+          checkin:checkin,setCfg:setCfg,haptic:haptic,combo:comboNow,scale:SCALE};
+})();
 
 </script>
 <script>
@@ -2124,6 +2478,8 @@ function renderMe(){
   var pace = S.settings.pace;
   if(!S.settings.fx) S.settings.fx = {on:true, level:"normal", char:true};
   var fx = S.settings.fx;
+  if(!S.settings.sound) S.settings.sound = {on:true, combo:true, haptic:true, volume:0.3};
+  var snd = S.settings.sound;
   $("#view-me").innerHTML = modHead("cheer", "把这里调舒服", "随时可以改，不影响已有进度") +
     '<div class="sec-title"><b>学习计划</b><span>随时可改</span></div>' +
     '<div class="panel">' +
@@ -2151,6 +2507,29 @@ function renderMe(){
           '<button class="seg' + (fx.level === "gentle" ? " on" : "") + '" data-act="fx-level" data-v="gentle">轻柔</button>' +
           '<button class="seg' + (fx.level === "normal" ? " on" : "") + '" data-act="fx-level" data-v="normal">标准</button>' +
           '<button class="seg' + (fx.level === "festive" ? " on" : "") + '" data-act="fx-level" data-v="festive">热闹</button>' +
+        '</div></div>' +
+    '</div>' +
+    '<div class="sec-title"><b>声音与触感</b><span>随时可关</span></div>' +
+    '<div class="panel">' +
+      '<div class="setrow"><div class="tx"><b>全局音效</b><small>八音盒音色，不需要联网</small></div>' +
+        '<div class="segs" style="margin:0">' +
+          '<button class="seg' + (snd.on ? " on" : "") + '" data-act="snd-on" data-v="1">开</button>' +
+          '<button class="seg' + (!snd.on ? " on" : "") + '" data-act="snd-on" data-v="0">关</button>' +
+        '</div></div>' +
+      '<div class="setrow"><div class="tx"><b>连击旋律</b><small style="font-size:10px">连续点击可弹奏上升音符</small></div>' +
+        '<div class="segs" style="margin:0">' +
+          '<button class="seg' + (snd.combo ? " on" : "") + '" data-act="snd-combo" data-v="1">开</button>' +
+          '<button class="seg' + (!snd.combo ? " on" : "") + '" data-act="snd-combo" data-v="0">关</button>' +
+        '</div></div>' +
+      '<div class="setrow"><div class="tx"><b>震动反馈</b><small>手机上的轻触感，电脑无效果</small></div>' +
+        '<div class="segs" style="margin:0">' +
+          '<button class="seg' + (snd.haptic ? " on" : "") + '" data-act="snd-haptic" data-v="1">开</button>' +
+          '<button class="seg' + (!snd.haptic ? " on" : "") + '" data-act="snd-haptic" data-v="0">关</button>' +
+        '</div></div>' +
+      '<div class="setrow" style="display:block"><b>音量</b>' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">' +
+          '<input type="range" id="volRange" min="0" max="100" value="' + Math.round((snd.volume ?? 0.3) * 100) + '" class="vol">' +
+          '<span class="mini" id="volVal">' + Math.round((snd.volume ?? 0.3) * 100) + '%</span>' +
         '</div></div>' +
     '</div>' +
     '<div class="sec-title"><b>数据</b><span>' + (offlineReady() ? "离线可用" : (storageOK ? "本机保存" : "未能保存")) + '</span></div>' +
@@ -2326,6 +2705,9 @@ function rate(id, lvl){
     var lc = window.__lastClick || {x: window.innerWidth / 2, y: window.innerHeight - 150};
     Effects.scene(lvl === "got" ? "got" : (lvl === "vague" ? "vague" : "forgot"), lc);
     Quotes.show(lvl === "got" ? "got" : (lvl === "vague" ? "vague" : "forgot"));
+    if(lvl === "got") Sound.got();
+    else if(lvl === "vague") Sound.vague();
+    else Sound.forgot();
   }catch(e){}
   study.i++;
   study.revealed = false;
@@ -2356,6 +2738,7 @@ function renderDone(){
       study._celebrated = true;
       Effects.scene("checkin", {x: window.innerWidth / 2, y: window.innerHeight * 0.42});
       Quotes.show("streak");
+      Sound.finale();
     }
   }catch(e){}
   render();
@@ -3061,6 +3444,9 @@ document.addEventListener("click", function(ev){
     S.cards[id] = {stage:5, due:addDays(todayStr(), 30), last:todayStr(), seen:(S.cards[id]?S.cards[id].seen:0)+1, lapses:(S.cards[id]?S.cards[id].lapses:0)};
     save(); closeCard(); render(); toast("记住啦！这张卡归你了 ♡");
   }
+  else if(a === "snd-on"){ S.settings.sound.on = el.dataset.v === "1"; Sound.setCfg(S.settings.sound); save(); renderMe(); }
+  else if(a === "snd-combo"){ S.settings.sound.combo = el.dataset.v === "1"; Sound.setCfg(S.settings.sound); save(); renderMe(); }
+  else if(a === "snd-haptic"){ S.settings.sound.haptic = el.dataset.v === "1"; Sound.setCfg(S.settings.sound); save(); renderMe(); }
   else if(a === "fx-on"){ S.settings.fx.on = el.dataset.v === "1"; Effects.set(S.settings.fx); save(); renderMe(); }
   else if(a === "fx-level"){ S.settings.fx.level = el.dataset.v; Effects.set(S.settings.fx); save(); renderMe(); }
   else if(a === "fx-char"){ S.settings.fx.char = el.dataset.v === "1"; Effects.set(S.settings.fx); save(); renderMe(); }
@@ -3090,6 +3476,13 @@ document.addEventListener("input", function(ev){
   }
 });
 document.addEventListener("change", function(ev){
+  if(ev.target && ev.target.id === "volRange"){
+    var v = Number(ev.target.value) / 100;
+    S.settings.sound.volume = v;
+    Sound.setCfg(S.settings.sound);
+    var lab = $("#volVal"); if(lab) lab.textContent = Math.round(v * 100) + "%";
+    save();
+  }
   if(ev.target && ev.target.id === "examInput"){
     var v = ev.target.value;
     if(v){ S.settings.exam = v; save(); render(); }
@@ -3164,6 +3557,8 @@ Quotes.show("open");
 day();           // 记录当日基线
 if(!S.settings.fx) S.settings.fx = {on:true, level:"normal", char:true};
 Effects.init(S.settings.fx);
+if(!S.settings.sound) S.settings.sound = {on:true, combo:true, haptic:true, volume:0.3};
+Sound.setCfg(S.settings.sound);
 try{
   var bmImg = $(".brand-mark img");
   var dne = CHARACTER.daily();
@@ -3173,6 +3568,7 @@ document.addEventListener("click", function(ev){
   try{
     if(typeof ev.clientX === "number") window.__lastClick = {x: ev.clientX, y: ev.clientY};
     Effects.clickAt(ev.clientX || window.innerWidth / 2, ev.clientY || window.innerHeight / 2);
+    Sound.click(ev.clientX, ev.clientY);
   }catch(e){}
 }, true);
 render();
